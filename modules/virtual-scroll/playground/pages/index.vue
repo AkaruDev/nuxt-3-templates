@@ -3,21 +3,16 @@
     <h1>Virtual scroll</h1>
 
     <div class="Sticky-parent">
+      <div>
+        Sticky parent
+      </div>
       <div
         id="sticky-1"
         v-scroll-sticky="{ onProgress }"
         class="Sticky"
       >
-        {{ progress }}%
-      </div>
-    </div>
-    <div class="Sticky-parent">
-      <div
-        id="sticky-2"
-        v-scroll-sticky="{ onProgress }"
-        class="Sticky"
-      >
-        {{ progress }}%
+        <span>Sticky element</span>
+        <span>Progress: {{ progress }}%</span>
       </div>
     </div>
   </div>
@@ -37,17 +32,21 @@ h1 {
   padding: 30vh 0;
 }
 
-.Sticky-parent {
-  position: relative;
-  width: 100%;
-  height: 300vh;
-  background-color: rgb(245, 255, 169);
-
-  overflow: hidden;
+.Page {
+  padding: 30px 0 100vh 30px;
 }
 
-.Sticky-parent:nth-child(2) {
-  background-color: rgb(255, 225, 169);
+.Sticky-parent {
+  position: relative;
+
+  width: 100%;
+  max-width: 920px;
+  height: 200vh;
+  background-color: rgb(255, 242, 200);
+
+  padding: 80px 40px;
+
+  overflow: hidden;
 }
 
 .Sticky {
@@ -59,14 +58,9 @@ h1 {
   width: 20vh;
   height: 20vh;
 
-  top: 20px;
-  left: calc(50% - 100px);
+  top: 130px;
+  left: calc(50% - 10vh);
 
   background-color: rgb(169, 169, 255);
-}
-
-#sticky-2 {
-  background-color: rgb(186, 255, 197);
-
 }
 </style>

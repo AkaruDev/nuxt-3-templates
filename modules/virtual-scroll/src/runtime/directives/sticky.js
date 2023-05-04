@@ -58,17 +58,18 @@ export default () => {
           sendProgress()
         }
       } else {
-        if (sticky.parentBounds.top <= 0 && sticky.parentBounds.top + sticky.parentBounds.height - sticky.elBounds.height >= 0) {
+        const isInBounds = sticky.parentBounds.top <= 0 && sticky.parentBounds.top + sticky.parentBounds.height - sticky.elBounds.height >= 0
+        if (isInBounds) {
           sticky.el.style.position = 'fixed'
-          sticky.el.style.top = '0px'
-          sticky.el.style.width = '100%'
-          sticky.el.style.transform = 'unset'
-
+          sticky.el.style.top = ''
+          sticky.el.style.width = ''
+          sticky.el.style.transform = ''
+          progress = (sticky.elBounds.top - sticky.parentBounds.top) / (sticky.parentBounds.height - sticky.elBounds.height)
           sendProgress()
         } else {
-          sticky.el.style.position = 'relative'
-          sticky.el.style.top = 'unset'
-          sticky.el.style.width = 'unset'
+          sticky.el.style.position = ''
+          sticky.el.style.top = ''
+          sticky.el.style.width = ''
 
           if (sticky.parentBounds.top <= 0) {
             sticky.el.style.transform = `translateY(${sticky.parentBounds.height - sticky.elBounds.height}px)`

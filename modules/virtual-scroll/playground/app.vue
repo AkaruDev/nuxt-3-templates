@@ -11,6 +11,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 .Page {
@@ -20,14 +21,14 @@
   align-items: center;
   justify-content: center;
 
-  width: 100%;
+  width: calc(100% - 30px);
   min-height: 100vh;
-
-  padding-bottom: 100vh;
 
   gap: 10px;
 
   text-align: center;
+
+  overflow: hidden;
 
   font-size: 16px;
 }
