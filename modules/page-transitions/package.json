@@ -1,8 +1,8 @@
 {
-  "name": "virtual-scroll",
+  "name": "page-transitions",
   "version": "1.0.0",
-  "description": "Virtual scroll",
-  "repository": "akaru/virtual-scroll",
+  "description": "Page transitions",
+  "repository": "akaru/page-transitions",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -29,8 +29,7 @@
   },
   "dependencies": {
     "@nuxt/kit": "^3.4.2",
-    "@vueuse/core": "^10.1.2",
-    "virtual-scroll": "^2.2.1"
+    "@vueuse/core": "^10.1.2"
   },
   "devDependencies": {
     "@nuxt/eslint-config": "^0.1.1",

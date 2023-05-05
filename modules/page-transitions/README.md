@@ -3,8 +3,8 @@ Get your module up and running quickly.
 
 Find and replace all on all files (CMD+SHIFT+F):
 - Name: My Module
-- Package name: virtual-scroll
-- Description: Virtual scroll module
+- Package name: page-transitions
+- Description: My new Nuxt module
 -->
 
 # My Module
@@ -17,7 +17,7 @@ Find and replace all on all files (CMD+SHIFT+F):
 My new Nuxt module for doing amazing things.
 
 - [✨ &nbsp;Release Notes](/CHANGELOG.md)
-<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/virtual-scroll?file=playground%2Fapp.vue) -->
+<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/page-transitions?file=playground%2Fapp.vue) -->
 <!-- - [📖 &nbsp;Documentation](https://example.com) -->
 
 ## Features
@@ -29,25 +29,25 @@ My new Nuxt module for doing amazing things.
 
 ## Quick Setup
 
-1. Add `virtual-scroll` dependency to your project
+1. Add `page-transitions` dependency to your project
 
 ```bash
 # Using pnpm
-pnpm add -D virtual-scroll
+pnpm add -D page-transitions
 
 # Using yarn
-yarn add --dev virtual-scroll
+yarn add --dev page-transitions
 
 # Using npm
-npm install --save-dev virtual-scroll
+npm install --save-dev page-transitions
 ```
 
-2. Add `virtual-scroll` to the `modules` section of `nuxt.config.ts`
+2. Add `page-transitions` to the `modules` section of `nuxt.config.ts`
 
 ```js
 export default defineNuxtConfig({
   modules: [
-    'virtual-scroll'
+    'page-transitions'
   ]
 })
 ```
@@ -81,14 +81,14 @@ npm run release
 ```
 
 <!-- Badges -->
-[npm-version-src]: https://img.shields.io/npm/v/virtual-scroll/latest.svg?style=flat&colorA=18181B&colorB=28CF8D
-[npm-version-href]: https://npmjs.com/package/virtual-scroll
+[npm-version-src]: https://img.shields.io/npm/v/page-transitions/latest.svg?style=flat&colorA=18181B&colorB=28CF8D
+[npm-version-href]: https://npmjs.com/package/page-transitions
 
-[npm-downloads-src]: https://img.shields.io/npm/dm/virtual-scroll.svg?style=flat&colorA=18181B&colorB=28CF8D
-[npm-downloads-href]: https://npmjs.com/package/virtual-scroll
+[npm-downloads-src]: https://img.shields.io/npm/dm/page-transitions.svg?style=flat&colorA=18181B&colorB=28CF8D
+[npm-downloads-href]: https://npmjs.com/package/page-transitions
 
-[license-src]: https://img.shields.io/npm/l/virtual-scroll.svg?style=flat&colorA=18181B&colorB=28CF8D
-[license-href]: https://npmjs.com/package/virtual-scroll
+[license-src]: https://img.shields.io/npm/l/page-transitions.svg?style=flat&colorA=18181B&colorB=28CF8D
+[license-href]: https://npmjs.com/package/page-transitions
 
 [nuxt-src]: https://img.shields.io/badge/Nuxt-18181B?logo=nuxt.js
 [nuxt-href]: https://nuxt.com

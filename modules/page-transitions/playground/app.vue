@@ -1,9 +1,8 @@
 <template>
-  <div v-scroll-container>
-    <VirtualScrollBar />
-    <div v-scroll-section>
-      <NuxtPage />
-    </div>
+  <div>
+    <PageLoader />
+    <PageTransition />
+    <NuxtPage />
   </div>
 </template>
 
@@ -11,7 +10,6 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 .Page {
@@ -21,14 +19,12 @@
   align-items: center;
   justify-content: center;
 
-  width: calc(100% - 30px);
-  min-height: 100vh;
+  width: 100%;
+  height: 100vh;
 
   gap: 10px;
 
   text-align: center;
-
-  overflow: hidden;
 
   font-size: 16px;
 }

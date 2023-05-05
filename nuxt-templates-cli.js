@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Virtual scroll',
-    description: 'Add virtual scroll',
+    title: 'Page transitions',
+    description: 'Add page transition and preloader',
     category: 'Animations'
   },
-  dependencies: ['virtual-scroll', '@vueuse/core'],
+  dependencies: ['@vueuse/core'],
   devDependencies: [],
-  files: ['modules/virtual-scroll', 'configs']
+  files: ['modules/page-transitions', 'configs']
 }

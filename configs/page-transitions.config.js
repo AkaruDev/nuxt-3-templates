@@ -2,7 +2,7 @@
 export default defineNuxtConfig(
     {
         modules: [
-            '@/modules/virtual-scroll/src/module',
+            '@/modules/page-transitions/src/module',
         ],
     }
 )
