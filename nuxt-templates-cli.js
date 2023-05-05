@@ -1,7 +1,7 @@
 module.exports = {
   metas: {
     title: 'Page transitions',
-    description: 'Add page transition and preloader',
+    description: 'Add page loader and pages transitions',
     category: 'Animations'
   },
   dependencies: ['@vueuse/core'],
