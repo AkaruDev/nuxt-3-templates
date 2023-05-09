@@ -2,6 +2,10 @@
   <div class="Page home">
     <h1>Virtual scroll</h1>
 
+    <nuxt-link to="/page">
+      Go to page
+    </nuxt-link>
+
     <div class="Sticky-parent">
       <div>
         Sticky parent

@@ -7,7 +7,6 @@ export default () => {
   let options = { active: true, marge: 100, onProgress: null }
   let stickys = []
   let progress = 0
-  let onScrollCallback = null
 
 
   /**
@@ -55,6 +54,7 @@ export default () => {
           sticky.el.style.transform = `translateY(${y}px)`
 
           progress = (sticky.elBounds.top - sticky.parentBounds.top) / (sticky.parentBounds.height - sticky.elBounds.height)
+          if (isNaN(progress)) progress = 0
           sendProgress()
         }
       } else {
@@ -79,11 +79,10 @@ export default () => {
     })
 
   }
-
   return {
     mounted,
-    destroy () {
-      $virtualScroll.off('scroll', onScrollCallback)
+    unmounted: () => {
+      $virtualScroll.off('scroll', onScroll)
     }
   }
 }
