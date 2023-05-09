@@ -16,7 +16,7 @@
         class="Sticky"
       >
         <span>Sticky element</span>
-        <span>Progress: {{ progress }}%</span>
+        <span>Progress: {{ progress1 }}%</span>
       </div>
     </div>
   </div>
@@ -24,10 +24,11 @@
 
 <script setup>
 
-const progress = ref(0)
+const progress1 = ref(0)
 
-const onProgress = (p) => {
-  progress.value = Math.floor(p * 100)
+const onProgress = ({ el, progress }) => {
+  // console.info(progress, el)
+  progress1.value = Math.floor(progress * 100)
 }
 </script>
 

@@ -6,8 +6,6 @@ export default () => {
   const $virtualScroll = useVirtualScroll()
   let options = { active: true, marge: 100, onProgress: null }
   let stickys = []
-  let progress = 0
-
 
   /**
    *
@@ -20,6 +18,7 @@ export default () => {
       elBounds: null,
       parent: el.parentNode,
       parentBounds: null,
+      progress: 0,
       options: { ...options, ...elOptions.value }
     })
 
@@ -36,7 +35,7 @@ export default () => {
 
   const sendProgress = () => {
     stickys.forEach(sticky => {
-      if (sticky.options.onProgress) sticky.options.onProgress(progress)
+      if (sticky.options.onProgress) sticky.options.onProgress({ el: sticky.el, progress: sticky.progress })
     })
   }
 
@@ -53,8 +52,9 @@ export default () => {
           const y = clamp(value, 0, max).toFixed($virtualScroll.getPrecision())
           sticky.el.style.transform = `translateY(${y}px)`
 
-          progress = (sticky.elBounds.top - sticky.parentBounds.top) / (sticky.parentBounds.height - sticky.elBounds.height)
-          if (isNaN(progress)) progress = 0
+          sticky.progress = (sticky.elBounds.top - sticky.parentBounds.top) / (sticky.parentBounds.height - sticky.elBounds.height)
+          if (isNaN(sticky.progress)) sticky.progress = 0
+
           sendProgress()
         }
       } else {
@@ -64,7 +64,10 @@ export default () => {
           sticky.el.style.top = ''
           sticky.el.style.width = ''
           sticky.el.style.transform = ''
-          progress = (sticky.elBounds.top - sticky.parentBounds.top) / (sticky.parentBounds.height - sticky.elBounds.height)
+
+          sticky.progress = (sticky.elBounds.top - sticky.parentBounds.top) / (sticky.parentBounds.height - sticky.elBounds.height)
+          if (isNaN(sticky.progress)) sticky.progress = 0
+
           sendProgress()
         } else {
           sticky.el.style.position = ''
