@@ -48,16 +48,20 @@ defineProps({
 
   padding: 10px 15px;
 
+  gap: 15px;
+
   border-radius: 13px;
   border: 1px solid #131313;
 
   background-color: white;
   color: #131313;
+
+  text-decoration: none;
 }
 
 .AppButton-svg {
   display: block;
-  width: 26px;
+  width: 30px;
   fill: #131313;
 }
 </style>

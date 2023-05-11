@@ -1,11 +1,10 @@
 <template>
   <div class="Page">
     <h1>Page</h1>
-    <AppButton
-      icon="akaru"
-      label="Go home"
-      to="/"
-    />
+    <nuxt-link to="/">
+      Go home
+    </nuxt-link>
+
   </div>
 </template>
 

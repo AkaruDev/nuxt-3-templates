@@ -1,4 +1,7 @@
 {
   "private": true,
-  "name": "app-link"
+  "name": "app-link",
+  "dependencies": {
+    "vite-svg-loader": "^4.0.0"
+  }
 }
