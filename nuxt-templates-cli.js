@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'Prismic',
+    description: 'Add Prismic module for Nuxt',
+    category: 'CMS'
   },
   dependencies: [],
-  devDependencies: [],
-  files: ['modules/my-feature', 'configs']
+  devDependencies: ['@nuxtjs/prismic@rc'],
+  files: ['modules/prismic', 'configs']
 }

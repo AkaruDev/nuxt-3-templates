@@ -1,8 +1,8 @@
 {
-  "name": "my-feature",
+  "name": "prismic",
   "version": "1.0.0",
   "description": "Page transitions",
-  "repository": "akaru/my-feature",
+  "repository": "akaru/prismic",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -33,6 +33,7 @@
   "devDependencies": {
     "@nuxt/eslint-config": "^0.1.1",
     "@nuxt/module-builder": "^0.3.0",
+    "@nuxtjs/prismic": "^3.0.0-rc.5",
     "@nuxt/schema": "^3.4.2",
     "@nuxt/test-utils": "^3.4.2",
     "@types/node": "^18",

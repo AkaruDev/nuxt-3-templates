@@ -1,0 +1,10 @@
+{
+  "text": {
+    "type": "StructuredText",
+    "config": {
+      "multi": "paragraph,strong,em,hyperlink,list-item,rtl",
+      "allowTargetBlank": true,
+      "label": "Texte"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "button_label": {
+    "type": "Text",
+    "config": {
+      "label": "Bouton label"
+    }
+  },
+  "button_link": {
+    "type": "Link",
+    "config": {
+      "allowTargetBlank": true,
+      "label": "Bouton lien",
+      "select": null
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+    "Entête": {
+        "uid": {
+            "type": "UID",
+            "config": {
+                "label": "uid"
+            }
+        },
+        "hero": {
+            "type": "Group",
+            "config": {
+                "repeat": false,
+                "fields": {
+                    "image": {
+                        "type": "Image",
+                        "config": {
+                            "label": "Image",
+                            "constraint": {
+                                "width": 2880,
+                                "height": 1600
+                            },
+                            "thumbnails": [
+                                {
+                                    "name": "portrait",
+                                    "width": 750,
+                                    "height": 1472
+                                }
+                            ]
+                        }
+                    },
+                    "title": {
+                        "type": "Text",
+                        "config": {
+                            "label": "Titre",
+                            "placeholder": ""
+                        }
+                    }
+                },
+                "label": "Information"
+            }
+        }
+    },
+    "SEO": {
+        "metas": {
+            "type": "Group",
+            "config": {
+                "repeat": false,
+                "fields": {
+                    "image": {
+                        "type": "Image",
+                        "config": {
+                            "constraint": {
+                                "width": 1200,
+                                "height": 630
+                            },
+                            "thumbnails": [],
+                            "label": "Image"
+                        }
+                    },
+                    "title": {
+                        "type": "Text",
+                        "config": {
+                            "label": "Title"
+                        }
+                    },
+                    "description": {
+                        "type": "Text",
+                        "config": {
+                            "label": "Description"
+                        }
+                    }
+                },
+                "label": "Seo"
+            }
+        }
+    }
+}
