@@ -1,4 +1,4 @@
-import { defineNuxtModule, addImports, addComponent, createResolver } from '@nuxt/kit'
+import { defineNuxtModule, addComponent, createResolver } from '@nuxt/kit'
 
 export default defineNuxtModule({
   meta: {
@@ -22,12 +22,10 @@ export default defineNuxtModule({
     */
 
     // Add components
-    /*
     addComponent({
-      name: 'MyComponent', // name of the component to be used in vue templates
-      filePath: resolver.resolve('runtime/components/MyComponent.vue')
+      name: 'AppImage', // name of the component to be used in vue templates
+      filePath: resolver.resolve('runtime/components/AppImage.vue')
     })
-    */
 
   }
 })

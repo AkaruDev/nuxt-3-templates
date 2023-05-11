@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'AppImage',
+    description: 'Add image component',
+    category: 'Components'
   },
   dependencies: [],
-  devDependencies: [],
-  files: ['modules/my-feature', 'configs']
+  devDependencies: ['@nuxt/image-edge', '@vueuse/core', '@vueuse/components'],
+  files: ['modules/app-image', 'configs']
 }
