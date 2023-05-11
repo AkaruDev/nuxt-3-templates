@@ -6,5 +6,5 @@ module.exports = {
   },
   dependencies: [],
   devDependencies: [],
-  files: ['modules/my-feature', 'configs']
+  files: ['modules/app-link', 'configs']
 }

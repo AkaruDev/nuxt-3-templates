@@ -1,8 +1,8 @@
 {
-  "name": "my-feature",
+  "name": "app-link",
   "version": "1.0.0",
   "description": "Page transitions",
-  "repository": "akaru/my-feature",
+  "repository": "akaru/app-link",
   "license": "MIT",
   "type": "module",
   "exports": {
