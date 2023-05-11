@@ -1,8 +1,8 @@
 {
-  "name": "my-feature",
+  "name": "app-svg",
   "version": "1.0.0",
-  "description": "Page transitions",
-  "repository": "akaru/my-feature",
+  "description": "AppSvg component",
+  "repository": "akaru/app-svg",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -28,7 +28,8 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.4.2"
+    "@nuxt/kit": "^3.4.2",
+    "vite-svg-loader": "^4.0.0"
   },
   "devDependencies": {
     "@nuxt/eslint-config": "^0.1.1",

@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'AppSVG',
+    description: 'Add component for svg',
+    category: 'Components'
   },
-  dependencies: [],
+  dependencies: ['vite-svg-loader'],
   devDependencies: [],
-  files: ['modules/my-feature', 'configs']
+  files: ['assets/svg', 'modules/app-svg', 'configs']
 }
