@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Page transitions',
-    description: 'Add page loader and pages transitions',
-    category: 'Animations'
+    title: 'Feature name',
+    description: 'Add feature',
+    category: 'Feature category'
   },
-  dependencies: ['@vueuse/core'],
+  dependencies: [],
   devDependencies: [],
-  files: ['modules/page-transitions', 'configs']
+  files: ['modules/my-feature', 'configs']
 }

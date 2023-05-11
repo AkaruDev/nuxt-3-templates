@@ -2,7 +2,7 @@
 export default defineNuxtConfig(
     {
         modules: [
-            '@/modules/page-transitions/src/module',
+            '@/modules/my-feature/src/module',
         ]
     }
 )

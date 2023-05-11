@@ -3,7 +3,7 @@ Get your module up and running quickly.
 
 Find and replace all on all files (CMD+SHIFT+F):
 - Name: My Module
-- Package name: page-transitions
+- Package name: my-feature
 - Description: My new Nuxt module
 -->
 
@@ -17,7 +17,7 @@ Find and replace all on all files (CMD+SHIFT+F):
 My new Nuxt module for doing amazing things.
 
 - [✨ &nbsp;Release Notes](/CHANGELOG.md)
-<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/page-transitions?file=playground%2Fapp.vue) -->
+<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-feature?file=playground%2Fapp.vue) -->
 <!-- - [📖 &nbsp;Documentation](https://example.com) -->
 
 ## Features
@@ -29,25 +29,25 @@ My new Nuxt module for doing amazing things.
 
 ## Quick Setup
 
-1. Add `page-transitions` dependency to your project
+1. Add `my-feature` dependency to your project
 
 ```bash
 # Using pnpm
-pnpm add -D page-transitions
+pnpm add -D my-feature
 
 # Using yarn
-yarn add --dev page-transitions
+yarn add --dev my-feature
 
 # Using npm
-npm install --save-dev page-transitions
+npm install --save-dev my-feature
 ```
 
-2. Add `page-transitions` to the `modules` section of `nuxt.config.ts`
+2. Add `my-feature` to the `modules` section of `nuxt.config.ts`
 
 ```js
 export default defineNuxtConfig({
   modules: [
-    'page-transitions'
+    'my-feature'
   ]
 })
 ```
@@ -81,14 +81,14 @@ npm run release
 ```
 
 <!-- Badges -->
-[npm-version-src]: https://img.shields.io/npm/v/page-transitions/latest.svg?style=flat&colorA=18181B&colorB=28CF8D
-[npm-version-href]: https://npmjs.com/package/page-transitions
+[npm-version-src]: https://img.shields.io/npm/v/my-feature/latest.svg?style=flat&colorA=18181B&colorB=28CF8D
+[npm-version-href]: https://npmjs.com/package/my-feature
 
-[npm-downloads-src]: https://img.shields.io/npm/dm/page-transitions.svg?style=flat&colorA=18181B&colorB=28CF8D
-[npm-downloads-href]: https://npmjs.com/package/page-transitions
+[npm-downloads-src]: https://img.shields.io/npm/dm/my-feature.svg?style=flat&colorA=18181B&colorB=28CF8D
+[npm-downloads-href]: https://npmjs.com/package/my-feature
 
-[license-src]: https://img.shields.io/npm/l/page-transitions.svg?style=flat&colorA=18181B&colorB=28CF8D
-[license-href]: https://npmjs.com/package/page-transitions
+[license-src]: https://img.shields.io/npm/l/my-feature.svg?style=flat&colorA=18181B&colorB=28CF8D
+[license-href]: https://npmjs.com/package/my-feature
 
 [nuxt-src]: https://img.shields.io/badge/Nuxt-18181B?logo=nuxt.js
 [nuxt-href]: https://nuxt.com

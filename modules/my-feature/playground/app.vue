@@ -1,7 +1,5 @@
 <template>
   <div>
-    <PageLoader />
-    <PageTransition />
     <NuxtPage />
   </div>
 </template>
@@ -27,6 +25,9 @@
   text-align: center;
 
   font-size: 16px;
+
+  background-color: #161616;
+  color: white;
 }
 
 h1 {
