@@ -1,8 +1,8 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'AppLink',
+    description: 'Add components',
+    category: 'Components'
   },
   dependencies: [],
   devDependencies: [],
