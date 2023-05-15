@@ -1,7 +1,4 @@
 {
   "private": true,
-  "name": "prismic",
-  "devDependencies": {
-    "@nuxtjs/prismic": "^3.0.0-rc.5"
-  }
+  "name": "akaru-prismic"
 }

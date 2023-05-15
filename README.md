@@ -9,6 +9,7 @@ If `preprod` is set Prismic is configured to work with preview functionality.
 
 ## Playground
 In the playground you have a basic functionning example of connexion with Prismic.
+Playground does not work with ssr for some reason. Ok on a new project.
 
 ## Preview
 // TODO test preview on Netlify

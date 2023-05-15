@@ -1,4 +1,5 @@
 import Formatter from '../utils/formatter'
+import { useRuntimeConfig } from '#app'
 
 import { usePrismic } from '@prismicio/vue'
 
@@ -13,6 +14,7 @@ const getHome = async () => {
 
   // Getting prismic
   const prismic = usePrismic()
+  if (prismic.client === undefined) return null
   Formatter.setPrismic(prismic)
   const document = await prismic.client.getSingle('page_home',
     {

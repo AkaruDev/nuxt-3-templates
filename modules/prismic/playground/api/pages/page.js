@@ -1,4 +1,5 @@
 import Formatter from '../utils/formatter'
+import { useRuntimeConfig } from '#app'
 
 import { usePrismic } from '@prismicio/vue'
 
