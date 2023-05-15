@@ -7,7 +7,8 @@ export default defineNuxtModule({
   },
   // Default configuration options of the Nuxt module
   defaults: {},
-  setup () { // options, nuxt
+  setup (options) { // options, nuxt
+    console.info(options)
     const resolver = createResolver(import.meta.url)
 
     addPlugin(resolver.resolve('./runtime/plugins/richTextLinks.client'))
