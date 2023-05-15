@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import getHome from "@/api/pages/home.js";
+import getHome from "../../../../api/pages/home.js";
 
 const { data: api, error } = await useAsyncData(getHome);
 

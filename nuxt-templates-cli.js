@@ -6,5 +6,5 @@ module.exports = {
   },
   dependencies: [],
   devDependencies: ['@nuxtjs/prismic@rc'],
-  files: ['modules/prismic', 'configs']
+  files: ['api', 'modules/prismic', 'configs']
 }
