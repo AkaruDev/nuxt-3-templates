@@ -3,13 +3,13 @@ import Formatter from '../utils/formatter'
 import { usePrismic } from '@prismicio/vue'
 
 const getHome = async () => {
-
   // Get lang
   /*
   const { localeProperties } = useI18n()
   const lang = localeProperties.value.iso
   */
-  const lang = 'fr-fr'
+  const config = useRuntimeConfig()
+  const lang = config?.public?.langIso || 'fr-fr'
 
   // Getting prismic
   const prismic = usePrismic()

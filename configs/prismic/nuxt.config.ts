@@ -1,10 +1,8 @@
 /**
  * Environment informations
  */
-const ENVIRONMENT = process.env.ENV || 'dev'
+const ENVIRONMENT = process?.env?.ENV || 'dev'
 const IS_PREPROD = ENVIRONMENT === 'preprod'
-
-console.log(ENVIRONMENT, IS_PREPROD);
 
 export default defineNuxtConfig(
     {
@@ -14,8 +12,13 @@ export default defineNuxtConfig(
         ],
         prismic: {
             endpoint: 'https://my-site.cdn.prismic.io/api/v2',
-            toolbar: false,
+            toolbar: IS_PREPROD,
             preview: IS_PREPROD ? '/preview/' : false
+        },
+        runtimeConfig: {
+            public: {
+                langIso: process?.env?.LANG_ISO || 'fr-fr'
+            }
         }
     }
 )

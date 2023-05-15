@@ -3,15 +3,13 @@ import { defineNuxtModule, addPlugin, createResolver } from '@nuxt/kit'
 export default defineNuxtModule({
   meta: {
     name: 'prismic',
-    configKey: 'akaruPrismic'
+    configKey: 'akaru-prismic'
   },
   // Default configuration options of the Nuxt module
   defaults: {},
-  setup (options) { // options, nuxt
-    console.info(options)
+  setup () { // options, nuxt
     const resolver = createResolver(import.meta.url)
 
     addPlugin(resolver.resolve('./runtime/plugins/richTextLinks.client'))
-
   }
 })
