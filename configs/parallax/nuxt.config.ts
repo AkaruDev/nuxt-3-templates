@@ -2,7 +2,7 @@
 export default defineNuxtConfig(
     {
         modules: [
-            '@/modules/my-feature/src/module',
+            '@/modules/parallax/src/module',
         ]
     }
 )

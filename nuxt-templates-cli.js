@@ -5,6 +5,6 @@ module.exports = {
     category: 'Feature category'
   },
   dependencies: [],
-  devDependencies: [],
-  files: ['modules/my-feature', 'configs']
+  devDependencies: ['@vueuse/core'],
+  files: ['modules/parallax', 'configs']
 }

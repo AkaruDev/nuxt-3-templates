@@ -3,7 +3,7 @@ Get your module up and running quickly.
 
 Find and replace all on all files (CMD+SHIFT+F):
 - Name: My Module
-- Package name: my-feature
+- Package name: parallax
 - Description: My new Nuxt module
 -->
 
@@ -17,7 +17,7 @@ Find and replace all on all files (CMD+SHIFT+F):
 My new Nuxt module for doing amazing things.
 
 - [✨ &nbsp;Release Notes](/CHANGELOG.md)
-<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-feature?file=playground%2Fapp.vue) -->
+<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/parallax?file=playground%2Fapp.vue) -->
 <!-- - [📖 &nbsp;Documentation](https://example.com) -->
 
 ## Features
@@ -29,25 +29,25 @@ My new Nuxt module for doing amazing things.
 
 ## Quick Setup
 
-1. Add `my-feature` dependency to your project
+1. Add `parallax` dependency to your project
 
 ```bash
 # Using pnpm
-pnpm add -D my-feature
+pnpm add -D parallax
 
 # Using yarn
-yarn add --dev my-feature
+yarn add --dev parallax
 
 # Using npm
-npm install --save-dev my-feature
+npm install --save-dev parallax
 ```
 
-2. Add `my-feature` to the `modules` section of `nuxt.config.ts`
+2. Add `parallax` to the `modules` section of `nuxt.config.ts`
 
 ```js
 export default defineNuxtConfig({
   modules: [
-    'my-feature'
+    'parallax'
   ]
 })
 ```
@@ -81,14 +81,14 @@ npm run release
 ```
 
 <!-- Badges -->
-[npm-version-src]: https://img.shields.io/npm/v/my-feature/latest.svg?style=flat&colorA=18181B&colorB=28CF8D
-[npm-version-href]: https://npmjs.com/package/my-feature
+[npm-version-src]: https://img.shields.io/npm/v/parallax/latest.svg?style=flat&colorA=18181B&colorB=28CF8D
+[npm-version-href]: https://npmjs.com/package/parallax
 
-[npm-downloads-src]: https://img.shields.io/npm/dm/my-feature.svg?style=flat&colorA=18181B&colorB=28CF8D
-[npm-downloads-href]: https://npmjs.com/package/my-feature
+[npm-downloads-src]: https://img.shields.io/npm/dm/parallax.svg?style=flat&colorA=18181B&colorB=28CF8D
+[npm-downloads-href]: https://npmjs.com/package/parallax
 
-[license-src]: https://img.shields.io/npm/l/my-feature.svg?style=flat&colorA=18181B&colorB=28CF8D
-[license-href]: https://npmjs.com/package/my-feature
+[license-src]: https://img.shields.io/npm/l/parallax.svg?style=flat&colorA=18181B&colorB=28CF8D
+[license-href]: https://npmjs.com/package/parallax
 
 [nuxt-src]: https://img.shields.io/badge/Nuxt-18181B?logo=nuxt.js
 [nuxt-href]: https://nuxt.com
