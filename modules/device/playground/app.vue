@@ -18,7 +18,7 @@
   justify-content: center;
 
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
 
   gap: 10px;
 
@@ -34,5 +34,9 @@ h1 {
   font-size: 58px;
 
   text-transform: uppercase;
+}
+
+a {
+  color: white;
 }
 </style>

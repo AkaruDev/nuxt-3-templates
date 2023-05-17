@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'Device',
+    description: 'Add a composable to detect breakpoints and mobile/tablet',
+    category: 'Helpers'
   },
   dependencies: [],
-  devDependencies: [],
-  files: ['modules/my-feature', 'configs']
+  devDependencies: ['@vueuse/core', 'detect-gpu'],
+  files: ['modules/device', 'configs']
 }
