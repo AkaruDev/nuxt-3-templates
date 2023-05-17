@@ -4,7 +4,7 @@ import { clamp, lerp } from "../utils/math"
 export default () => {
   // Directives options
   const options = {
-    cssVar: '--plx-progress',
+    cssVar: '--px-progress',
     margin: 100,
     hasLerp: true,
     hasClamp: true,
@@ -12,7 +12,8 @@ export default () => {
     onProgress: null,
     ratio: 0.1,
     precision: 6,
-    offsetY: 0
+    offsetY: 0,
+    active: true
   }
 
   // Variables
@@ -26,7 +27,7 @@ export default () => {
   const mounted = (el, binding) => {
     const animation = {
       el,
-      active: false,
+      inView: false,
       options: { ...options, ...binding.value },
       progress: { value: 0, lerp: 0 }
     }
@@ -52,7 +53,7 @@ export default () => {
     entries.forEach(entry => {
       const animation = animations.find(({ el }) => el === entry.target)
       if (animation) {
-        animation.active = entry.isIntersecting
+        animation.inView = entry.isIntersecting
         setProgress(animation)
       }
     })
@@ -66,8 +67,12 @@ export default () => {
     setProgress(animation)
   }
 
-  const setProgress = ({ el, active, progress, options }) => {
-    if (!active) return;
+  const setProgress = ({ el, inView, progress, options }) => {
+    if (!inView) return;
+    if (!options.active) {
+      el.style.setProperty(options.cssVar, 0)
+      return;
+    }
     progress.value = getProgress(el, options)
     if (options.hasLerp) {
       progress.lerp = lerp(progress.lerp, progress.value, options.ratio).toFixed(options.precision)

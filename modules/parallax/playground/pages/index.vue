@@ -19,9 +19,10 @@
       :style="{ backgroundColor: '#feeed3' }"
     />
     <div
-      v-parallax
+      v-parallax="{ active }"
       class="Parallax"
       :style="{ backgroundColor: '#d3fef7' }"
+      @click="toggleActive"
     />
   </div>
 </template>
@@ -36,6 +37,11 @@ const offsetY = ref(height.value * -0.5)
 
 const parllax1 = ref()
 const progress = ref(0)
+
+const active = ref(false)
+const toggleActive = () => {
+  active.value = !active.value
+}
 
 const onProgress = ({ el, lerp }) => {
   if (parllax1.value === el) {
@@ -78,7 +84,7 @@ const onResize = () => {
   justify-content: center;
   align-items: center;
 
-  width: 50vw;
+  width: 25vw;
   aspect-ratio: 1;
 
   background-color: #f1d3fe;
