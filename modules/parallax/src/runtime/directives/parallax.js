@@ -1,34 +1,33 @@
 import { useRafFn, useIntersectionObserver } from '@vueuse/core'
-
 import { clamp, lerp } from "../utils/math"
 
 export default () => {
   // Directives options
   const options = {
     cssVar: '--plx-progress',
-    marge: 100,
+    margin: 100,
     hasLerp: true,
     hasClamp: true,
+    normalised: false,
     onProgress: null,
     ratio: 0.1,
-    offset: 0
-    // TODO see for adding an offset maybe ?
+    precision: 6,
+    offsetY: 0
   }
 
   // Variables
   let animations = []
 
-
   /**
    *
    * @param {Element} el
-   * @param {Object} elOptions parameters
+   * @param {Object} binding parameters
    */
-  const mounted = (el, elOptions) => {
+  const mounted = (el, binding) => {
     const animation = {
       el,
       active: false,
-      options: { ...options, ...elOptions.value },
+      options: { ...options, ...binding.value },
       progress: { value: 0, lerp: 0 }
     }
     animations.push(animation)
@@ -38,7 +37,7 @@ export default () => {
       onIntersect,
       {
         threshold: 0,
-        rootMargin: `${animation.options.marge}px 0px ${animation.options.marge}px 0px`
+        rootMargin: `${animation.options.margin}px 0px ${animation.options.margin}px 0px`
       }
     )
 
@@ -69,31 +68,57 @@ export default () => {
 
   const setProgress = ({ el, active, progress, options }) => {
     if (!active) return;
-    progress.value = getProgress(el, options.hasClamp)
+    progress.value = getProgress(el, options)
     if (options.hasLerp) {
-      progress.lerp = lerp(progress.lerp, progress.value, options.ratio)
+      progress.lerp = lerp(progress.lerp, progress.value, options.ratio).toFixed(options.precision)
     }
 
     el.style.setProperty(options.cssVar, options.hasLerp ? progress.lerp : progress.value)
 
-    options?.onProgress?.({ el, progress })
+    options?.onProgress?.({ el, ...progress })
   }
 
-  const getProgress = (el, hasClamp) => {
-    const { top, height } = el.getBoundingClientRect()
+  const getProgress = (el, options) => {
 
+    // Set offset
+    let { top, height } = el.getBoundingClientRect()
+    top -= options.offsetY
+    height += options.offsetY
+
+    // Compute value
     const value = Math.max(0, top + height)
     let progress = value / (window.innerHeight + height)
 
-    if (hasClamp) {
+    //Clamp
+    if (options.hasClamp) {
       progress = clamp(progress, 0, 1)
     }
 
-    return 1 - progress
+    // Reset value to 0 - 1
+    progress = 1 - progress
+
+    // Normalised
+    if (options.normalised) {
+      progress = progress * 2 - 1
+    }
+
+    return progress
+  }
+
+  // Update bindings values
+  const updated = (el, binding) => {
+    if (binding.value) {
+      const animation = animations.find((animation) => animation.el === el)
+
+      if (animation) {
+        animation.options = { ...animation.options, ...binding.value }
+      }
+    }
   }
 
   return {
     mounted,
+    updated,
     unmounted
   }
 }

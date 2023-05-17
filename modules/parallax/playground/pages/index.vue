@@ -6,11 +6,15 @@
     </nuxt-link>
 
     <div
-      v-parallax="{ onProgress }"
+      ref="parllax1"
+      v-parallax="{ onProgress, offsetY }"
       class="Parallax"
-    />
+    >
+      {{ progress }}
+    </div>
     <div
-      v-parallax
+      id="parallax-2"
+      v-parallax="{ normalised: true }"
       class="Parallax"
       :style="{ backgroundColor: '#feeed3' }"
     />
@@ -24,30 +28,66 @@
 
 <script setup>
 
-const onProgress = ({ el, progress }) => {
-  // console.info(el, progress)
+import { useWindowSize } from '@vueuse/core'
+
+const { height } = useWindowSize()
+
+const offsetY = ref(height.value * -0.5)
+
+const parllax1 = ref()
+const progress = ref(0)
+
+const onProgress = ({ el, lerp }) => {
+  if (parllax1.value === el) {
+    progress.value = lerp
+  }
 }
+
+onMounted(() => {
+  window.addEventListener("resize", onResize)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", onResize)
+})
+
+const onResize = () => {
+  offsetY.value = height.value * -0.5
+}
+
+
+
 </script>
 
 <style scoped>
 .Page {
   position: relative;
   justify-content: flex-start;
-  height: 500vh;
+  height: auto;
 
   gap: 100px;
+
+  padding-bottom: 100vh;
 
   overflow: hidden;
 }
 
 .Parallax {
   position: relative;
-  width: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 50vw;
   aspect-ratio: 1;
 
   background-color: #f1d3fe;
+  color: black;
 
   transform: scaleX(calc((var(--plx-progress, 0) * 1.5) + 1));
+}
 
+#parallax-2 {
+  transform: translateX(calc((var(--plx-progress, 0) * 100) * 1%));
 }
 </style>
