@@ -1,9 +1,18 @@
-## Setup
+# Description
+Add a config file for breakpoints `app.config.ts`.
+Add a composable `useDevice` to detect the following informations: 
+- breakpoints
+- screen orientation
+- pointer type
+- safari
+- gpu power indicator
 
-Create a new branch with name like `features/my-feature`
+# Example
+```
+<div v-if='device.mobile'/>
+const device = useDevice()
 
-Replace folder name, config names `my-feature` by the name of your new feature. 
+if(device.mobile.value)// do something
+```
 
-In `nuxt-templates.cli.js` fill the field corresponding to your new feature.
-
-Describe the feature in this README
+You can see it in action in the `playground` too.

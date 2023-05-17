@@ -14,7 +14,7 @@
         {{ value }}
       </li>
 
-      <li>Gpu tier {{ tier }}</li>
+      <li>Gpu tier {{ tier }} - {{ tiers[tier] }}</li>
     </ul>
   </div>
 </template>
@@ -23,6 +23,8 @@
 const device = useDevice()
 const gpuTier = await device.getGpuTier()
 const tier = ref(gpuTier)
+
+const tiers = ['Unknow 0fps', 'Low 15fps', 'Middle 30fps', 'High 60fps']
 
 const activeValues = computed(() => {
   const values = []
