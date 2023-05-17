@@ -18,7 +18,7 @@
   justify-content: center;
 
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
 
   gap: 10px;
 
@@ -27,6 +27,10 @@
   font-size: 16px;
 
   background-color: #161616;
+  color: white;
+}
+
+a {
   color: white;
 }
 
