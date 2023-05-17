@@ -1,8 +1,8 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'Parallax',
+    description: 'Add parallax directive/class',
+    category: 'Animations'
   },
   dependencies: [],
   devDependencies: ['@vueuse/core'],
