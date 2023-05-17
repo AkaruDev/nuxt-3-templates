@@ -61,8 +61,6 @@ const onResize = () => {
   offsetY.value = height.value * -0.5
 }
 
-
-
 </script>
 
 <style scoped>
@@ -90,10 +88,10 @@ const onResize = () => {
   background-color: #f1d3fe;
   color: black;
 
-  transform: scaleX(calc((var(--plx-progress, 0) * 1.5) + 1));
+  transform: scaleX(calc((var(--px-progress, 0) * 1.5) + 1));
 }
 
 #parallax-2 {
-  transform: translateX(calc((var(--plx-progress, 0) * 100) * 1%));
+  transform: translateX(calc((var(--px-progress, 0) * 100) * 1%));
 }
 </style>

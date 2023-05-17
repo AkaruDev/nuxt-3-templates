@@ -23,7 +23,7 @@
 
   background-color: #f1d3fe;
 
-  transform: scaleX(calc((var(--plx-progress, 0) * 1.5) + 1));
+  transform: scaleX(calc((var(--px-progress, 0) * 1.5) + 1));
 
 }
 </style>
