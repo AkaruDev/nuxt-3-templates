@@ -36,7 +36,6 @@ const getHome = async () => {
     title: Formatter.formatKeyText(document.data?.hero?.[0].title),
     link: document.data?.hero?.[0].link
   }
-  console.info(hero)
 
   // Return formated content
   return {

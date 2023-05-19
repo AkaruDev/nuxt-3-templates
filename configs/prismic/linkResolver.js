@@ -1,5 +1,4 @@
 const linkResolver = (doc) => {
-  console.info(doc)
   if (doc.isBroken) {
     return '/404/'
   }
