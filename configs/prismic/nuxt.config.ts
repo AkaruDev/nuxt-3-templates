@@ -13,7 +13,9 @@ export default defineNuxtConfig(
         prismic: {
             endpoint: 'https://my-site.cdn.prismic.io/api/v2',
             toolbar: IS_PREPROD,
-            preview: IS_PREPROD ? '/preview/' : false
+            preview: IS_PREPROD ? '/preview/' : false,
+            linkResolver: '@/configs/prismic/linkResolver.js',
+            htmlSerializer: '@/configs/prismic/htmlSerializer.js'
         },
         runtimeConfig: {
             public: {

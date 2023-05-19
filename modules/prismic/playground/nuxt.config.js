@@ -11,6 +11,6 @@ export default defineNuxtConfig({
   prismic: {
     endpoint: 'https://nuxt-3-templates.cdn.prismic.io/api/v2',
     toolbar: IS_PREPROD,
-    preview: IS_PREPROD ? '/preview/' : false
+    preview: IS_PREPROD ? '/preview/' : false,
   }
 })

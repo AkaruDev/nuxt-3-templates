@@ -6,6 +6,13 @@
     <nuxt-link to="/page">
       Go to page
     </nuxt-link>
+
+    <PrismicLink
+      v-if="api?.hero?.link"
+      :field="api.hero.link"
+    >
+      link test
+    </PrismicLink>
   </div>
 </template>
 
