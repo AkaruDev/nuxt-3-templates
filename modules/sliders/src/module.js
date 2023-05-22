@@ -2,7 +2,7 @@ import { defineNuxtModule, addImports, addComponent, createResolver } from '@nux
 
 export default defineNuxtModule({
   meta: {
-    name: 'my-feature',
+    name: 'sliders',
     configKey: 'myModule'
   },
   // Default configuration options of the Nuxt module
