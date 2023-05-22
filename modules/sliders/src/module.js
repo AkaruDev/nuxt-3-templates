@@ -22,12 +22,14 @@ export default defineNuxtModule({
     */
 
     // Add components
-    /*
     addComponent({
-      name: 'MyComponent', // name of the component to be used in vue templates
-      filePath: resolver.resolve('runtime/components/MyComponent.vue')
+      name: 'AppSlider', // name of the component to be used in vue templates
+      filePath: resolver.resolve('runtime/components/AppSlider.vue')
     })
-    */
+    addComponent({
+      name: 'AppSlideShow', // name of the component to be used in vue templates
+      filePath: resolver.resolve('runtime/components/AppSlideShow.vue')
+    })
 
   }
 })
