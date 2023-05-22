@@ -10,7 +10,6 @@ const htmlSerializer = {
 			: ''
 
 		const nuxtLink = node.data.link_type === 'Document' ? 'data-nuxt-link' : ''
-
 		const url = linkResolver(node.data)
 		return `<a ${target} href="${url}" ${nuxtLink}>${children}</a>`
 	}
