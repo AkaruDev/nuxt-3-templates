@@ -13,6 +13,8 @@
     >
       link test
     </PrismicLink>
+
+    <div v-html="api.hero.text" v-if="api?.hero?.text"/>
   </div>
 </template>
 

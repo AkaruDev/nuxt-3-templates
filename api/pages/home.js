@@ -23,6 +23,7 @@ const getHome = async () => {
           hero{
             title
             link
+            text
           }
         }
       }`,
@@ -34,7 +35,8 @@ const getHome = async () => {
   // Format document here
   const hero = {
     title: Formatter.formatKeyText(document.data?.hero?.[0].title),
-    link: document.data?.hero?.[0].link
+    link: document.data?.hero?.[0].link,
+    text: Formatter.formatRichText(document.data?.hero?.[0].text)
   }
 
   // Return formated content
