@@ -16,11 +16,12 @@
 <script setup>
 
 const items = []
-
 for (let i = 0; i < 5; i++) {
   items.push({ id: i, label: `slider-${i}` })
 
 }
+
+// TODO debug using Houlahoop implementation
 </script>
 
 <style scoped>
