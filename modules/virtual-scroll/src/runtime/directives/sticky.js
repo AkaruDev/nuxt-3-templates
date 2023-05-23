@@ -13,80 +13,80 @@ export default () => {
    * @param {Object} elOptions parameters
    */
   const mounted = (el, elOptions) => {
-    stickys.push({
+    const sticky = {
       el,
       elBounds: null,
       parent: el.parentNode,
       parentBounds: null,
       progress: 0,
+      onScroll: () => onScroll(sticky),
       options: { ...options, ...elOptions.value }
-    })
+    }
+    stickys.push(sticky)
 
-
-    $virtualScroll.on('scroll', onScroll)
+    $virtualScroll.on('scroll', sticky.onScroll)
   }
 
-  const setBounds = () => {
-    stickys.forEach(sticky => {
-      sticky.elBounds = sticky.el.getBoundingClientRect()
-      sticky.parentBounds = sticky.parent.getBoundingClientRect()
-    })
+  const unmounted = (el) => {
+    const sticky = stickys.find((sticky) => sticky.el === el)
+    if (sticky) $virtualScroll.off('scroll', sticky.onScroll)
+    stickys = stickys.filter((sticky) => sticky.el !== el)
   }
 
-  const sendProgress = () => {
-    stickys.forEach(sticky => {
-      if (sticky.options.onProgress) sticky.options.onProgress({ el: sticky.el, progress: sticky.progress })
-    })
+  const setBound = (sticky) => {
+    sticky.elBounds = sticky.el.getBoundingClientRect()
+    sticky.parentBounds = sticky.parent.getBoundingClientRect()
   }
 
-  const onScroll = () => {
-    if (!options.active) return
-    setBounds()
+  const sendProgress = (sticky) => {
+    if (sticky.options.onProgress) sticky.options.onProgress({ el: sticky.el, progress: sticky.progress })
+  }
 
-    stickys.forEach(sticky => {
-      if ($virtualScroll.active.value) {
-        const isInBounds = sticky.parentBounds.top <= sticky.options.marge && sticky.parentBounds.top + sticky.parentBounds.height - sticky.elBounds.height >= -sticky.options.marge
-        if (isInBounds) {
-          const max = sticky.parentBounds.height - sticky.elBounds.height
-          const value = sticky.parentBounds.top * -1
-          const y = clamp(value, 0, max).toFixed($virtualScroll.getPrecision())
-          sticky.el.style.transform = `translateY(${y}px)`
+  const onScroll = (sticky) => {
+    if (!sticky.options.active) return
+    setBound(sticky)
 
-          sticky.progress = (sticky.elBounds.top - sticky.parentBounds.top) / (sticky.parentBounds.height - sticky.elBounds.height)
-          if (isNaN(sticky.progress)) sticky.progress = 0
+    if ($virtualScroll.active.value) {
+      const isInBounds = sticky.parentBounds.top <= sticky.options.marge && sticky.parentBounds.top + sticky.parentBounds.height - sticky.elBounds.height >= -sticky.options.marge
+      if (isInBounds) {
+        const max = sticky.parentBounds.height - sticky.elBounds.height
+        const value = sticky.parentBounds.top * -1
+        const y = clamp(value, 0, max).toFixed($virtualScroll.getPrecision())
+        sticky.el.style.transform = `translateY(${y}px)`
 
-          sendProgress()
-        }
+        sticky.progress = (sticky.elBounds.top - sticky.parentBounds.top) / (sticky.parentBounds.height - sticky.elBounds.height)
+        if (isNaN(sticky.progress)) sticky.progress = 0
+
+        sendProgress(sticky)
+      }
+    } else {
+      const isInBounds = sticky.parentBounds.top <= 0 && sticky.parentBounds.top + sticky.parentBounds.height - sticky.elBounds.height >= 0
+      if (isInBounds) {
+        sticky.el.style.position = 'fixed'
+        sticky.el.style.top = ''
+        sticky.el.style.width = ''
+        sticky.el.style.transform = ''
+
+        sticky.progress = (sticky.elBounds.top - sticky.parentBounds.top) / (sticky.parentBounds.height - sticky.elBounds.height)
+        if (isNaN(sticky.progress)) sticky.progress = 0
+
+        sendProgress(sticky)
       } else {
-        const isInBounds = sticky.parentBounds.top <= 0 && sticky.parentBounds.top + sticky.parentBounds.height - sticky.elBounds.height >= 0
-        if (isInBounds) {
-          sticky.el.style.position = 'fixed'
-          sticky.el.style.top = ''
-          sticky.el.style.width = ''
-          sticky.el.style.transform = ''
+        sticky.el.style.position = ''
+        sticky.el.style.top = ''
+        sticky.el.style.width = ''
 
-          sticky.progress = (sticky.elBounds.top - sticky.parentBounds.top) / (sticky.parentBounds.height - sticky.elBounds.height)
-          if (isNaN(sticky.progress)) sticky.progress = 0
-
-          sendProgress()
-        } else {
-          sticky.el.style.position = ''
-          sticky.el.style.top = ''
-          sticky.el.style.width = ''
-
-          if (sticky.parentBounds.top <= 0) {
-            sticky.el.style.transform = `translateY(${sticky.parentBounds.height - sticky.elBounds.height}px)`
-          }
+        if (sticky.parentBounds.top <= 0) {
+          sticky.el.style.transform = `translateY(${sticky.parentBounds.height - sticky.elBounds.height}px)`
         }
       }
-    })
+    }
+
 
   }
   return {
     mounted,
-    unmounted: () => {
-      $virtualScroll.off('scroll', onScroll)
-    }
+    unmounted
   }
 }
 

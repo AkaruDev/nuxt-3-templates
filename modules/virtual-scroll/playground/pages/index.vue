@@ -15,8 +15,15 @@
         v-scroll-sticky="{ onProgress }"
         class="Sticky"
       >
-        <span>Sticky element</span>
+        <span>Sticky element 1</span>
         <span>Progress: {{ progress1 }}%</span>
+      </div>
+      <div
+        id="sticky-2"
+        v-scroll-sticky
+        class="Sticky"
+      >
+        <span>Sticky element 2</span>
       </div>
     </div>
   </div>
@@ -67,5 +74,10 @@ h1 {
   left: calc(50% - 10vh);
 
   background-color: rgb(169, 169, 255);
+}
+
+#sticky-2 {
+  top: 300px;
+  background-color: rgb(242, 169, 255);
 }
 </style>
