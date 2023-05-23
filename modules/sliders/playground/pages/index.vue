@@ -5,9 +5,17 @@
       Go to page
     </nuxt-link>
 
-    <AppSlider class="Slider" :items="items">
+    <AppSlider
+      class="Slider"
+      :items="items"
+    >
       <template #item="{ item, i }">
-        <div class="Slider-item" :id="`item-${i}`">{{ item.label }}</div>
+        <div
+          :id="`item-${i}`"
+          class="Slider-item"
+        >
+          {{ item.label }}
+        </div>
       </template>
     </AppSlider>
   </div>
@@ -18,7 +26,6 @@
 const items = []
 for (let i = 0; i < 5; i++) {
   items.push({ id: i, label: `slider-${i}` })
-
 }
 
 // TODO debug using Houlahoop implementation
@@ -32,9 +39,7 @@ for (let i = 0; i < 5; i++) {
 }
 
 .AppSlider.Slider {
-  position: relative;
   width: 100%;
-  height: 500px;
 }
 
 .Slider-item {
@@ -44,23 +49,12 @@ for (let i = 0; i < 5; i++) {
   justify-content: center;
 
   width: 40vw;
-  height: 100%;
+  height: 500px;
 
-  top: 0;
-  left: 0;
+  margin-right: 1rem;
 
-  color: #121212;
-}
 
-#item-0 {
   background-color: #fff3a4;
-}
-
-#item-1 {
-  background-color: #ecd3fa;
-}
-
-#item-2 {
-  background-color: #a4c8ff;
+  color: #121212;
 }
 </style>

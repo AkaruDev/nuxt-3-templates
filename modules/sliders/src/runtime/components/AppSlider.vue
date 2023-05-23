@@ -1,16 +1,27 @@
 <template>
-  <div ref="el" class="AppSlider" :class="{ '--no-drag': !hasDrag }">
+  <div
+    ref="el"
+    class="AppSlider"
+    :class="{ '--no-drag': !hasDrag }"
+  >
     <div ref="dragzone">
       <slot name="dragzone" />
     </div>
-    <div ref="wrapper" class="AppSlider-items">
+    <div
+      ref="wrapper"
+      class="AppSlider-items"
+    >
       <div
-      class="AppSlider-item"
-      ref="items"
-      :key="`${name}-item-${i}`"
-      v-for="(item, i) in props.items"
+        v-for="(item, i) in props.items"
+        ref="items"
+        :key="`${name}-item-${i}`"
+        class="AppSlider-item"
       >
-        <slot name="item" :item="item" :i="i" />
+        <slot
+          name="item"
+          :item="item"
+          :i="i"
+        />
       </div>
     </div>
   </div>
@@ -140,6 +151,7 @@ const init = () => {
 
 const setSlides = () => {
   if (props.items.length === 0) return
+
   total = props.items.length
   wrapWidth = 0
   itemHeight = 0
@@ -168,9 +180,20 @@ const setSlides = () => {
       position
     }
 
+    gsap.set(item, { position: 'absolute', x: slide.position.x, })
+
+
+
     slides.push(slide)
   })
 
+  gsap.set(el.value, { height: itemHeight })
+
+  if (props.isInfinite) {
+    gsap.set(wrapper.value, {
+      x: -itemWidth
+    })
+  }
 
   wrap = gsap.utils.wrap(0, wrapWidth)
   max = wrapWidth - viewWidth
@@ -187,9 +210,9 @@ const setAnimation = () => {
     modifiers: {
       x: (x, target) => {
         const i = parseInt(target.dataset.index)
-        const xTo = props.isInfinite ? (parseInt(x) % wrapWidth) : x
+        const xTo = props.isInfinite ? (`${parseInt(x) % wrapWidth}px`) : x
         slides[i].progress = xTo / wrapWidth
-        return `${xTo}px`
+        return xTo
       }
     }
   })
@@ -273,7 +296,7 @@ const updateProgress = () => {
 
   emit(EVENT_UPDATE, {
     progress: 1.0 - progress,
-    slidesProgress: slides.map(slide => { progress: slide.progress })
+    slidesProgress: slides.map(slide => { slide.progress })
   })
 }
 
@@ -375,15 +398,7 @@ const onResize = () => {
 .AppSlider-items {
   display: flex;
   width: 100%;
-  height: 100%;
 }
 
-.AppSlider-item {
-  position: relative;
-  flex: none;
-  height: 100%;
-
-  top: 0;
-  left: 0;
-}
+.AppSlider-item {}
 </style>
