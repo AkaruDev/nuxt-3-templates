@@ -27,10 +27,10 @@
         :alt="alt"
         :width="width"
         :height="height"
-        quality="80"
+        :quality="quality"
         :loading="loading"
         :preload="preload"
-        sizes="small:100vw medium:100vw large:100vw"
+        :sizes="sizes"
         @load="onLoad"
       />
     </div>
@@ -71,6 +71,15 @@ defineProps({
     type: String,
     default: "blur",
     validator: value => ['none', 'blur'].includes(value)
+  },
+  sizes: {
+    type: String,
+    default: "small:100vw medium:100vw large:100vw"
+  },
+  quality: {
+    type: Number,
+    default: 80,
+    validator: value => value >= 0 && value <= 100
   }
 })
 
