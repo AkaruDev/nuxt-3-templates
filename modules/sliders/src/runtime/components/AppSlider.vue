@@ -61,7 +61,7 @@ const props = defineProps({
   },
   autoplay: {
     type: Boolean,
-    default: false
+    default: true
   },
   speed: {
     type: Number,
@@ -106,7 +106,6 @@ let itemHeight = 0
 let max = 0
 let proxy = null
 let slides = []
-let scrollDelta = 0
 let total = 0
 let trigger = null
 let viewWidth = 0
@@ -146,6 +145,8 @@ const init = () => {
   setSlides()
   setAnimation()
   setDraggable()
+
+  updateProgress()
 
   isInit.value = true
 }
@@ -319,7 +320,7 @@ const setX = ({ x }) => {
 }
 
 // Raf
-useRafFn(() => onTick)
+useRafFn(() => onTick())
 const onTick = () => {
   if (!isVisible.value || !isInit.value) return
 
@@ -328,7 +329,7 @@ const onTick = () => {
   }
 
   if (props.autoplay && props.infinite && !dragging.value) {
-    updateAutoscrollInfiniteSlider()
+    updateAutoplay()
   }
 }
 
@@ -340,16 +341,14 @@ const updateSlider = () => {
   animation.progress(progressInertia)
 }
 
-const updateAutoscrollInfiniteSlider = () => {
-  const scrollY = 0 // todo get real value
-  scrollDelta = scrollY * 0.02
-
+const updateAutoplay = () => {
   gsap.set(draggable[0].target, {
-    x: (draggable[0].x -= (props.speed + Math.abs(scrollDelta)) * props.direction)
+    x: draggable[0].x -= props.speed * props.direction
   })
   draggable[0].update()
   progress = wrap(draggable[0].x) / wrapWidth
   animation.progress(progress)
+  updateProgress()
 }
 
 // Nav

@@ -36,9 +36,13 @@ for (let i = 0; i < 5; i++) {
 
 const onUpdate = ({ slides }) => { // { progress, slides }
   slides.forEach(({ el, progress }) => {
-    el.style.setProperty('--progress', progress)
+    const division = 1 / slides.length
+    const p = gsap.utils.clamp(0, 1, gsap.utils.mapRange(division * 2, division * 3, 0, 1, progress))
+    el.style.setProperty('--progress', p)
   })
 }
+
+// TODO test prev/next
 
 </script>
 
@@ -74,6 +78,6 @@ const onUpdate = ({ slides }) => { // { progress, slides }
   background-color: #fff3a4;
   color: #121212;
 
-  transform: scale(calc((var(--progress, 0) * -0.2) + 1));
+  transform: scale(calc((var(--progress, 0) * -0.5) + 1));
 }
 </style>
