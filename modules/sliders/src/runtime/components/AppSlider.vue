@@ -31,6 +31,7 @@
 import { clamp, lerp } from '../utils/math'
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
+
 import { useIntersectionObserver, useRafFn } from '@vueuse/core'
 
 // GSAP
@@ -46,7 +47,7 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
-  isInfinite: {
+  infinite: {
     type: Boolean,
     default: true
   },
@@ -152,17 +153,22 @@ const init = () => {
 const setSlides = () => {
   if (props.items.length === 0) return
 
-  total = props.items.length
+  // Reorder
+  const itemsSorted = [...items.value]
+  const last = itemsSorted.pop()
+  itemsSorted.unshift(last)
+
+  total = itemsSorted.length
   wrapWidth = 0
   itemHeight = 0
 
   viewWidth = wrapper.value.getBoundingClientRect().width
-  itemWidth = items?.value?.[0]?.offsetWidth || 0
+  itemWidth = itemsSorted?.[0]?.offsetWidth || 0
   wrapWidth = itemWidth * total
 
   // Loop items and create slides object
   slides = []
-  items.value.forEach((item, i) => {
+  itemsSorted.forEach((item, i) => {
 
     item.setAttribute('data-index', i)
 
@@ -182,14 +188,12 @@ const setSlides = () => {
 
     gsap.set(item, { position: 'absolute', x: slide.position.x, })
 
-
-
     slides.push(slide)
   })
 
   gsap.set(el.value, { height: itemHeight })
 
-  if (props.isInfinite) {
+  if (props.infinite) {
     gsap.set(wrapper.value, {
       x: -itemWidth
     })
@@ -205,13 +209,14 @@ const setAnimation = () => {
 
   animation.to(items.value, {
     duration: 1,
-    x: `+=${props.isInfinite ? wrapWidth : max}`,
+    x: `+=${props.infinite ? wrapWidth : max}`,
     ease: 'none',
     modifiers: {
       x: (x, target) => {
         const i = parseInt(target.dataset.index)
-        const xTo = props.isInfinite ? (`${parseInt(x) % wrapWidth}px`) : x
-        slides[i].progress = xTo / wrapWidth
+        const modulo = parseInt(x) % wrapWidth
+        const xTo = props.infinite ? (`${modulo}px`) : x
+        slides[i].progress = modulo / wrapWidth
         return xTo
       }
     }
@@ -236,7 +241,7 @@ const getDraggableOptions = () => {
     onThrowUpdate: () => updateProgress()
   }
 
-  if (props.isInfinite) {
+  if (props.infinite) {
     options = {
       ...options,
       edgeResistance: touchDevice.value ? 1.70 : 0.85,
@@ -283,7 +288,7 @@ const onRelease = () => {
 
 // Progress
 const updateProgress = () => {
-  if (props.isInfinite) {
+  if (props.infinite) {
     progress = wrap(draggable[0].x) / wrapWidth
     animation.progress(progress)
 
@@ -296,7 +301,7 @@ const updateProgress = () => {
 
   emit(EVENT_UPDATE, {
     progress: 1.0 - progress,
-    slidesProgress: slides.map(slide => { slide.progress })
+    slides: slides.map(slide => { return { el: slide.el, progress: slide.progress } })
   })
 }
 
@@ -318,11 +323,11 @@ useRafFn(() => onTick)
 const onTick = () => {
   if (!isVisible.value || !isInit.value) return
 
-  if (!props.isInfinite) {
+  if (!props.infinite) {
     updateSlider()
   }
 
-  if (props.autoplay && props.isInfinite && !dragging.value) {
+  if (props.autoplay && props.infinite && !dragging.value) {
     updateAutoscrollInfiniteSlider()
   }
 }

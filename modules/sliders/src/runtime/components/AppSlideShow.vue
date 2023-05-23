@@ -1,6 +1,9 @@
 <template>
   <div>
     TODO AppSlideShow
+    - prev
+    - next
+    - swipe / swipe zone
   </div>
 </template>
 
