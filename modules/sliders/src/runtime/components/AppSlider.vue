@@ -153,7 +153,6 @@ const init = () => {
 
   isInit.value = true
   emit(EVENT_READY, slides)
-
 }
 
 const setSlides = () => {
@@ -379,8 +378,9 @@ const prev = (duration = 1, ease = 'power3.out') => {
 
 const set = (direction, duration = 1, ease = 'power3.out') => {
   const target = { currentX }
+  const x = Math.round(currentX / itemWidth) * itemWidth
   gsap.to(target, {
-    currentX: currentX + (itemWidth * direction),
+    currentX: x + (itemWidth * direction),
     duration,
     onUpdate: () => {
       setX({ x: target.currentX })
@@ -423,6 +423,4 @@ defineExpose({ prev, next, updateProgress })
   display: flex;
   width: 100%;
 }
-
-.AppSlider-item {}
 </style>

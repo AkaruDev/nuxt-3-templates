@@ -1,4 +1,4 @@
-const clamp = (value, min, max) => {
+function clamp (value, min, max) {
   if (min !== undefined && max !== undefined) {
     return Math.min(Math.max(value, min), max)
   } else if (min !== undefined) {
@@ -10,11 +10,15 @@ const clamp = (value, min, max) => {
   }
 }
 
-const lerp = (value, target, coeff, precision) => {
+function lerp (value, target, coeff, precision) {
   if (Math.abs(target - value) < precision) { return target }
 
   return value * (1 - coeff) + target * coeff
 }
 
+function loop (value, min, max) {
+  return value < min ? max : value > max ? min : value
+}
 
-export { lerp, clamp }
+
+export { lerp, clamp, loop }

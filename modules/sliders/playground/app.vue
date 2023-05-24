@@ -52,7 +52,7 @@ button {
   padding: 10px 15px;
 
   border: none;
-  border-radius: 13px;
+  border-radius: 8px;
   outline: none;
   background-color: white;
   color: #161616;

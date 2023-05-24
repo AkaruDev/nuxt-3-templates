@@ -1,23 +1,16 @@
 <template>
   <div
     class="AppBullets"
-    :class="[...classes, { '--progress': hasProgress }]"
+    :class="classes"
   >
     <button
       v-for="(i, itemIndex) in length"
       :key="i"
       class="AppBullet"
       :class="{ '--selected': itemIndex === index }"
-      :aria-label="`Bullet-${itemIndex}`"
+      :aria-label="`Bulletpoint-${itemIndex}`"
       @click="onClick(itemIndex)"
-    >
-      <AppCircle
-        v-if="hasProgress"
-        class="AppBullet-circle"
-        :progress="itemIndex === index ? progress : 0"
-        color="#FFA25F"
-      />
-    </button>
+    />
   </div>
 </template>
 
@@ -34,14 +27,6 @@ const props = defineProps({
   length: {
     type: Number,
     default: 1
-  },
-  hasProgress: {
-    type: Boolean,
-    default: false
-  },
-  progress: {
-    type: Number,
-    default: 0
   },
   theme: {
     type: String,
@@ -67,10 +52,6 @@ const onClick = (index) => {
   justify-content: center;
   align-items: center;
   pointer-events: none;
-}
-
-.AppBullets.--progress {
-  gap: 5px;
 }
 
 .AppBullet {

@@ -25,6 +25,7 @@
     </AppSlider>
 
     <AppBullets
+      class="SliderBullets"
       :length="items.length"
       :index="index"
     />
@@ -75,12 +76,14 @@ const onUpdate = (data) => { // { index,progress, slides }
 
 const tls = []
 const onReady = (slides) => {
-  const step = 1 / slides.length
+  const step = (1 / slides.length)
   slides.forEach(slide => {
     const tl = gsap.timeline({ paused: true })
     const target = slide.el.querySelector('.Slider-item')
-    tl.fromTo(target, { scale: 0.5 }, { scale: 1, duration: step, ease: "power3.out" }, 0)
-    tl.fromTo(target, { scale: 1 }, { scale: 0.5, duration: step, ease: "power3.out" }, step * 2)
+    tl.fromTo(target, {}, { duration: step * slides.length }, 0)
+    tl.fromTo(target, { scaleX: 0.8 }, { scaleX: 1, duration: step, ease: "power3.out" }, step * 1)
+    tl.fromTo(target, { scaleX: 1 }, { scaleX: 0.8, duration: step, ease: "power3.out" }, step * 2)
+
     tls.push(tl)
   })
 
@@ -126,10 +129,15 @@ const prev = () => {
 
   margin: 0 0 0 2.33vw;
 
-
-  background-color: #fdf8d7;
+  border-radius: 13px;
+  background-color: #e2d7fd;
   color: #121212;
 
+
+}
+
+.AppBullets.SliderBullets {
+  margin-top: 20px;
 }
 
 .SliderNav {
