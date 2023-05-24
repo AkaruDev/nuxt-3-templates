@@ -30,6 +30,14 @@ export default defineNuxtModule({
       name: 'AppSlideShow', // name of the component to be used in vue templates
       filePath: resolver.resolve('runtime/components/AppSlideShow.vue')
     })
+    addComponent({
+      name: 'AppBullets', // name of the component to be used in vue templates
+      filePath: resolver.resolve('runtime/components/AppBullets.vue')
+    })
+    addComponent({
+      name: 'AppCircle', // name of the component to be used in vue templates
+      filePath: resolver.resolve('runtime/components/AppCircle.vue')
+    })
 
   }
 })

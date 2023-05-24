@@ -61,7 +61,7 @@ const props = defineProps({
   },
   autoplay: {
     type: Boolean,
-    default: true
+    default: false
   },
   speed: {
     type: Number,
@@ -80,11 +80,12 @@ const props = defineProps({
 })
 
 // Define emits events
+const EVENT_READY = 'slider:ready'
 const EVENT_CHANGE = 'slider:change'
 const EVENT_UPDATE = 'slider:update'
 const EVENT_PRESS = 'slider:press'
 const EVENT_RELEASE = 'slider:release'
-const emit = defineEmits(['slider:change', 'slider:update', 'slider:press', 'slider:release'])
+const emit = defineEmits(['slider:ready', 'slider:change', 'slider:update', 'slider:press', 'slider:release'])
 
 // Refs
 const el = ref()
@@ -97,6 +98,10 @@ const items = ref('items')
 const dragzone = ref('dragzone')
 
 // Data
+const directions = {
+  PREVIOUS: 1,
+  NEXT: -1
+}
 let animation = gsap.timeline()
 let currentX = 0
 let draggable = null
@@ -146,9 +151,9 @@ const init = () => {
   setAnimation()
   setDraggable()
 
-  updateProgress()
-
   isInit.value = true
+  emit(EVENT_READY, slides)
+
 }
 
 const setSlides = () => {
@@ -177,7 +182,7 @@ const setSlides = () => {
     itemHeight = bounds.height > itemHeight ? bounds.height : itemHeight
 
     const progress = i / total
-    const x = bounds.width * i
+    const x = bounds.width * (i + 1)
     const width = (itemHeight * bounds.width) / bounds.height
     const position = { x, width }
     const slide = {
@@ -289,11 +294,12 @@ const onRelease = () => {
 
 // Progress
 const updateProgress = () => {
+  if (!draggable?.[0]) return
   if (props.infinite) {
     progress = wrap(draggable[0].x) / wrapWidth
     animation.progress(progress)
 
-    index.value = total - Math.ceil(progress * total)
+    index.value = progress === 0 ? 0 : total - Math.round(progress * total)
   } else {
     x = draggable[0].x
     progress = clamp((draggable[0].x / -max), 0, 1)
@@ -301,6 +307,7 @@ const updateProgress = () => {
   }
 
   emit(EVENT_UPDATE, {
+    index: index.value,
     progress: 1.0 - progress,
     slides: slides.map(slide => { return { el: slide.el, progress: slide.progress } })
   })
@@ -309,14 +316,14 @@ const updateProgress = () => {
 const setX = ({ x }) => {
   currentX = x
 
-  const d = draggable?.[0] || null
-  if (!d) return
-  gsap.set(d.target, { x })
-  d.update()
-  progress = wrap(d.x) / wrapWidth
+  const currentDrag = draggable?.[0] || null
+  if (!currentDrag) return
+  gsap.set(currentDrag.target, { x })
+  currentDrag.update()
+  progress = wrap(currentDrag.x) / wrapWidth
   animation.progress(progress)
 
-  index.value = total - Math.ceil(progress * total)
+  index.value = (total - 1) - Math.ceil(progress * total)
 }
 
 // Raf
@@ -352,27 +359,37 @@ const updateAutoplay = () => {
 }
 
 // Nav
-const next = ({ ease = 'power2.inOut', duration = 1 }) => {
-  gsap.to(el, {
-    x: currentX + itemWidth,
+/**
+ *
+ * @param {Number} duration
+ * @param {String} ease from gsap
+ */
+const next = (duration = 1, ease = 'power3.out') => {
+  set(directions.NEXT, duration, ease)
+}
+
+/**
+ *
+ * @param {Number} duration
+ * @param {String} ease from gsap
+ */
+const prev = (duration = 1, ease = 'power3.out') => {
+  set(directions.PREVIOUS, duration, ease)
+}
+
+const set = (direction, duration = 1, ease = 'power3.out') => {
+  const target = { currentX }
+  gsap.to(target, {
+    currentX: currentX + (itemWidth * direction),
     duration,
     onUpdate: () => {
-      setX({ x: currentX })
+      setX({ x: target.currentX })
+      updateProgress()
     },
     ease
   })
 }
 
-const prev = ({ ease = 'power2.inOut', duration = 1 }) => {
-  gsap.to(el, {
-    x: currentX - itemWidth,
-    duration,
-    onUpdate: () => {
-      setX({ x: currentX })
-    },
-    ease
-  })
-}
 
 // Resize
 const setTouchDevice = () => {
@@ -386,6 +403,9 @@ const onResize = () => {
   // TODO see if it's needed to setTimeout 0 this method
   setX({ x: currentX })
 }
+
+// Expose
+defineExpose({ prev, next, updateProgress })
 
 </script>
 

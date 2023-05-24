@@ -8,6 +8,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 .Page {
@@ -39,5 +40,29 @@ h1 {
   font-size: 58px;
 
   text-transform: uppercase;
+}
+
+button {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
+  padding: 10px 15px;
+
+  border: none;
+  border-radius: 13px;
+  outline: none;
+  background-color: white;
+  color: #161616;
+
+  font-size: 16px;
+
+  text-transform: uppercase;
+}
+
+button:focus {
+  outline: none;
 }
 </style>

@@ -7,8 +7,11 @@
 
     <h2>Slider draggable infinite:</h2>
     <AppSlider
+      ref="slider"
       class="Slider"
       :items="items"
+      :has-snap="true"
+      @slider:ready="onReady"
       @slider:update="onUpdate"
     >
       <template #item="{ item, i }">
@@ -20,6 +23,28 @@
         </div>
       </template>
     </AppSlider>
+
+    <AppBullets
+      :length="items.length"
+      :index="index"
+    />
+
+    <div class="SliderNav">
+      <button
+        type="button"
+        aria-label="Previous"
+        @click="prev"
+      >
+        Prev
+      </button>
+      <button
+        type="button"
+        aria-label="Next"
+        @click="next"
+      >
+        Next
+      </button>
+    </div>
   </div>
 </template>
 
@@ -29,20 +54,45 @@ import { InertiaPlugin } from '../gsap/InertiaPlugin'
 
 gsap.registerPlugin(InertiaPlugin)
 
+// Set slider
+const slider = ref('slider')
+const index = ref(0)
+
 const items = []
 for (let i = 0; i < 5; i++) {
   items.push({ id: i, label: `slider-${i}` })
 }
 
-const onUpdate = ({ slides }) => { // { progress, slides }
-  slides.forEach(({ el, progress }) => {
-    const division = 1 / slides.length
-    const p = gsap.utils.clamp(0, 1, gsap.utils.mapRange(division * 2, division * 3, 0, 1, progress))
-    el.style.setProperty('--progress', p)
+const onUpdate = (data) => { // { index,progress, slides }
+  data.slides.forEach(({ progress }, index) => {
+    if (tls[index]) {
+      tls[index].progress(progress)
+    }
   })
+
+  index.value = data.index
 }
 
-// TODO test prev/next
+const tls = []
+const onReady = (slides) => {
+  const step = 1 / slides.length
+  slides.forEach(slide => {
+    const tl = gsap.timeline({ paused: true })
+    const target = slide.el.querySelector('.Slider-item')
+    tl.fromTo(target, { scale: 0.5 }, { scale: 1, duration: step, ease: "power3.out" }, 0)
+    tl.fromTo(target, { scale: 1 }, { scale: 0.5, duration: step, ease: "power3.out" }, step * 2)
+    tls.push(tl)
+  })
+
+}
+
+const next = () => {
+  slider?.value?.next()
+}
+const prev = () => {
+  slider?.value?.prev()
+}
+
 
 </script>
 
@@ -61,6 +111,8 @@ const onUpdate = ({ slides }) => { // { progress, slides }
   width: 100%;
 
   margin-top: 50px;
+
+  margin-left: -3.33vw;
 }
 
 .Slider-item {
@@ -69,15 +121,22 @@ const onUpdate = ({ slides }) => { // { progress, slides }
   align-items: center;
   justify-content: center;
 
-  width: 40vw;
-  height: 500px;
+  width: 31vw;
+  height: 31vw;
 
-  margin: 0 0 0 2vw;
+  margin: 0 0 0 2.33vw;
 
 
-  background-color: #fff3a4;
+  background-color: #fdf8d7;
   color: #121212;
 
-  transform: scale(calc((var(--progress, 0) * -0.5) + 1));
+}
+
+.SliderNav {
+  display: flex;
+
+  margin-top: 30px;
+
+  gap: 10px;
 }
 </style>
