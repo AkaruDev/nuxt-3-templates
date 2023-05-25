@@ -57,7 +57,7 @@ const props = defineProps({
   },
   hasSnap: {
     type: Boolean,
-    default: false
+    default: true
   },
   autoplay: {
     type: Boolean,
@@ -410,7 +410,7 @@ const onResize = () => {
 }
 
 // Expose
-defineExpose({ prev, next, updateProgress })
+defineExpose({ prev, next })
 
 </script>
 

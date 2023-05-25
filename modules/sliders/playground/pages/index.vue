@@ -86,7 +86,6 @@ const onReady = (slides) => {
     tl.fromTo(target, { rotateY: 30 }, { rotateY: 0, duration: step * 2, ease: "power3.out" }, step * 0.5)
     tl.fromTo(target, { rotateY: 0 }, { rotateY: -30, duration: step * 2, ease: "power3.out" }, step * 2.5)
 
-
     tls.push(tl)
   })
 
@@ -98,7 +97,6 @@ const next = () => {
 const prev = () => {
   slider?.value?.prev()
 }
-
 
 </script>
 
