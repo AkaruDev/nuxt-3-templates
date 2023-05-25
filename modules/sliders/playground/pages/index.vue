@@ -76,13 +76,16 @@ const onUpdate = (data) => { // { index,progress, slides }
 
 const tls = []
 const onReady = (slides) => {
+
   const step = (1 / slides.length)
   slides.forEach(slide => {
     const tl = gsap.timeline({ paused: true })
     const target = slide.el.querySelector('.Slider-item')
-    tl.fromTo(target, {}, { duration: step * slides.length }, 0)
-    tl.fromTo(target, { scaleX: 0.8 }, { scaleX: 1, duration: step, ease: "power3.out" }, step * 1)
-    tl.fromTo(target, { scaleX: 1 }, { scaleX: 0.8, duration: step, ease: "power3.out" }, step * 2)
+    tl.set(target, { rotateY: 30 }, 0)
+    tl.to(target, { duration: step * slides.length }, 0)
+    tl.fromTo(target, { rotateY: 30 }, { rotateY: 0, duration: step * 2, ease: "power3.out" }, step * 0.5)
+    tl.fromTo(target, { rotateY: 0 }, { rotateY: -30, duration: step * 2, ease: "power3.out" }, step * 2.5)
+
 
     tls.push(tl)
   })
@@ -116,6 +119,10 @@ const prev = () => {
   margin-top: 50px;
 
   margin-left: -3.33vw;
+}
+
+.AppSlider.Slider:deep(.AppSlider-item) {
+  perspective: 400px;
 }
 
 .Slider-item {

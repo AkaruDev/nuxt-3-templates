@@ -180,7 +180,7 @@ const setSlides = () => {
     const bounds = item.getBoundingClientRect()
     itemHeight = bounds.height > itemHeight ? bounds.height : itemHeight
 
-    const progress = i / total
+    const progress = (i + 1) / total
     const x = bounds.width * (i + 1)
     const width = (itemHeight * bounds.width) / bounds.height
     const position = { x, width }
@@ -364,7 +364,7 @@ const updateAutoplay = () => {
  * @param {String} ease from gsap
  */
 const next = (duration = 1, ease = 'power3.out') => {
-  set(directions.NEXT, duration, ease)
+  goTo(directions.NEXT, duration, ease)
 }
 
 /**
@@ -373,10 +373,16 @@ const next = (duration = 1, ease = 'power3.out') => {
  * @param {String} ease from gsap
  */
 const prev = (duration = 1, ease = 'power3.out') => {
-  set(directions.PREVIOUS, duration, ease)
+  goTo(directions.PREVIOUS, duration, ease)
 }
 
-const set = (direction, duration = 1, ease = 'power3.out') => {
+/**
+ *
+ * @param {Integer} direction
+ * @param {Number} duration
+ * @param {String} ease from gsap
+ */
+const goTo = (direction, duration = 1, ease = 'power3.out') => {
   const target = { currentX }
   const x = Math.round(currentX / itemWidth) * itemWidth
   gsap.to(target, {
@@ -390,7 +396,6 @@ const set = (direction, duration = 1, ease = 'power3.out') => {
   })
 }
 
-
 // Resize
 const setTouchDevice = () => {
   touchDevice.value = window.matchMedia?.('(hover: none) and (pointer: coarse)')?.matches || false
@@ -400,8 +405,8 @@ const onResize = () => {
   setSlides()
   setAnimation()
 
-  // TODO see if it's needed to setTimeout 0 this method
   setX({ x: currentX })
+  updateProgress()
 }
 
 // Expose
