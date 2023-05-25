@@ -1,4 +1,4 @@
-import { defineNuxtModule, addImports, addComponent, createResolver } from '@nuxt/kit'
+import { defineNuxtModule, addComponent, createResolver } from '@nuxt/kit'
 
 export default defineNuxtModule({
   meta: {
@@ -13,13 +13,11 @@ export default defineNuxtModule({
 
     // Exemples
     // Add composables
-    /*
-    addImports({
-      name: 'useMyComposable',
-      as: 'useMyComposable',
-      from: resolver.resolve('runtime/composables/my-composable')
-    })
-    */
+    /* addImports({
+      name: 'useSlidesEvents',
+      as: 'useSlidesEvents',
+      from: resolver.resolve('runtime/composables/useSlidesEvents')
+    }) */
 
     // Add components
     addComponent({

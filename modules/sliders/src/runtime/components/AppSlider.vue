@@ -32,7 +32,7 @@ import { clamp, lerp } from '../utils/math'
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
 
-import { set, useIntersectionObserver, useRafFn } from '@vueuse/core'
+import { useIntersectionObserver, useRafFn } from '@vueuse/core'
 
 // GSAP
 gsap.registerPlugin(Draggable)
@@ -65,7 +65,7 @@ const props = defineProps({
   },
   speed: {
     type: Number,
-    default: 0.5
+    default: 1
   },
   direction: {
     type: Number,
@@ -80,35 +80,36 @@ const props = defineProps({
 })
 
 // Define emits events
-const EVENT_READY = 'slider:ready'
-const EVENT_CHANGE = 'slider:change'
-const EVENT_UPDATE = 'slider:update'
-const EVENT_PRESS = 'slider:press'
-const EVENT_RELEASE = 'slider:release'
-const emit = defineEmits(['slider:ready', 'slider:change', 'slider:update', 'slider:press', 'slider:release'])
+const EVENT_CHANGE = 'change'
+const EVENT_PRESS = 'press'
+const EVENT_READY = 'ready'
+const EVENT_RELEASE = 'release'
+const emit = defineEmits(['ready', 'change', 'press', 'release'])
 
 // Refs
 const el = ref()
-const touchDevice = ref(false)
-const slots = useSlots()
 const dragging = ref(false)
-const isInit = ref(false)
-const wrapper = ref('wrapper')
-const items = ref('items')
 const dragzone = ref('dragzone')
+const index = ref(0);
+const isInit = ref(false)
+const items = ref('items')
+const slots = useSlots()
+const touchDevice = ref(false)
+const wrapper = ref('wrapper')
 
 // Data
 const directions = {
-  PREVIOUS: 1,
-  NEXT: -1
+  previous: 1,
+  next: -1
 }
 let animation = gsap.timeline()
 let currentX = 0
 let draggable = null
-let ease = 0.08
+let ease = 0.1
 let itemWidth = 0
 let itemHeight = 0
 let max = 0
+let progress = 0
 let proxy = null
 let slides = []
 let total = 0
@@ -116,14 +117,7 @@ let trigger = null
 let viewWidth = 0
 let wrap = null
 let wrapWidth = 0
-let progress = 0
 
-
-// Watch
-const index = ref(0);
-watch(index, (newValue) => {
-  emit(EVENT_CHANGE, { index: newValue })
-})
 
 // Intersection Observer
 const isVisible = ref(true)
@@ -305,7 +299,7 @@ const updateProgress = () => {
     index.value = Math.round((total - 1) * progress)
   }
 
-  emit(EVENT_UPDATE, {
+  emit(EVENT_CHANGE, {
     index: index.value,
     progress: 1.0 - progress,
     slides: slides.map(slide => { return { el: slide.el, progress: slide.progress } })
@@ -371,7 +365,7 @@ const getCurrentIndex = () => {
  */
 const next = (duration = 1, ease = 'power3.out') => {
   const index = getCurrentIndex()
-  goTo(index, directions.NEXT, duration, ease)
+  goTo(index, directions.next, duration, ease)
 }
 
 /**
@@ -381,7 +375,7 @@ const next = (duration = 1, ease = 'power3.out') => {
  */
 const prev = (duration = 1, ease = 'power3.out') => {
   const index = getCurrentIndex()
-  goTo(index, directions.PREVIOUS, duration, ease)
+  goTo(index, directions.previous, duration, ease)
 }
 
 /**
