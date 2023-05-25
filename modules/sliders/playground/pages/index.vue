@@ -28,6 +28,7 @@
       class="SliderBullets"
       :length="items.length"
       :index="index"
+      @bullet:click="onClickBullet"
     />
 
     <div class="SliderNav">
@@ -88,7 +89,10 @@ const onReady = (slides) => {
 
     tls.push(tl)
   })
+}
 
+const onClickBullet = (index) => {
+  slider?.value?.goTo(index)
 }
 
 const next = () => {
@@ -137,7 +141,6 @@ const prev = () => {
   border-radius: 13px;
   background-color: #e2d7fd;
   color: #121212;
-
 
 }
 

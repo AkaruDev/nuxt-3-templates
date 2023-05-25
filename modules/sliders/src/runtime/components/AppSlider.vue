@@ -32,7 +32,7 @@ import { clamp, lerp } from '../utils/math'
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
 
-import { useIntersectionObserver, useRafFn } from '@vueuse/core'
+import { set, useIntersectionObserver, useRafFn } from '@vueuse/core'
 
 // GSAP
 gsap.registerPlugin(Draggable)
@@ -357,14 +357,21 @@ const updateAutoplay = () => {
   updateProgress()
 }
 
+
+
 // Nav
+const getCurrentIndex = () => {
+  return Math.round(currentX / itemWidth)
+}
+
 /**
  *
  * @param {Number} duration
  * @param {String} ease from gsap
  */
 const next = (duration = 1, ease = 'power3.out') => {
-  goTo(directions.NEXT, duration, ease)
+  const index = getCurrentIndex()
+  goTo(index, directions.NEXT, duration, ease)
 }
 
 /**
@@ -373,20 +380,24 @@ const next = (duration = 1, ease = 'power3.out') => {
  * @param {String} ease from gsap
  */
 const prev = (duration = 1, ease = 'power3.out') => {
-  goTo(directions.PREVIOUS, duration, ease)
+  const index = getCurrentIndex()
+  goTo(index, directions.PREVIOUS, duration, ease)
 }
 
 /**
  *
+ * @param {Integer} index
  * @param {Integer} direction
  * @param {Number} duration
  * @param {String} ease from gsap
  */
-const goTo = (direction, duration = 1, ease = 'power3.out') => {
+const goTo = (index, direction = 0, duration = 1, ease = 'power3.out') => {
   const target = { currentX }
-  const x = Math.round(currentX / itemWidth) * itemWidth
+  const diff = index - getCurrentIndex()
+  const indexDiffDirection = diff === 0 ? 1 : -1
+  const x = (index * itemWidth * indexDiffDirection) + (itemWidth * direction)
   gsap.to(target, {
-    currentX: x + (itemWidth * direction),
+    currentX: x,
     duration,
     onUpdate: () => {
       setX({ x: target.currentX })
@@ -410,7 +421,7 @@ const onResize = () => {
 }
 
 // Expose
-defineExpose({ prev, next })
+defineExpose({ prev, next, goTo })
 
 </script>
 

@@ -40,6 +40,7 @@ const classes = computed(() => {
 })
 
 const onClick = (index) => {
+  console.info("cc")
   emit(BULLET_CLICK, index)
 }
 
@@ -51,28 +52,53 @@ const onClick = (index) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  pointer-events: none;
 }
 
 .AppBullet {
   position: relative;
-  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   flex: none;
-  width: 8px;
+  width: 22px;
   aspect-ratio: 1;
 
-  margin: 0 6px;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
   padding: 0;
+
+  cursor: pointer;
+
+  transition: 0.3s backgroundColor cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .AppBullet:hover::before {
+
+    background-color: #d6fdff;
+  }
+}
+
+.AppBullet::before {
+  position: relative;
+  width: 8px;
+  aspect-ratio: 1;
 
   border-radius: 100%;
 
   background-color: #CCC;
 
-  transition: 0.3s backgroundColor cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  content: '';
 }
 
 .AppBullet.--selected {
   pointer-events: none;
+}
+
+.AppBullet.--selected::before {
   background-color: #dbffb8;
 }
 
