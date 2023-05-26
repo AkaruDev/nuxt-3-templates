@@ -63,7 +63,7 @@ const onScrollBarRelease = () => {
 }
 
 const onScrollbarDrag = (e) => {
-  e.preventDefault()
+  e.stopPropagation()
   if (!mouseDown.value) return
 
   const y = e.clientY / el.value.clientHeight * $virtualScroll.bounds.value
