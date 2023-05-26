@@ -94,7 +94,7 @@ for (let i = 0; i < 5; i++) {
   border-width: 1px 0 0 0;
 }
 
-.AppSlider.last-child {
+.AppSlider:last-child {
   border-bottom-width: 1px;
 }
 
