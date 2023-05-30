@@ -8,6 +8,7 @@
 </template>
 
 <script setup>
+useMetas({ title: 'Home' })
 </script>
 
 <style scoped></style>

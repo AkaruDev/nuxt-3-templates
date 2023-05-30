@@ -4,6 +4,12 @@
   </div>
 </template>
 
+<script setup>
+
+useMetas()
+
+</script>
+
 <style>
 * {
   margin: 0;

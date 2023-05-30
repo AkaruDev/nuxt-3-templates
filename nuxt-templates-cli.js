@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'Metas',
+    description: 'Add metas tags for SEO',
+    category: 'Helpers'
   },
   dependencies: [],
   devDependencies: [],
-  files: ['modules/my-feature', 'configs']
+  files: ['modules/metas', 'configs']
 }

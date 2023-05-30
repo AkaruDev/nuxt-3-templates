@@ -4,11 +4,11 @@
     <nuxt-link to="/">
       Go home
     </nuxt-link>
-
   </div>
 </template>
 
 <script setup>
+useMetas({ title: 'Page' })
 </script>
 
 <style scoped></style>
