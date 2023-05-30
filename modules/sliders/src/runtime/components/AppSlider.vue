@@ -13,7 +13,7 @@
     >
       <div
         v-for="(item, i) in props.items"
-        ref="items"
+        ref="slideItems"
         :key="`${name}-item-${i}`"
         class="AppSlider-item"
       >
@@ -92,7 +92,7 @@ const dragging = ref(false)
 const dragzone = ref('dragzone')
 const index = ref(0);
 const isInit = ref(false)
-const items = ref('items')
+const slideItems = ref('items')
 const slots = useSlots()
 const touchDevice = ref(false)
 const wrapper = ref('wrapper')
@@ -153,7 +153,7 @@ const setSlides = () => {
   if (props.items.length === 0) return
 
   // Reorder
-  const itemsSorted = [...items.value]
+  const itemsSorted = [...slideItems.value]
   const last = itemsSorted.pop()
   itemsSorted.unshift(last)
 
@@ -206,7 +206,7 @@ const setAnimation = () => {
   animation.kill()
   animation = gsap.timeline({ paused: true })
 
-  animation.to(items.value, {
+  animation.to(slideItems.value, {
     duration: 1,
     x: `+=${props.infinite ? wrapWidth : max}`,
     ease: 'none',

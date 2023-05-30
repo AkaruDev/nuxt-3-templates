@@ -7,6 +7,7 @@
 
     <SliderDemo1 />
     <SliderDemo2 />
+    <SliderDemo3 />
   </div>
 </template>
 

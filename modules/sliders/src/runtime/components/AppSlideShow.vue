@@ -1,14 +1,16 @@
 <template>
   <div
-    class="AppSlider"
+    ref="el"
+    class="AppSlideShow"
     :class="{ '--inactive': items.length < 2 }"
   >
-    <div class="AppSlider-items">
+    <div class="AppSlideShow-items">
       <div
         v-for="(item, i) in items"
         :key="`${name}-item-${i}`"
-        ref="items"
-        class="AppSlider-item"
+        ref="slideItems"
+        class="AppSlideShow-item"
+        :class="{ '--selected': i === index }"
       >
         <slot
           name="item"
@@ -41,11 +43,11 @@ const props = defineProps({
   },
   duration: {
     type: Number,
-    default: 1
+    default: 8
   },
   delay: {
     type: Number,
-    default: 5
+    default: 0.3
   },
   swipe: {
     type: Boolean,
@@ -53,24 +55,23 @@ const props = defineProps({
   }
 })
 
-// TODO find how to animate that from outside, timeline props for from/to ?
-
 // Define emits events
 const EVENT_CHANGE = 'change'
 const EVENT_PROGRESS = 'progress'
 const emit = defineEmits(['change', 'progress'])
 
 // Refs
-const items = ref('items')
+const el = ref()
+const index = ref(0)
+const slideItems = ref('items')
+const pause = ref(true)
 const progress = ref(0)
 
 // Data
 const directions = {
-  forward: -1,
-  backward: 1
+  forward: 1,
+  backward: -1
 }
-const index = 0
-const pause = true
 const tls = {
   autoplay: gsap.timeline()
 }
@@ -88,11 +89,11 @@ useIntersectionObserver(
 )
 
 const onEnter = () => {
-  pause = false
+  pause.value = false
   tls?.autoplay?.play()
 }
 const onLeave = () => {
-  pause = true
+  pause.value = true
   tls?.autoplay?.pause()
 }
 
@@ -105,22 +106,22 @@ onMounted(() => {
   play(directions.forward)
 })
 
-
 // Methods
 const play = (direction) => {
+  console.info("cc")
   tls?.autoplay?.kill()
-  if (!props.autoplay || items.length < 2) {
+  if (!props.autoplay || props.items.length < 2) {
     progress.value = 0
     emit(EVENT_PROGRESS, progress.value)
     return
   }
   tls.autoplay = gsap.timeline({
-    paused: pause,
+    paused: pause.value,
     onUpdate: () => {
       emit(EVENT_PROGRESS, progress.value)
     }
   })
-    .fromTo(progress, { value: 0 }, { value: 1, duration: delay, ease: 'linear' }, 0)
+    .fromTo(progress, { value: 0 }, { value: 1, duration: props.duration, ease: 'linear' }, props.delay)
     .call(() => {
       if (direction === directions.forward) {
         next()
@@ -139,10 +140,16 @@ const prev = () => {
   set(directions.backward)
 }
 
-const set = (direction) => {
-  index += direction
-  index = loop(index, 0, total)
-  emit(EVENT_CHANGE, index)
+const goTo = (value) => {
+  index.value = value
+  set()
+}
+
+const set = (direction = 0) => {
+  const oldValue = index.value
+  index.value += direction
+  index.value = loop(index.value, 0, props.items.length - 1)
+  emit(EVENT_CHANGE, { oldValue, newValue: index.value })
   play(direction)
 }
 
@@ -150,53 +157,44 @@ const set = (direction) => {
 
 // TODO test
 const { direction } = useSwipe(el, {
-  onSwipe (e) {
-    console.info(direction)
+  onSwipeEnd () {
+    if (!props.swipe) { return }
+    if (direction.value === 'left') {
+      next()
+    }
+    if (direction.value === 'right') {
+      prev()
+    }
   }
 })
-/*
-const onSwipe = (direction) => {
-  if (!swipeAble) { return }
-  if (direction === 'left') {
-    next()
-  }
-  if (direction === 'right') {
-    prev()
-  }
-}
-*/
 
 // Expose
-defineExpose({ prev, next })
+defineExpose({ prev, next, goTo })
 
 </script>
 
 <style scoped>
-.AppSlider {
+.AppSlideShow {
   position: relative;
   width: 100%;
 
   touch-action: pan-y;
 }
 
-.AppSlider.--inactive {
+.AppSlideShow.--inactive {
   pointer-events: none;
   touch-action: none;
 }
 
-.AppSlider-items {
-  position: absolute;
-  display: flex;
+.AppSlideShow-items {
+  position: relative;
   width: 100%;
   height: 100%;
 
-  top: 0;
-  left: 0;
-
-  z-index: 1;
+  overflow: hidden;
 }
 
-.AppSlider-item {
+.AppSlideShow-item {
   position: absolute;
   flex: none;
   width: 100%;

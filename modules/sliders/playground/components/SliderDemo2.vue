@@ -105,7 +105,7 @@ for (let i = 0; i < 5; i++) {
   justify-content: center;
 
   min-width: 100%;
-  height: 10vw;
+  height: 10vh;
 
   margin: 0 0 0 2vw;
 

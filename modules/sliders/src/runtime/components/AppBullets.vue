@@ -52,6 +52,11 @@ const onClick = (index) => {
   display: flex;
   justify-content: center;
   align-items: center;
+
+
+  --background: #312451;
+  --selected: #e2d7fd;
+  --hover: #d6fdff;
 }
 
 .AppBullet {
@@ -72,13 +77,12 @@ const onClick = (index) => {
   cursor: pointer;
 
   transition: 0.3s backgroundColor cubic-bezier(0.25, 0.46, 0.45, 0.94);
-
 }
 
 @media (hover: hover) and (pointer: fine) {
   .AppBullet:hover::before {
 
-    background-color: #d6fdff;
+    background-color: var(--hover);
   }
 }
 
@@ -89,7 +93,7 @@ const onClick = (index) => {
 
   border-radius: 100%;
 
-  background-color: #CCC;
+  background-color: var(--background);
 
   content: '';
 }
@@ -99,7 +103,7 @@ const onClick = (index) => {
 }
 
 .AppBullet.--selected::before {
-  background-color: #dbffb8;
+  background-color: var(--selected);
 }
 
 .AppCircle.AppBullet-circle {
