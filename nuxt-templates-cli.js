@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'GSAP',
+    description: 'Add gsap library as a plugin.',
+    category: 'Animations'
   },
-  dependencies: [],
+  dependencies: ['gsap'],
   devDependencies: [],
-  files: ['modules/my-feature', 'configs']
+  files: ['configs', 'plugins']
 }
