@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'AppSliders',
+    description: 'Add components',
+    category: 'Components'
   },
   dependencies: [],
-  devDependencies: [],
+  devDependencies: ['@vueuse/core', 'npm:@gsap/shockingly'],
   files: ['modules/sliders', 'configs']
 }
