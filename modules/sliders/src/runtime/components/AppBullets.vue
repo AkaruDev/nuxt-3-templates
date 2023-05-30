@@ -1,7 +1,6 @@
 <template>
   <div
     class="AppBullets"
-    :class="classes"
   >
     <button
       v-for="(i, itemIndex) in length"
@@ -27,16 +26,7 @@ const props = defineProps({
   length: {
     type: Number,
     default: 1
-  },
-  theme: {
-    type: String,
-    default: 'light',
-    validator: value => ['dark', 'light'].includes(value)
   }
-})
-
-const classes = computed(() => {
-  return ['--theme-' + props.theme]
 })
 
 const onClick = (index) => {
@@ -52,7 +42,6 @@ const onClick = (index) => {
   display: flex;
   justify-content: center;
   align-items: center;
-
 
   --background: #312451;
   --selected: #e2d7fd;

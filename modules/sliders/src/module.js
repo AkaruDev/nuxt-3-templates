@@ -10,15 +10,6 @@ export default defineNuxtModule({
   setup () { // options, nuxt
     const resolver = createResolver(import.meta.url)
 
-
-    // Exemples
-    // Add composables
-    /* addImports({
-      name: 'useSlidesEvents',
-      as: 'useSlidesEvents',
-      from: resolver.resolve('runtime/composables/useSlidesEvents')
-    }) */
-
     // Add components
     addComponent({
       name: 'AppSlider', // name of the component to be used in vue templates
