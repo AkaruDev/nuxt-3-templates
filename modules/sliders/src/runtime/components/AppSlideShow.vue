@@ -108,7 +108,6 @@ onMounted(() => {
 
 // Methods
 const play = (direction) => {
-  console.info("cc")
   tls?.autoplay?.kill()
   if (!props.autoplay || props.items.length < 2) {
     progress.value = 0

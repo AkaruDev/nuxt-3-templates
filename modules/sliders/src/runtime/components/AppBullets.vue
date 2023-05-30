@@ -18,7 +18,7 @@
 const BULLET_CLICK = 'bullet:click'
 const emit = defineEmits(['bullet:click'])
 
-const props = defineProps({
+defineProps({
   index: {
     type: Number,
     default: 0
@@ -30,7 +30,6 @@ const props = defineProps({
 })
 
 const onClick = (index) => {
-  console.info("cc")
   emit(BULLET_CLICK, index)
 }
 
