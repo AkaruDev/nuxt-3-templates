@@ -15,8 +15,10 @@ const { data, error } = useAsyncData(() =>
     .then(response => response.json())
     .then(json => {
       return {
-        title: 'Page test',
-        image: json.message
+        metas: {
+          title: 'Page test',
+          image: json.message
+        }
       }
     })
 )
@@ -25,7 +27,7 @@ if (error.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page Not Found', fatal: true })
 }
 
-useMetas(data.value)
+useMetas(data.value?.metas)
 </script>
 
 <style scoped></style>
