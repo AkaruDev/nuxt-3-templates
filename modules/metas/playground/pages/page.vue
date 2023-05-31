@@ -8,7 +8,24 @@
 </template>
 
 <script setup>
-useMetas({ title: 'Page' })
+
+const url = 'https://dog.ceo/api/breeds/image/random'
+const { data, error } = useAsyncData(() =>
+  fetch(url)
+    .then(response => response.json())
+    .then(json => {
+      return {
+        title: 'Page test',
+        image: json.message
+      }
+    })
+)
+if (error.value) {
+  console.warn(error)
+  throw createError({ statusCode: 404, statusMessage: 'Page Not Found', fatal: true })
+}
+
+useMetas(data.value)
 </script>
 
 <style scoped></style>

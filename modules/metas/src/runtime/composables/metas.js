@@ -1,6 +1,18 @@
 import { useHead, useSeoMeta, useRoute, useRuntimeConfig } from "#imports"
 
-export const useMetas = ({ title = null, description = null, image = null, siteName = null, twitterUser = null, lang = 'fr-FR' } = {}) => {
+/**
+ *
+ * @param {Object} options
+ * @param {string=} options.title
+ * @param {string=} options.description
+ * @param {string=} options.image - Url of an image. Size:1200x630
+ * @param {string=} options.siteName
+ * @param {string=} options.twitterUser
+ * @param {string=} [options.lang=fr-FR]
+ */
+export const useMetas = (options) => {
+
+  const { title = null, description = null, image = null, siteName = null, twitterUser = null, lang = 'fr-FR' } = options || {}
 
   const runtimeConfig = useRuntimeConfig()
   const baseUrl = runtimeConfig?.public?.baseUrl || ''
@@ -20,7 +32,7 @@ export const useMetas = ({ title = null, description = null, image = null, siteN
 
   useSeoMeta({
     charset: 'utf-8',
-    viewport: 'viewport', content: 'width=device-width, initial-scale=1',
+    viewport: 'width=device-width, initial-scale=1',
     url,
     ogUrl: url,
     ...(title ? { title, ogTitle: title, twitterTitle: title, ogSiteName: title } : {}),

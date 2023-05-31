@@ -1,9 +1,15 @@
-## Setup
+# Metas
 
-Create a new branch with name like `features/my-feature`
+Add a composable `useMetas` to have basic meta for the site and socials like Twitter/Facebook.
 
-Replace folder name, config names `my-features` by the name of your new feature. 
 
-In `nuxt-templates.cli.js` fill the field corresponding to your new feature.
+## How to use
+Add environnement variables as seen in `configs/envs` exemples.
 
-Describe the feature in this README
+Use it globally in your `app.vue`.
+
+Use it directly in your pages for custom meta by page.
+
+
+## Examples
+See examples of it in the playground
