@@ -3,13 +3,16 @@ import { defineNuxtModule, addImports, addComponent, createResolver } from '@nux
 export default defineNuxtModule({
   meta: {
     name: 'favicon',
-    configKey: 'myModule'
+    configKey: 'favicon'
   },
   // Default configuration options of the Nuxt module
   defaults: {},
-  setup () { // options, nuxt
+  setup (options, nuxt) { // options, nuxt
     const resolver = createResolver(import.meta.url)
 
+    nuxt.hook('build:before', () => {
+      console.info(options)
+    })
 
     // Exemples
     // Add composables
