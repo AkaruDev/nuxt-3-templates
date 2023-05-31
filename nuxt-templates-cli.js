@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'Favicon',
+    description: 'Generate a favicon',
+    category: 'Hosting / Deployment'
   },
-  dependencies: [],
+  dependencies: [],//TODO add depency
   devDependencies: [],
   files: ['modules/favicon', 'configs']
 }

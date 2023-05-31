@@ -1,70 +1,67 @@
 
 import { defineNuxtConfig } from 'nuxt/config'
-
 const title = "My app"
-const themeColor = "#FFFFFF"
+const theme_color = "#FFFFFF"
 
 export default defineNuxtConfig({
   modules: ['../src/module'],
   favicon: {
-    rfg: {
-      design: {
-        ios: {
-          pictureAspect: 'noChange',
-          assets: {
-            ios6AndPriorIcons: false,
-            ios7AndLaterIcons: false,
-            precomposedIcons: false,
-            declareOnlyDefaultIcon: true
-          },
-          appName: title
+    favicon_design: {
+      ios: {
+        pictureAspect: 'no_change',
+        assets: {
+          ios6AndPriorIcons: false,
+          ios7AndLaterIcons: false,
+          precomposedIcons: false,
+          declareOnlyDefaultIcon: true
         },
-        desktopBrowser: {
-          design: 'raw'
-        },
-        windows: {
-          pictureAspect: 'noChange',
-          backgroundColor: themeColor,
-          onConflict: 'override',
-          assets: {
-            windows80Ie10Tile: false,
-            windows10Ie11EdgeTiles: {
-              small: false,
-              medium: true,
-              big: false,
-              rectangle: false
-            }
-          },
-          appName: title
-        },
-        androidChrome: {
-          pictureAspect: 'noChange',
-          themeColor,
-          manifest: {
-            name: title,
-            display: 'standalone',
-            orientation: 'notSet',
-            onConflict: 'override',
-            declared: true
-          },
-          assets: {
-            legacyIcon: false,
-            lowResolutionIcons: false
+        appName: title
+      },
+      desktop_browser: {
+        design: 'raw'
+      },
+      windows: {
+        picture_aspect: 'no_change',
+        background_color: theme_color,
+        on_conflict: 'override',
+        assets: {
+          windows_80_ie_10_tile: false,
+          windows_10_ie_11_edge_tiles: {
+            small: false,
+            medium: true,
+            big: false,
+            rectangle: false
           }
         },
-        safariPinnedTab: {
-          pictureAspect: 'blackAndWhite',
-          threshold: 63.125,
-          themeColor
+        app_name: title
+      },
+      android_Chrome: {
+        picture_aspect: 'no_change',
+        theme_color,
+        manifest: {
+          name: title,
+          display: 'standalone',
+          orientation: 'notSet',
+          on_conflict: 'override',
+          declared: true
+        },
+        assets: {
+          legacy_icon: false,
+          low_resolution_icons: false
         }
       },
-      settings: {
-        scalingAlgorithm: 'Mitchell',
-        errorOnImageTooSmall: false,
-        readmeFile: false,
-        htmlCodeFile: false,
-        usePathAsIs: false
+      safari_pinned_tab: {
+        picture_aspect: 'black_and_white',
+        threshold: 63.125,
+        theme_color
       }
+    },
+    settings: {
+      scaling_algorithm: 'Mitchell',
+      error_on_image_too_small: false,
+      readme_file: false,
+      html_code_file: false,
+      use_path_as_is: false
     }
   }
 })

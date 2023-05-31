@@ -28,7 +28,9 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.4.2"
+    "@nuxt/kit": "^3.4.2",
+    "https": "^1.0.0",
+    "unzipper": "^0.10.14"
   },
   "devDependencies": {
     "@nuxt/eslint-config": "^0.1.1",
