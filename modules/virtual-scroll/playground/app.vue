@@ -21,7 +21,7 @@
   align-items: center;
   justify-content: center;
 
-  width: calc(100% - 30px);
+  width: 100%;
   min-height: 100vh;
 
   gap: 10px;
@@ -31,6 +31,13 @@
   overflow: hidden;
 
   font-size: 16px;
+
+  background-color: #131313;
+  color: white;
+}
+
+a {
+  color: white;
 }
 
 h1 {

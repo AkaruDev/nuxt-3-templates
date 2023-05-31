@@ -26,7 +26,7 @@ const $virtualScroll = useVirtualScroll()
 
 const isScrolling = computed(() => {
   if (!$virtualScroll) return false
-  return Math.abs($virtualScroll.target - $virtualScroll.current) > 10
+  return Math.abs($virtualScroll.y.value - $virtualScroll.y.lerp) > 10
 })
 
 onMounted(() => {
@@ -44,11 +44,11 @@ onBeforeMount(() => {
 })
 
 
-const onScroll = ({ current }) => {
+const onScroll = ({ lerp }) => {
   if (!el?.value) return
   const elHeight = el.value.clientHeight || 0
   const thumbHeight = thumb.value.clientHeight || 0
-  const t = current / $virtualScroll.bounds.value * (elHeight - thumbHeight - 4)
+  const t = lerp / $virtualScroll.bounds.value * (elHeight - thumbHeight - 4)
   thumb.value.style.transform = `translate3d(0px, ${t.toFixed(2)}px, 0px)`
 }
 

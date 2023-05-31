@@ -33,7 +33,7 @@
 
 const progress1 = ref(0)
 
-const onProgress = ({ el, progress }) => {
+const onProgress = ({ progress }) => {//{ el, progress }
   // console.info(progress, el)
   progress1.value = Math.floor(progress * 100)
 }
@@ -41,11 +41,12 @@ const onProgress = ({ el, progress }) => {
 
 <style  scoped>
 h1 {
-  padding: 30vh 0;
+  padding: 10vh 0 0 0;
 }
 
 .Page {
   padding: 30px 0 100vh 30px;
+
 }
 
 .Sticky-parent {
@@ -54,9 +55,12 @@ h1 {
   width: 100%;
   max-width: 920px;
   height: 200vh;
-  background-color: rgb(255, 242, 200);
+  background-color: rgb(231, 221, 185);
+  color: #131313;
 
   padding: 80px 40px;
+
+  margin-top: 200px;
 
   overflow: hidden;
 }
@@ -67,17 +71,19 @@ h1 {
   flex-flow: column;
   align-items: center;
   justify-content: center;
-  width: 20vh;
+  width: 20vw;
   height: 20vh;
 
   top: 130px;
-  left: calc(50% - 10vh);
+  left: calc(50% - 10vw);
 
   background-color: rgb(169, 169, 255);
 }
 
 #sticky-2 {
+  width: 30vw;
   top: 300px;
-  background-color: rgb(242, 169, 255);
+  left: calc(50% - 15vw);
+  background-color: rgb(208, 194, 243);
 }
 </style>

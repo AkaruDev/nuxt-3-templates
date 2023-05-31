@@ -11,8 +11,16 @@ export const useVirtualScroll = (() => {
    * @type {Element}
    */
   let container = null
-  let target = 0
-  let current = 0
+  let directions = {
+    up: 'up',
+    down: 'down'
+  }
+  const y = {
+    previous: 0,
+    lerp: 0,
+    value: 0,
+    direction: directions.down
+  }
   /**
    * @type {RefImpl<Number>}
    */
@@ -102,20 +110,26 @@ export const useVirtualScroll = (() => {
   }
 
   const onTick = () => {
+    setY()
+    setDirection()
+    bus.emit('scroll', y)
+  }
+
+  const setY = () => {
     if (active.value) {
-      current = lerp(current, target, ratio, precision)
+      y.lerp = lerp(y.lerp, y.value, ratio, precision)
     } else {
-      current = window.scrollY
-      target = window.scrollY
+      y.lerp = window.scrollY
+      y.value = window.scrollY
     }
-
-    // eslint-disable-next-line no-unused-vars
-    const values = {
-      current: current.toFixed(precision),
-      target
+  }
+  const setDirection = () => {
+    if (y.previous > y.value) {
+      y.direction = directions.up
+    } else if (y.previous < y.value) {
+      y.direction = directions.down
     }
-
-    bus.emit('scroll', values)
+    y.previous = y.value
   }
 
   const virtualScrollCallback = (e) => {
@@ -130,7 +144,7 @@ export const useVirtualScroll = (() => {
   const scrollOf = (value = 0, force = false) => {
     if (isLocked.value && !force) return
 
-    target = clamp(target + value, 0, bounds.value)
+    y.value = clamp(y.value + value, 0, bounds.value)
   }
 
   /**
@@ -147,7 +161,7 @@ export const useVirtualScroll = (() => {
         behavior: 'smooth'
       })
     } else {
-      scrollOf(yValue - target)
+      scrollOf(yValue - y.value)
     }
   }
 
@@ -175,8 +189,8 @@ export const useVirtualScroll = (() => {
     if (!active.value) {
       window.scrollTo(0, yValue)
     } else {
-      target = yValue
-      current = yValue
+      y.value = yValue
+      y.lerp = yValue
     }
   }
 
@@ -188,7 +202,7 @@ export const useVirtualScroll = (() => {
   const scrollOfOneViewport = (force = false) => {
     if (isLocked.value && !force) return
 
-    scrollTo(target + window.innerHeight)
+    scrollTo(y.value + window.innerHeight)
   }
 
   /**
@@ -247,7 +261,7 @@ export const useVirtualScroll = (() => {
     if (isLocked.value && !force) return
     if (!element || !element.getboundsClientRect) return
 
-    scrollTo(current + element.getboundsClientRect().top + offset, force)
+    scrollTo(y.lerp + element.getboundsClientRect().top + offset, force)
   }
 
   const destroy = () => {
@@ -339,9 +353,8 @@ export const useVirtualScroll = (() => {
     off,
     container,
     active,
-    target,
+    y,
     bounds,
-    current,
     scrollTo,
     scrollOfOneViewport,
     goToTop,

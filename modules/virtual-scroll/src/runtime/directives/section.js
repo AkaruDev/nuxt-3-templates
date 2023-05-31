@@ -35,7 +35,7 @@ export default (nuxtApp) => {
       let isVisible = false
 
       // Listen to scroll event and update element transform on each call
-      el.__scroll_callback__ = ({ current }) => {
+      el.__scroll_callback__ = ({ lerp }) => {
 
         const { top, bottom } = el.getBoundingClientRect()
         let offset = {
@@ -43,10 +43,10 @@ export default (nuxtApp) => {
           yStop: bottom - getTranslate(el).y + SECTION_OFFSET_MARGIN
         }
 
-        if (current > offset.yStart && current < offset.yStop) {
-          el.style.transform = `matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,0,${(current * -1)},0,1)`
-          el.style.webkitTransform = `matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,0,${(current * -1)},0,1)`
-          el.style.msTransform = `matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,0,${(current * -1)},0,1)`
+        if (lerp > offset.yStart && lerp < offset.yStop) {
+          el.style.transform = `matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,0,${(lerp * -1)},0,1)`
+          el.style.webkitTransform = `matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,0,${(lerp * -1)},0,1)`
+          el.style.msTransform = `matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,0,${(lerp * -1)},0,1)`
 
           if (!isVisible) {
             isVisible = true

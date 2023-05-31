@@ -56,7 +56,14 @@ export default () => {
 
         sticky.progress = (sticky.elBounds.top - sticky.parentBounds.top) / (sticky.parentBounds.height - sticky.elBounds.height)
         if (isNaN(sticky.progress)) sticky.progress = 0
+        sticky.progress = clamp(sticky.progress, 0, 1)
 
+        sendProgress(sticky)
+      }
+
+      if (!isInBounds && sticky.progress <= 0.2 && sticky.progress > 0) {
+        sticky.progress -= 0.01
+        sticky.progress = clamp(sticky.progress, 0, 1)
         sendProgress(sticky)
       }
     } else {
@@ -70,6 +77,7 @@ export default () => {
         sticky.progress = (sticky.elBounds.top - sticky.parentBounds.top) / (sticky.parentBounds.height - sticky.elBounds.height)
         if (isNaN(sticky.progress)) sticky.progress = 0
 
+        sticky.progress = clamp(sticky.progress, 0, 1)
         sendProgress(sticky)
       } else {
         sticky.el.style.position = ''
@@ -79,6 +87,14 @@ export default () => {
         if (sticky.parentBounds.top <= 0) {
           sticky.el.style.transform = `translateY(${sticky.parentBounds.height - sticky.elBounds.height}px)`
         }
+
+        if (!isInBounds && sticky.progress <= 0.2 && sticky.progress > 0) {
+          sticky.progress -= 0.01
+          sticky.progress = clamp(sticky.progress, 0, 1)
+          sendProgress(sticky)
+        }
+
+
       }
     }
 
