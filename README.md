@@ -12,4 +12,7 @@ Use it directly in your pages for custom meta by page.
 
 
 ## Examples
-See examples of it in the playground
+In the playground you have 3 examples of use.
+Global configuration in `app.vue`.
+Direct use in `pages/index.vue`.
+Asynchrone data use in `pages/page.vue`.

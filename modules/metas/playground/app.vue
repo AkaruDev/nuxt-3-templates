@@ -6,7 +6,7 @@
 
 <script setup>
 
-useMetas({ title: 'Features metas' })
+useMetas({ title: 'Features metas', description: 'Description' })
 
 </script>
 
