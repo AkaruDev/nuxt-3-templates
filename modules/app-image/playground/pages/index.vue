@@ -6,6 +6,7 @@
     </nuxt-link>
 
     <AppImage v-if="dog" :url="dog" :width="300" :height="300" :style="{ width: '300px', height: '300px' }" placeholder="blur"/>
+    <AppImage url="/doggo.jpg" :width="300" :height="300" :style="{ width: '300px', height: '300px' }" placeholder="blur"/>
   </div>
 </template>
 
@@ -16,4 +17,8 @@ await fetch('https://dog.ceo/api/breed/beagle/images/random').then(rs => rs.json
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.Page {
+  min-height: 200vh;
+}
+</style>

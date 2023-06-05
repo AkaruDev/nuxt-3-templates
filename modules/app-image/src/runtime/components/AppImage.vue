@@ -112,7 +112,6 @@ function onIntersectionObserver ([{ isIntersecting }]) {
   object-fit: cover;
 
   transition: 0.3s opacity cubic-bezier(0.65, 0, 0.35, 1);
-
 }
 
 .AppImage:deep(.AppImage-image.--loaded) {

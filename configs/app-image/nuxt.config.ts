@@ -5,11 +5,13 @@ export default defineNuxtConfig(
             '@nuxt/image-edge',
             '@/modules/app-image/src/module',
         ],
-        /*
-        // If prismic you can use this configuration
+
         image: {
+            // If prismic you can use this configuration
+            /*
             provider: "prismic",
             prismic: {},
+            */
             screens: { // Example of custom breakpoints
                 small: 768,
                 medium: 1080,
@@ -19,6 +21,5 @@ export default defineNuxtConfig(
                 xxxlarge: 2560,
             },
         },
-        */
     }
 )
