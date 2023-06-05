@@ -22,11 +22,17 @@ export default defineNuxtModule({
       // Icons folder
       const publicPath = resolver.resolve('../../../public/')
       const iconPath = resolver.resolve(publicPath, 'icons')
-      console.info(iconPath)
+      const manifestPath = resolver.resolve(iconPath, 'manifest.json')
 
       // Check favicon does not exist
-      const pathExist = existsSync(iconPath)
-      if (pathExist && !options?.force) return
+      const pathExist = existsSync(manifestPath)
+      if (pathExist && !options?.force) {
+        // Set metas from manifest file json
+        const manifest = readFileSync(manifestPath)
+        const data = JSON.parse(manifest)
+        nuxt.options.app.head = { ...nuxt.options.app.head, ...data }
+        return
+      }
 
       // Get image from static file
       const pathImg = resolver.resolve(publicPath, options?.image || 'icon.png')
@@ -40,7 +46,7 @@ export default defineNuxtModule({
       }
 
 
-      // TODO add log, loading to let know the users of what is happening
+      // Add loading log to let know the users of what is happening
       const intervalID = loading('Favicon generation ')
       // Fetch api post options
       options = {
@@ -80,6 +86,9 @@ export default defineNuxtModule({
         const headers = result?.favicon_generation_result?.favicon?.html_code || null
         const data = headersToJson(headers)
         nuxt.options.app.head = { ...nuxt.options.app.head, ...data }
+
+        // Store date in manifest file
+        writeFileSync(manifestPath, JSON.stringify(data))
 
         // Unzip files
         const urlZip = result?.favicon_generation_result?.favicon?.package_url || null
