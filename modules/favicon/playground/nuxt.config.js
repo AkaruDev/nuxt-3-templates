@@ -6,6 +6,8 @@ const theme_color = "#FFFFFF"
 export default defineNuxtConfig({
   modules: ['../src/module'],
   favicon: {
+    force: true,
+    image: 'icon.png',
     favicon_design: {
       ios: {
         pictureAspect: 'no_change',

@@ -4,7 +4,7 @@ module.exports = {
     description: 'Generate a favicon',
     category: 'Hosting / Deployment'
   },
-  dependencies: [],//TODO add depency
+  dependencies: ['https', 'unzipper'],
   devDependencies: [],
   files: ['modules/favicon', 'configs']
 }
