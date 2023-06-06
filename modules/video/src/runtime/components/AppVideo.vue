@@ -3,6 +3,7 @@
     v-intersection-observer="onIntersectionObserver"
     class="AppVideo"
   >
+    <!-- Cover -->
     <div
       v-show="cover"
       class="AppVideo-cover"
@@ -10,12 +11,16 @@
       <slot
         name="cover"
       />
-      <button
+      <div
         class="AppVideo-btplay"
-        type="button"
         @click="onClickBtplay"
-      />
+      >
+        <slot
+          name="btplay"
+        />
+      </div>
     </div>
+    <!-- Player -->
     <div
       v-if="!cover"
       class="AppVideo-player"
@@ -30,8 +35,17 @@
 <script setup>
 import { vIntersectionObserver } from '@vueuse/components'
 
+const uid = `video-${useUID()}`
+
+const props = defineProps({
+  autoplay: {
+    type: Boolean,
+    default: false
+  }
+})
+
 // Composables
-const { events, on, off } = useVideoBus()
+const { events, bus, on, off } = useVideoBus()
 
 // Ref
 const slots = useSlots()
@@ -40,31 +54,36 @@ cover.value = slots.cover !== undefined
 const isInView = ref(false)
 
 // Methods
-const onShow = () => {
-  cover.value = false
+const onShow = (id) => {
+  if (id === uid) {
+    cover.value = false
+  }
 }
 on(events.show, onShow)
 
 const onIntersectionObserver = ([{ isIntersecting }]) => {
   isInView.value = isIntersecting
 
-  if (isInView.value && slots.cover === undefined) {
+  if (isInView.value && (slots.cover === undefined || props.autoplay)) {
     cover.value = false
   }
 
-  if (!isInView.value && slots.cover !== undefined) {
+  if (!isInView.value && slots.cover !== undefined && !props.autoplay) {
     cover.value = true
   }
 }
 
 const onClickBtplay = () => {
-  cover.value = false
+  bus.emit(events.show, uid)
 }
 
 // Lifecycle
 onUnmounted(() => {
   off(events.show, onShow)
 })
+
+// Expose
+defineExpose({ uid })
 </script>
 
 <style  scoped>
@@ -75,6 +94,11 @@ onUnmounted(() => {
 
 .AppVideo-cover {
   position: absolute;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
   width: 100%;
   height: 100%;
 
@@ -87,25 +111,11 @@ onUnmounted(() => {
 }
 
 .AppVideo-btplay {
-  position: absolute;
-  width: 0;
-  height: 0;
-
-  top: 50%;
-  left: 50%;
-
-  margin-left: -25px;
-  margin-top: -25px;
-
-  background-color: transparent;
-  border-style: solid;
-  border-width: 25px 0 25px 50px;
-  border-color: transparent transparent transparent white;
-
-  cursor: pointer;
+  position: relative;
 
   z-index: 1;
 }
+
 
 .AppVideo-player {
   position: absolute;

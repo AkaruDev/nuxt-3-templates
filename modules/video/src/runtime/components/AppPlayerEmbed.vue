@@ -2,7 +2,7 @@
 <template>
   <div
     v-if="embed"
-    class="AppVideoEmbed"
+    class="AppPlayerEmbed"
     v-html="html"
   />
 </template>
@@ -27,13 +27,14 @@ const html = computed(() => {
 </script>
 
 <style scoped>
-.AppVideoEmbed {
+.AppPlayerEmbed {
   width: 100%;
   height: 100%;
 }
 
-.AppVideoEmbed:deep(iframe) {
+.AppPlayerEmbed:deep(iframe) {
   width: 100%;
   height: 100%;
+
 }
 </style>

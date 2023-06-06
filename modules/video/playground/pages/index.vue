@@ -5,14 +5,62 @@
       Go to page
     </nuxt-link>
 
+    <!-- Embed player -->
     <div class="Page-demo">
-      <h2> Video with cover and embed player</h2>
-      <AppVideo class="Page-video">
+      <h2> Video with embed player and cover</h2>
+      <AppVideo
+        class="Page-video"
+      >
         <template #cover>
-          <img src="/cover.jpg">
+          <img
+            class="Page-img"
+            src="/cover.jpg"
+          >
+        </template>
+        <template #btplay>
+          <button
+            type="button"
+            aria-label="Play"
+            class="Page-btplay"
+          />
         </template>
         <template #player>
-          <AppVideoEmbed :embed="embed" />
+          <AppPlayerEmbed :embed="embed" />
+        </template>
+      </AppVideo>
+    </div>
+
+    <!-- Vimeo player -->
+    <div class="Page-demo">
+      <h2> Video with vimeo player and cover</h2>
+      <AppVideo class="Page-video">
+        <template #cover>
+          <img
+            class="Page-img"
+            src="/cover.jpg"
+          >
+        </template>
+        <template #btplay>
+          <button
+            type="button"
+            aria-label="Play"
+            class="Page-btplay"
+          />
+        </template>
+        <template #player>
+          <AppPlayerVimeo url="https://vimeo.com/265070712" />
+        </template>
+      </AppVideo>
+    </div>
+
+    <div class="Page-demo">
+      <h2> Video with Vimeo player and autoplay</h2>
+      <AppVideo
+        class="Page-video"
+        :autoplay="true"
+      >
+        <template #player>
+          <AppPlayerVimeo url="https://vimeo.com/265070712" />
         </template>
       </AppVideo>
     </div>
@@ -39,5 +87,30 @@ const embed = `<iframe width="200" height="113" src="https://www.youtube.com/emb
   aspect-ratio: 16/9;
 
   margin-top: 50px;
+
+  background-color: black;
+}
+
+.Page-btplay {
+  width: 0;
+  height: 0;
+
+  background-color: transparent;
+  border-style: solid;
+  border-width: 30px 0 30px 60px;
+  border-color: transparent transparent transparent #52427a;
+
+  cursor: pointer;
+}
+
+.Page-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  top: 0;
+  left: 0;
+
+  object-fit: cover;
 }
 </style>

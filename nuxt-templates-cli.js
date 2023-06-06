@@ -5,6 +5,6 @@ module.exports = {
     category: 'Components'
   },
   dependencies: [],
-  devDependencies: ['@vueuse/core', '@vueuse/components'],
+  devDependencies: ['@vueuse/core', '@vueuse/components', '@vimeo/player'],
   files: ['modules/video/src', 'configs']
 }

@@ -17,6 +17,11 @@ export default defineNuxtModule({
       as: 'useVideoBus',
       from: resolver.resolve('runtime/composables/video-bus')
     })
+    addImports({
+      name: 'useUID',
+      as: 'useUID',
+      from: resolver.resolve('runtime/composables/uid')
+    })
 
     // Add components
     addComponent({
@@ -24,8 +29,12 @@ export default defineNuxtModule({
       filePath: resolver.resolve('runtime/components/AppVideo.vue')
     })
     addComponent({
-      name: 'AppVideoEmbed',
-      filePath: resolver.resolve('runtime/components/AppVideoEmbed.vue')
+      name: 'AppPlayerEmbed',
+      filePath: resolver.resolve('runtime/components/AppPlayerEmbed.vue')
+    })
+    addComponent({
+      name: 'AppPlayerVimeo',
+      filePath: resolver.resolve('runtime/components/AppPlayerVimeo.vue')
     })
 
   }
