@@ -7,9 +7,10 @@
 
     <!-- Embed player -->
     <div class="Page-demo">
-      <h2> Video with embed player and cover</h2>
+      <h2>Video with embed player and cover</h2>
       <AppVideo
         class="Page-video"
+        :embed="embed"
       >
         <template #cover>
           <img
@@ -23,23 +24,24 @@
             aria-label="Play"
             class="Page-btplay"
           />
-        </template>
-        <template #player>
-          <AppPlayerEmbed :embed="embed" />
         </template>
       </AppVideo>
     </div>
 
     <!-- Vimeo player -->
     <div class="Page-demo">
-      <h2> Video with vimeo player and cover</h2>
-      <AppVideo class="Page-video">
+      <h2>Video with vimeo player and cover</h2>
+      <AppVideo
+        class="Page-video"
+        vimeo="https://vimeo.com/265070712"
+      >
         <template #cover>
           <img
             class="Page-img"
             src="/cover.jpg"
           >
         </template>
+
         <template #btplay>
           <button
             type="button"
@@ -47,22 +49,16 @@
             class="Page-btplay"
           />
         </template>
-        <template #player>
-          <AppPlayerVimeo url="https://vimeo.com/265070712" />
-        </template>
       </AppVideo>
     </div>
 
     <div class="Page-demo">
-      <h2> Video with Vimeo player and autoplay</h2>
+      <h2>Video with Vimeo player and autoplay</h2>
       <AppVideo
         class="Page-video"
         :autoplay="true"
-      >
-        <template #player>
-          <AppPlayerVimeo url="https://vimeo.com/265070712" />
-        </template>
-      </AppVideo>
+        vimeo="https://vimeo.com/265070712"
+      />
     </div>
   </div>
 </template>

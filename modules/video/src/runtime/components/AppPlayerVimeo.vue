@@ -36,9 +36,10 @@ const options = {
 
 const events = {
   play: 'play',
-  pause: 'pause'
+  pause: 'pause',
+  progress: 'progress',
 }
-const emit = defineEmits(['play'])
+const emit = defineEmits(['play', 'pause', 'progress'])
 
 const el = ref()
 const ready = ref(false)
@@ -89,11 +90,9 @@ const load = (url) => {
     if (!iframe) iframe = el.value.querySelector('iframe')
     onResize()
 
-    if (props.autoplay) {
-      player.play().then(() => {
-        emit(events.play)
-      })
-    }
+    player.play().then(() => {
+      emit(events.play)
+    })
 
   }).catch((error) => {
     // eslint-disable-next-line no-console
@@ -112,7 +111,7 @@ const pause = () => {
   })
 }
 
-// TODO add window resize event
+
 const onResize = () => {
   if (!iframe) return
 
@@ -127,8 +126,27 @@ const onResize = () => {
   iframe.style.top = `${y}px`
 }
 
+const setState = ({ mute, playing, fullscreen }) => {
+  if (!player) return
+
+  const volume = mute ? 0 : 1
+  player.setVolume(volume)
+
+  if (playing) {
+    play()
+  } else {
+    pause()
+  }
+  if (fullscreen) {
+    // TODO toggle fullscreen
+  }
+}
+
+// TODO listen to progress events
+
+
 // Expose
-defineExpose({ play, pause, load })
+defineExpose({ play, pause, load, setState })
 
 </script>
 

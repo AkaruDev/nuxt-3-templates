@@ -25,8 +25,28 @@
       v-if="!cover"
       class="AppVideo-player"
     >
-      <slot
-        name="player"
+      <AppPlayerEmbed
+        v-if="embed"
+        :embed="embed"
+      />
+      <AppPlayerVimeo
+        v-if="vimeo"
+        ref="vimeo"
+        :autoplay="autoplay"
+        :url="vimeo"
+        @play="onPlay"
+        @pause="onPause"
+      />
+    </div>
+
+    <!-- Controls -->
+    <div
+      v-if="controls"
+      v-show="!cover"
+      class="AppVideo-controls"
+    >
+      <AppVideoControls
+        @change="onControlsChange"
       />
     </div>
   </div>
@@ -35,52 +55,61 @@
 <script setup>
 import { vIntersectionObserver } from '@vueuse/components'
 
-const uid = `video-${useUID()}`
-
+// Props
 const props = defineProps({
   autoplay: {
     type: Boolean,
     default: false
-  }
+  },
+  controls: {
+    type: Boolean,
+    default: false
+  },
+  embed: {
+    type: String,
+    default: undefined
+  },
+  vimeo: {
+    type: String,
+    default: undefined
+  },
 })
 
-// Composables
-const { events, bus, on, off } = useVideoBus()
+// Data
+const uid = `video-${useUID()}`
 
 // Ref
 const slots = useSlots()
 const cover = ref(false)
 cover.value = slots.cover !== undefined
 const isInView = ref(false)
+const vimeo = ref()
 
 // Methods
-const onShow = (id) => {
-  if (id === uid) {
-    cover.value = false
-  }
-}
-on(events.show, onShow)
-
 const onIntersectionObserver = ([{ isIntersecting }]) => {
   isInView.value = isIntersecting
 
-  if (isInView.value && (slots.cover === undefined || props.autoplay)) {
+  // TODO weird
+  if (isInView.value && slots.cover === undefined) {
     cover.value = false
   }
 
-  if (!isInView.value && slots.cover !== undefined && !props.autoplay) {
+  if (!isInView.value && slots.cover !== undefined && props.embed !== undefined) {
     cover.value = true
   }
 }
 
 const onClickBtplay = () => {
-  bus.emit(events.show, uid)
+  show()
 }
 
-// Lifecycle
-onUnmounted(() => {
-  off(events.show, onShow)
-})
+const show = () => {
+  cover.value = false
+}
+
+const onControlsChange = (state) => {
+  vimeo?.value?.setState(state)
+}
 
 // Expose
 defineExpose({ uid })
@@ -89,7 +118,6 @@ defineExpose({ uid })
 <style  scoped>
 .AppVideo {
   position: relative;
-
 }
 
 .AppVideo-cover {

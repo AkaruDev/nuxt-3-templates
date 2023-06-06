@@ -13,11 +13,6 @@ export default defineNuxtModule({
     // Exemples
     // Add composables
     addImports({
-      name: 'useVideoBus',
-      as: 'useVideoBus',
-      from: resolver.resolve('runtime/composables/video-bus')
-    })
-    addImports({
       name: 'useUID',
       as: 'useUID',
       from: resolver.resolve('runtime/composables/uid')
@@ -35,6 +30,10 @@ export default defineNuxtModule({
     addComponent({
       name: 'AppPlayerVimeo',
       filePath: resolver.resolve('runtime/components/AppPlayerVimeo.vue')
+    })
+    addComponent({
+      name: 'AppVideoControls',
+      filePath: resolver.resolve('runtime/components/AppVideoControls.vue')
     })
 
   }
