@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'Video',
+    description: 'Add components for video use',
+    category: 'Components'
   },
   dependencies: [],
-  devDependencies: [],
-  files: ['modules/my-feature', 'configs']
+  devDependencies: ['@vueuse/core', '@vueuse/components'],
+  files: ['modules/video/src', 'configs']
 }

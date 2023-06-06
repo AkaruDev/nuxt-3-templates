@@ -15,12 +15,13 @@
   display: flex;
   flex-flow: column;
   align-items: center;
-  justify-content: center;
 
   width: 100%;
   min-height: 100vh;
 
   gap: 10px;
+
+  padding-top: 100px;
 
   text-align: center;
 
