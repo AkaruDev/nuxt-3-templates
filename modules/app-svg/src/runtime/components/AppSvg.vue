@@ -1,10 +1,10 @@
 
 <template>
-  <span class="AppIcon">
+  <span class="AppSvg">
     <client-only>
       <component
         :is="currentIcon"
-        class="AppIcon-icon"
+        class="AppSvg-icon"
       />
       <template #fallback />
     </client-only>
