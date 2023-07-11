@@ -13,13 +13,18 @@
 
 <script setup>
 
+import { useRuntimeConfig } from "#app";
+
 const props = defineProps({
   name: { type: String, required: true }
 })
 
+const runtimeConfig = useRuntimeConfig()
+const path = runtimeConfig?.public?.appSvg?.path || '../../../../../assets/svg/'
+
 const currentIcon = computed(() =>
   defineAsyncComponent({
-    loader: () => import(`../assets/svg/${props.name}.svg`),
+    loader: () => import(/* @vite-ignore */`${path}${props.name}.svg`),
     loadingComponent: {
       template: '<span></span>',
     },
