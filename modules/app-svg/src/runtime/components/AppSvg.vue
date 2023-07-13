@@ -1,5 +1,9 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
-  <span class="AppSvg" v-html="currentIcon"/>
+  <span
+    class="AppSvg"
+    v-html="currentIcon"
+  />
 </template>
 
 <script setup>
