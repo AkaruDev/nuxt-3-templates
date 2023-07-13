@@ -2,10 +2,9 @@
 export default defineNuxtConfig(
     {
         modules: [
-            '@nuxt/image-edge',
+            '@nuxt/image',
             '@/modules/app-image/src/module',
         ],
-
         image: {
             // If prismic you can use this configuration
             /*

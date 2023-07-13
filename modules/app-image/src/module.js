@@ -2,8 +2,8 @@ import { defineNuxtModule, addComponent, createResolver } from '@nuxt/kit'
 
 export default defineNuxtModule({
   meta: {
-    name: 'my-feature',
-    configKey: 'myModule'
+    name: 'app-img',
+    configKey: 'appImg'
   },
   // Default configuration options of the Nuxt module
   defaults: {},
