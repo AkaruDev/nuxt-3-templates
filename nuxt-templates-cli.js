@@ -5,6 +5,6 @@ module.exports = {
     category: 'Components'
   },
   dependencies: [],
-  devDependencies: ['@nuxt/image-edge', '@vueuse/core', '@vueuse/components'],
+  devDependencies: ['@nuxt/image@rc', '@vueuse/core', '@vueuse/components'],
   files: ['modules/app-image', 'configs']
 }
