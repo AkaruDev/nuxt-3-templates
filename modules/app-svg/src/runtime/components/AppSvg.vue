@@ -1,20 +1,9 @@
-
 <template>
-  <span class="AppSvg">
-    <client-only>
-      <span
-        v-html="currentIcon"
-        class="AppSvg-icon"
-      />
-      <template #fallback />
-    </client-only>
+  <span class="AppSvg" v-html="currentIcon">
   </span>
 </template>
 
 <script setup>
-
-import { useRuntimeConfig } from "#app";
-
 const props = defineProps({
   name: { type: String, required: true }
 })
