@@ -2,8 +2,8 @@
 <template>
   <span class="AppSvg">
     <client-only>
-      <component
-        :is="currentIcon"
+      <span
+        v-html="currentIcon"
         class="AppSvg-icon"
       />
       <template #fallback />
@@ -19,21 +19,15 @@ const props = defineProps({
   name: { type: String, required: true }
 })
 
-const runtimeConfig = useRuntimeConfig()
-const path = runtimeConfig?.public?.appSvg?.path || '../../../../../assets/svg/'
-
-const currentIcon = computed(() =>
-  defineAsyncComponent({
-    loader: () => import(/* @vite-ignore */`${path}${props.name}.svg`),
-    loadingComponent: {
-      template: '<span></span>',
+// Auto-load icons
+const icons = Object.fromEntries(
+  Object.entries(import.meta.glob('~/assets/svg/*.svg', { as: 'raw' })).map(
+    ([key, value]) => {
+      const filename = key.split('/').pop().split('.').shift()
+      return [filename, value]
     },
-    errorComponent: {
-      template: '<span>error</span>',
-    },
-    delay: 200,
-    timeout: 3000,
-    suspensible: true,
-  })
+  ),
 )
+const currentIcon = await icons[props.name]?.()
+
 </script>
