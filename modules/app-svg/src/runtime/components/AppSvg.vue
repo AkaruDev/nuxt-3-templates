@@ -1,6 +1,5 @@
 <template>
-  <span class="AppSvg" v-html="currentIcon">
-  </span>
+  <span class="AppSvg" v-html="currentIcon"/>
 </template>
 
 <script setup>
