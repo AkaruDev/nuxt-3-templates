@@ -75,6 +75,7 @@ export default defineNuxtModule({
       })
         .then(response => response.json())
         .catch(error => {
+          clearInterval(intervalID)
           console.warn(error)
           return error
         })
