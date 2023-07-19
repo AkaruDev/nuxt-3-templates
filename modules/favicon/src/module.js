@@ -110,6 +110,9 @@ export default defineNuxtModule({
 
           })
         }
+      } else {
+        clearInterval(intervalID)
+        console.warn(result)
       }
     })
 
