@@ -122,6 +122,11 @@ export const useVirtualScroll = (() => {
       y.lerp = window.scrollY
       y.value = window.scrollY
     }
+
+    // Prevent infinite lerp
+    if (y.value - y.lerp <= 0.0000001) {
+      y.lerp = y.value;
+    }
   }
   const setDirection = () => {
     if (y.previous > y.value) {
