@@ -6,5 +6,5 @@ module.exports = {
   },
   dependencies: ['https', 'unzipper'],
   devDependencies: [],
-  files: ['modules/favicon', 'configs']
+  files: ['modules/favicon', 'configs', 'public/icons']
 }

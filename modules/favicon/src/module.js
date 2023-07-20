@@ -47,7 +47,7 @@ export default defineNuxtModule({
 
 
       // Add loading log to let know the users of what is happening
-      const intervalID = loading('Favicon generation ')
+      let intervalID = loading('Favicon generation ')
       // Fetch api post options
       options = {
         favicon_generation: {
@@ -65,7 +65,6 @@ export default defineNuxtModule({
         }
       }
 
-
       const result = await fetch(RFG_ENDPOINT, {
         method: 'POST',
         headers: {
@@ -79,10 +78,11 @@ export default defineNuxtModule({
           console.warn(error)
           return error
         })
-
+      clearInterval(intervalID)
 
       // Unzip files to public folder
       if (result?.favicon_generation_result?.result?.status === 'success') {
+        intervalID = loading('Favicon set manifest file')
         // Set metas data from favicons
         const headers = result?.favicon_generation_result?.favicon?.html_code || null
         const data = headersToJson(headers)
@@ -95,28 +95,38 @@ export default defineNuxtModule({
         const urlZip = result?.favicon_generation_result?.favicon?.package_url || null
 
         if (urlZip) {
+          clearInterval(intervalID)
+          intervalID = loading('Favicon get zip files')
           get(urlZip, (response) => {
+            clearInterval(intervalID)
+            intervalID = loading('Favicon unzip files')
             const stream = response.pipe(unzipper.Extract({ path: iconPath + '/' }))
+            stream.on('error', (error) => {
+              clearInterval(intervalID)
+              console.log('Stream zip error.')
+              console.log(error)
+            })
 
             stream.on('finish', () => {
-              // Move favicon.ico to public directory
-              const favicon = readFileSync(resolver.resolve(publicPath, 'icons', 'favicon.ico'))
-              writeFileSync(resolver.resolve(publicPath, 'favicon.ico'), favicon)
-
               clearInterval(intervalID)
+              setTimeout(() => {
+                // Move favicon.ico to public directory
+                const favicon = readFileSync(resolver.resolve(publicPath, 'icons', 'favicon.ico'))
+                writeFileSync(resolver.resolve(publicPath, 'favicon.ico'), favicon)
+              }, 300)
+
               console.log('Favicon is created!')
             })
 
-
           })
+        } else {
+          clearInterval(intervalID)
         }
       } else {
         clearInterval(intervalID)
         console.warn(result)
       }
     })
-
-
 
   }
 })
