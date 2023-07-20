@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'Eslint',
+    description: 'Add eslint module and configs',
+    category: 'Development helpers'
   },
   dependencies: [],
-  devDependencies: [],
-  files: ['modules/my-feature', 'configs']
+  devDependencies: ['@nuxtjs/eslint-module', '@nuxtjs/eslint-config'],
+  files: ['configs', '.eslintrc', '.eslintignore', '.editorconfig']
 }
