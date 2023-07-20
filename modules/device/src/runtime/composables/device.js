@@ -27,6 +27,11 @@ export const useDevice = () => {
   const landscape = ref(true)
   const portrait = ref(false)
 
+  // Virtualkeyboard
+  let previousWidth = ref(0)
+  let previousHeight = ref(0)
+  const virtualKeyboardIsOpen = ref(false)
+
   // Pointers
   const mouse = ref(true)
   const touch = ref(true)
@@ -36,16 +41,21 @@ export const useDevice = () => {
 
   // Device power
   const getGpuTier = async () => {
-    const gpu = await getGPUTier();
+    const gpu = await getGPUTier()
 
     return gpu?.tier
   }
 
   function update () {
+
     // Breakpoints
     mobile.value = width.value <= breakpoints.small
     tablet.value = width.value > breakpoints.small && width.value <= breakpoints.medium
     desktop.value = width.value > breakpoints.medium
+
+    const widthChanged = previousWidth.value !== width.value
+    const heightChanged = previousHeight.value !== height.value
+    virtualKeyboardIsOpen.value = mobile.value && heightChanged && !widthChanged
 
     // Screen orientation
     landscape.value = width.value > height.value
@@ -59,6 +69,9 @@ export const useDevice = () => {
     const isChrome = navigator.userAgent.indexOf("Chrome") > -1
     const isSafari = navigator.userAgent.indexOf("Safari") > -1
     safari.value = !isChrome && isSafari
+
+    previousWidth.value = width.value
+    previousHeight.value = height.value
   }
 
   onMounted(() => {
@@ -67,5 +80,5 @@ export const useDevice = () => {
   })
   onUnmounted(() => window.removeEventListener('resize', update))
 
-  return { mobile, tablet, desktop, landscape, portrait, mouse, touch, safari, getGpuTier }
+  return { mobile, tablet, desktop, landscape, portrait, mouse, touch, safari, getGpuTier, virtualKeyboardIsOpen }
 }
