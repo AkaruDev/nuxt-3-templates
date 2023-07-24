@@ -5,6 +5,6 @@ module.exports = {
     category: 'Development helpers'
   },
   dependencies: [],
-  devDependencies: ['@nuxtjs/eslint-module', '@nuxt/eslint-config'],
+  devDependencies: ['eslint', '@nuxtjs/eslint-module', '@nuxt/eslint-config'],
   files: ['configs', '.eslintrc', '.eslintignore', '.editorconfig']
 }
