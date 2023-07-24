@@ -41,7 +41,8 @@ export default defineNuxtModule({
       try {
         image = readFileSync(pathImg, "base64")
       } catch (error) {
-        console.error(error)
+        // console.error(error)
+        console.warn("No public/icon.png file found for generating favicon")
         return
       }
 
