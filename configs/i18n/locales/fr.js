@@ -1,5 +1,3 @@
-const fr = {
+export default {
     text: "Sympa !"
 }
-
-export { fr }

@@ -6,5 +6,5 @@ module.exports = {
   },
   dependencies: [],
   devDependencies: ['@nuxtjs/i18n@next'],
-  files: ['configs']
+  files: ['configs', 'i18n.config.js']
 }
