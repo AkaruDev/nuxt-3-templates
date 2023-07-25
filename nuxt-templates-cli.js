@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'i18n',
+    description: 'Add i18n base localisation',
+    category: 'Localization'
   },
   dependencies: [],
-  devDependencies: [],
-  files: ['modules/my-feature', 'configs']
+  devDependencies: ['@nuxtjs/i18n'],
+  files: ['configs']
 }

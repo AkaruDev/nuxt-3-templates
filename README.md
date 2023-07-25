@@ -1,6 +1,6 @@
 ## Setup
 
-Create a new branch with name like `features/my-feature`
+Create a new branch with name like `features/i18n`
 
 Replace folder name, config names `my-features` by the name of your new feature. 
 
