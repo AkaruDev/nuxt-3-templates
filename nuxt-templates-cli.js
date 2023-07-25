@@ -5,6 +5,6 @@ module.exports = {
     category: 'Localization'
   },
   dependencies: [],
-  devDependencies: ['@nuxtjs/i18n'],
+  devDependencies: ['@nuxtjs/i18n@next'],
   files: ['configs']
 }
