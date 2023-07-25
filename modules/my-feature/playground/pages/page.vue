@@ -4,7 +4,6 @@
     <nuxt-link to="/">
       Go home
     </nuxt-link>
-
   </div>
 </template>
 
