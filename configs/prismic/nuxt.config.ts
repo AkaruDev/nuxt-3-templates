@@ -5,6 +5,7 @@ const IS_PREPROD = ENVIRONMENT === 'preprod'
 
 export default defineNuxtConfig(
     {
+        ssr: IS_PREPROD ? false : true,
         modules: [
             '@nuxtjs/prismic',
             '@/modules/prismic/src/module',
