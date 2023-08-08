@@ -27,8 +27,8 @@ const icons = Object.fromEntries(
 const icon = await icons[props.name]?.()
 const currentIcon = ref(icon)
 
-watch(props, async (newProps) => {
-  currentIcon.value = await icons[newProps.name]?.()
+watch(() => props.name, async (newName) => {
+  currentIcon.value = await icons[newName]?.()
 }
 )
 
