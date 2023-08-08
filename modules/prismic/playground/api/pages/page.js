@@ -3,7 +3,8 @@ import { useRuntimeConfig } from '#app'
 
 import { usePrismic } from '@prismicio/vue'
 
-const getHome = async () => {
+const getPage = async (uid) => {
+
   // Get lang
   /*
   const { localeProperties } = useI18n()
@@ -15,29 +16,26 @@ const getHome = async () => {
   // Getting prismic
   const prismic = usePrismic()
   if (prismic.client === undefined) return null
+
   Formatter.setPrismic(prismic)
-  const document = await prismic.client.getSingle('page_home',
+  const document = await prismic.client.getByUID(
+    'page',
+    uid,
     {
       graphQuery: `{
-        page_home{
-          hero{
-            title
-            link
-            text
+          page {
+            hero{
+              title
+            }
           }
-        }
-      }`,
+        }`,
       lang
     }
   )
 
-
   // Format document here
   const hero = {
-    title: Formatter.formatKeyText(document.data?.hero?.[0].title),
-    link: document.data?.hero?.[0].link,
-    text: Formatter.formatRichText(document.data?.hero?.[0].text),
-    text2: document.data?.hero?.[0].text
+    title: Formatter.formatKeyText(document.data?.hero?.[0].title)
   }
 
   // Return formated content
@@ -46,4 +44,4 @@ const getHome = async () => {
   }
 }
 
-export default getHome
+export default getPage

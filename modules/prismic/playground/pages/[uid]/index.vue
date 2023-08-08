@@ -10,7 +10,8 @@
 </template>
 
 <script setup>
-import getPage from "../../../../../api/pages/page.js";
+import getPage from "@/api/pages/page.js";
+
 const route = useRoute();
 
 const { data: api, error } = await useAsyncData(() => getPage(route.params.uid))

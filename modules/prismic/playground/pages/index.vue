@@ -14,12 +14,14 @@
       link test
     </PrismicLink>
 
-    <div v-html="api.hero.text" v-if="api?.hero?.text"/>
+    <prismic-rich-text
+      :field='api.hero.text2'
+    />
   </div>
 </template>
 
 <script setup>
-import getHome from "../../../../api/pages/home.js";
+import getHome from "@/api/pages/home.js";
 
 const { data: api, error } = await useAsyncData(getHome);
 

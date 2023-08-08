@@ -5,6 +5,6 @@ module.exports = {
     category: 'CMS'
   },
   dependencies: [],
-  devDependencies: ['@nuxtjs/prismic@rc'],
-  files: ['api', 'modules/prismic', 'configs']
+  devDependencies: ['@nuxtjs/prismic'],
+  files: ['api', 'modules/prismic/src', 'configs']
 }

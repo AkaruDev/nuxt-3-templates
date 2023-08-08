@@ -1,6 +1,5 @@
-/**
- * Environment informations
- */
+import routes from "./routes"
+
 const ENVIRONMENT = process?.env?.ENV || 'dev'
 const IS_PREPROD = ENVIRONMENT === 'preprod'
 
@@ -14,8 +13,10 @@ export default defineNuxtConfig(
             endpoint: 'https://my-site.cdn.prismic.io/api/v2',
             toolbar: IS_PREPROD,
             preview: IS_PREPROD ? '/preview/' : false,
-            linkResolver: '@/configs/prismic/linkResolver.js',
-            htmlSerializer: '@/configs/prismic/htmlSerializer.js'
+            clientConfig: {
+                routes
+            },
+            richTextSerializer: "~/configs/prismic/richTextSerializer"
         },
         runtimeConfig: {
             public: {

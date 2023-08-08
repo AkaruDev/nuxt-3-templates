@@ -1,0 +1,36 @@
+{
+  "SEO": {
+    "metas": {
+      "type": "Group",
+      "config": {
+        "repeat": false,
+        "fields": {
+          "image": {
+            "type": "Image",
+            "config": {
+              "constraint": {
+                "width": 1200,
+                "height": 630
+              },
+              "thumbnails": [],
+              "label": "Image"
+            }
+          },
+          "title": {
+            "type": "Text",
+            "config": {
+              "label": "Title"
+            }
+          },
+          "description": {
+            "type": "Text",
+            "config": {
+              "label": "Description"
+            }
+          }
+        },
+        "label": "Seo"
+      }
+    }
+  }
+}
