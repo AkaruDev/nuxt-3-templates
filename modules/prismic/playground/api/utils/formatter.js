@@ -1,7 +1,7 @@
 import { hasKey, isObject, isEmptyObject, filterObjectKeys, toArrayIfNeeded, stripTags, createEllispis, isValidRelationShip } from './helpers'
 
 class Formatter {
-  setPrismic(prismic) {
+  setPrismic (prismic) {
     this.$prismic = prismic
   }
 
@@ -11,11 +11,11 @@ class Formatter {
    *
    */
 
-  formatTitle(title) {
+  formatTitle (title) {
     return this.formatRichText(title)
   }
 
-  formatRichText(richText, { removeWrappingPTag = false, ellispsis } = {}) {
+  formatRichText (richText, { removeWrappingPTag = false, ellispsis } = {}) {
 
     if (!richText || richText.length === 0) { return undefined }
 
@@ -41,7 +41,7 @@ class Formatter {
     return html
   }
 
-  formatImage(image, { views: requiredViews, includeDimensions = true } = {}) {
+  formatImage (image, { views: requiredViews, includeDimensions = true } = {}) {
     if (!image || isEmptyObject(image) || Object.values(image).every(imageFormat => isEmptyObject(imageFormat))) { return undefined }
 
     requiredViews = toArrayIfNeeded(requiredViews)
@@ -88,7 +88,7 @@ class Formatter {
     }
   }
 
-  formatRelationship(relationship, { validTypes, fields = ['id', 'type', 'uid', 'lang', 'link_type'] } = {}) {
+  formatRelationship (relationship, { validTypes, fields = ['id', 'type', 'uid', 'lang', 'link_type', 'url'] } = {}) {
     if (!isValidRelationShip(relationship, validTypes)) { return undefined }
 
     return {
@@ -97,7 +97,7 @@ class Formatter {
     }
   }
 
-  formatLink(link, options) {
+  formatLink (link, options) {
     if (!link || link.link_type === 'Any') { return undefined }
 
     if (link.link_type === 'Document') {
@@ -117,7 +117,7 @@ class Formatter {
     }
   }
 
-  formatLinkToMedia(mediaLink, { validKinds, validExtensions, fields = ['link_type', 'name', 'url'] } = {}) {
+  formatLinkToMedia (mediaLink, { validKinds, validExtensions, fields = ['link_type', 'name', 'url'] } = {}) {
     validKinds = toArrayIfNeeded(validKinds)
     validExtensions = toArrayIfNeeded(validExtensions)
 
@@ -131,7 +131,7 @@ class Formatter {
   }
 
   // https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleDateString
-  formatDate(date, { locale, options, format } = {}) {
+  formatDate (date, { locale, options, format } = {}) {
     if (!date) { return undefined }
 
     options = {
@@ -151,7 +151,7 @@ class Formatter {
     return format({ weekday, day, month, year })
   }
 
-  formatTimestamp(timestamp, { locale, options, format } = {}) {
+  formatTimestamp (timestamp, { locale, options, format } = {}) {
     if (!timestamp) { return undefined }
 
     options = {
@@ -173,7 +173,7 @@ class Formatter {
     return format({ minute, hour, weekday, day, month, year })
   }
 
-  formatColor(color, { convertToRgb = false, alpha, fullDetails = false } = {}) {
+  formatColor (color, { convertToRgb = false, alpha, fullDetails = false } = {}) {
     if (!color) { return undefined }
 
     if (convertToRgb || fullDetails) {
@@ -192,13 +192,13 @@ class Formatter {
     return color
   }
 
-  formatNumber(number) {
+  formatNumber (number) {
     if (typeof number !== 'number') { return undefined }
 
     return number
   }
 
-  formatKeyText(text, { ellispsis } = {}) {
+  formatKeyText (text, { ellispsis } = {}) {
     if (!text) { return undefined }
 
     text = this.endOfSentenceUnbreakableSpace(text)
@@ -208,7 +208,7 @@ class Formatter {
     return text
   }
 
-  endOfSentenceUnbreakableSpace(text) {
+  endOfSentenceUnbreakableSpace (text) {
     // ?!:€
     if (typeof text === 'string') {
       text = text.split(/\u0020\u003A/g).join('\u00A0\u003A')
@@ -220,13 +220,13 @@ class Formatter {
     return text
   }
 
-  formatSelect(selectValue, { valueMapping } = {}) {
+  formatSelect (selectValue, { valueMapping } = {}) {
     if (!selectValue) { return undefined }
 
     return valueMapping ? (valueMapping[selectValue] || selectValue) : selectValue
   }
 
-  formatEmbed(embed, { fields = ['provider_name', 'title', 'video_id', 'thumbnail_url', 'embed_url'] } = {}) {
+  formatEmbed (embed, { fields = ['provider_name', 'title', 'video_id', 'thumbnail_url', 'embed_url'] } = {}) {
     if (!embed || isEmptyObject(embed)) { return undefined }
 
     if (embed.provider_name === 'Vimeo') {
@@ -245,7 +245,7 @@ class Formatter {
     return embed
   }
 
-  formatGeopoint(geopoint) {
+  formatGeopoint (geopoint) {
     if (!geopoint || isEmptyObject(geopoint)) { return undefined }
 
     return geopoint
@@ -257,7 +257,7 @@ class Formatter {
    *
    */
 
-  formatMetas(metasGroup, { defaults } = {}) {
+  formatMetas (metasGroup, { defaults } = {}) {
     let imageUrl = (this.formatImage(metasGroup?.meta_image) || defaults?.image)?.url
 
     if (imageUrl) {
@@ -274,7 +274,7 @@ class Formatter {
     }
   }
 
-  formatButton(ctaGroup, { linkFormatterOptions, requiredLink = true } = {}) {
+  formatButton (ctaGroup, { linkFormatterOptions, requiredLink = true } = {}) {
     if (!ctaGroup || !isObject(ctaGroup)) { return undefined }
 
     const link = this.formatLink(ctaGroup?.link, linkFormatterOptions)
