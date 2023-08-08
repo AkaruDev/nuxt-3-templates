@@ -50,11 +50,11 @@ const TYPES = ['email', 'tel', 'place']
 
 let AppPrismicLink = null
 try {
-  AppPrismicLink = resolveComponent('AppPrismicLink')
+  AppPrismicLink = resolveComponent('PrismicLink')
 } catch (e) {
   // Prismic is not installed
 }
-const AppNuxtLink = resolveComponent('AppNuxtLink')
+const AppNuxtLink = resolveComponent('NuxtLink')
 
 const getComponentTag = () => {
   if (props.tag) return props.tag
