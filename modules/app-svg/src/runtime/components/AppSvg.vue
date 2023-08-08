@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <span
+    v-if="currentIcon"
     class="AppSvg"
     v-html="currentIcon"
   />
@@ -20,6 +21,15 @@ const icons = Object.fromEntries(
     },
   ),
 )
-const currentIcon = await icons[props.name]?.()
+
+// Set icon, watch when props change to reset it
+// eslint-disable-next-line vue/no-setup-props-destructure
+const icon = await icons[props.name]?.()
+const currentIcon = ref(icon)
+
+watch(props, async (newProps) => {
+  currentIcon.value = await icons[newProps.name]?.()
+}
+)
 
 </script>
