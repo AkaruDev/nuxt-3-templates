@@ -2,7 +2,7 @@ import routes from "./routes"
 
 const ENVIRONMENT = process?.env?.ENV || 'dev'
 const IS_PREPROD = ENVIRONMENT === 'preprod'
-//test
+
 export default defineNuxtConfig(
     {
         ssr: IS_PREPROD ? false : true,
