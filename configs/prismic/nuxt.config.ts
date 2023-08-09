@@ -3,15 +3,20 @@ import routes from "./routes"
 const ENVIRONMENT = process?.env?.ENV || 'dev'
 const IS_PREPROD = ENVIRONMENT === 'preprod'
 
+const endpoint = process?.env?.PRISMIC_ENDPOINT
+if (!endpoint) {
+    console.error("Missing prismic endpoint in the environnement variable.")
+}
+
 export default defineNuxtConfig(
     {
-        ssr: IS_PREPROD ? false : true,
+        // ssr: IS_PREPROD ? false : true,
         modules: [
             '@nuxtjs/prismic',
             '@/modules/prismic/src/module',
         ],
         prismic: {
-            endpoint: 'https://my-site.cdn.prismic.io/api/v2',
+            endpoint,
             toolbar: IS_PREPROD,
             preview: IS_PREPROD ? '/preview/' : false,
             clientConfig: {
@@ -21,6 +26,7 @@ export default defineNuxtConfig(
         },
         runtimeConfig: {
             public: {
+                endpoint,
                 langIso: process?.env?.LANG_ISO || 'fr-fr'
             }
         }

@@ -1,21 +1,11 @@
 import Formatter from '../utils/formatter'
-import { useRuntimeConfig } from '#app'
 
-import { usePrismic } from '@prismicio/vue'
+import usePrismicApi from '../prismic'
 
 const getHome = async () => {
-  // Get lang
-  /*
-  const { localeProperties } = useI18n()
-  const lang = localeProperties.value.iso
-  */
-  const config = useRuntimeConfig()
-  const lang = config?.public?.langIso || 'fr-fr'
 
   // Getting prismic
-  const prismic = usePrismic()
-  if (prismic.client === undefined) return null
-  Formatter.setPrismic(prismic)
+  const { prismic, lang } = usePrismicApi()
   const document = await prismic.client.getSingle('page_home',
     {
       graphQuery: `{
