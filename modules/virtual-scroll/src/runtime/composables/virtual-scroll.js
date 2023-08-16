@@ -123,8 +123,10 @@ export const useVirtualScroll = (() => {
       y.value = window.scrollY
     }
 
-    // Prevent infinite lerp
-    if (y.value - y.lerp <= 0.0000001) {
+    // Prevent infinite lerp, not sur if needed
+    const diff = y.value - y.lerp
+    const limit = 0.0000001
+    if ((diff <= limit && diff > 0) || (diff >= -limit && diff < 0)) {
       y.lerp = y.value;
     }
   }
