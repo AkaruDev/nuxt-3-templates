@@ -1,6 +1,6 @@
 module.exports = {
   metas: {
-    title: 'i18n',
+    title: 'i18n (NOT READY)',
     description: 'Add i18n base localisation',
     category: 'Localization'
   },
