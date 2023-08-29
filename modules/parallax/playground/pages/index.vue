@@ -23,7 +23,9 @@
       class="Parallax"
       :style="{ backgroundColor: '#d3fef7' }"
       @click="toggleActive"
-    />
+    >
+    click me to active/deactivate parallax
+    </div>
   </div>
 </template>
 

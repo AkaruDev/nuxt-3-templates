@@ -4,7 +4,7 @@ module.exports = {
     description: 'Add parallax directive/class',
     category: 'Animations'
   },
-  dependencies: [],
-  devDependencies: ['@vueuse/core'],
-  files: ['modules/parallax', 'configs']
+  dependencies: ['@vueuse/core'],
+  devDependencies: ['gsap'],
+  files: ['modules/parallax/src', 'configs']
 }

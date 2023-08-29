@@ -1,4 +1,5 @@
-import { useRafFn, useIntersectionObserver } from '@vueuse/core'
+import { useIntersectionObserver } from '@vueuse/core'
+import { gsap } from 'gsap'
 import { clamp, lerp } from "../utils/math"
 
 export default () => {
@@ -29,7 +30,8 @@ export default () => {
       el,
       inView: false,
       options: { ...options, ...binding.value },
-      progress: { value: 0, lerp: 0 }
+      progress: { value: 0, lerp: 0 },
+      onTick: () => onTick(animation)
     }
     animations.push(animation)
 
@@ -42,7 +44,12 @@ export default () => {
       }
     )
 
-    useRafFn(() => onTick(animation))
+
+    gsap.ticker.add(animation.onTick)
+  }
+
+  const onTick = (animation) => {
+    setProgress(animation)
   }
 
 
@@ -60,11 +67,11 @@ export default () => {
   }
 
   const unmounted = (el) => {
+    const animation = animations.find((animation) => animation.el === el)
+    if (animation) {
+      gsap.ticker.remove(animation.onTick)
+    }
     animations = animations.filter((animation) => animation.el !== el)
-  }
-
-  const onTick = (animation) => {
-    setProgress(animation)
   }
 
   const setProgress = ({ el, inView, progress, options }) => {
