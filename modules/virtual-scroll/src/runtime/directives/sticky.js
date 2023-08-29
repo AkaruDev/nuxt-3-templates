@@ -22,6 +22,7 @@ export default () => {
       onScroll: () => onScroll(sticky),
       options: { ...options, ...elOptions.value }
     }
+    el.style.willChange = 'transform'
     stickys.push(sticky)
 
     $virtualScroll.on('scroll', sticky.onScroll)
@@ -31,6 +32,8 @@ export default () => {
     const sticky = stickys.find((sticky) => sticky.el === el)
     if (sticky) $virtualScroll.off('scroll', sticky.onScroll)
     stickys = stickys.filter((sticky) => sticky.el !== el)
+
+    el.style.willChange = ''
   }
 
   const setBound = (sticky) => {
@@ -51,8 +54,8 @@ export default () => {
       if (isInBounds) {
         const max = sticky.parentBounds.height - sticky.elBounds.height
         const value = sticky.parentBounds.top * -1
-        const y = clamp(value, 0, max).toFixed($virtualScroll.getPrecision())
-        sticky.el.style.transform = `translateY(${y}px)`
+        const y = clamp(value, 0, max)
+        sticky.el.style.transform = `translate3D(0,${y}px,0) `
 
         sticky.progress = (sticky.elBounds.top - sticky.parentBounds.top) / (sticky.parentBounds.height - sticky.elBounds.height)
         if (isNaN(sticky.progress)) sticky.progress = 0
