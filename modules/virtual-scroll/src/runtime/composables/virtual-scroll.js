@@ -1,5 +1,6 @@
 import { ref } from 'vue'
-import { useRafFn, useResizeObserver } from '@vueuse/core'
+import { useResizeObserver } from '@vueuse/core'
+import { gsap } from 'gsap'
 import VirtualScroll from 'virtual-scroll'
 import { clamp, lerp } from '../utils/math'
 import { useBus } from './bus'
@@ -83,7 +84,7 @@ export const useVirtualScroll = (() => {
       })
     }
 
-    useRafFn(onTick)
+    gsap.ticker.add(onTick)
   }
 
   /**
@@ -270,6 +271,7 @@ export const useVirtualScroll = (() => {
   }
 
   const destroy = () => {
+    gsap.ticker.remove(onTick)
     virtualScroll?.destroy()
     resizeObserver?.disconnect()
     window.removeEventListener('keydown', this.onKeyDown)
