@@ -4,7 +4,7 @@ module.exports = {
     description: 'Add virtual scroll',
     category: 'Animations'
   },
-  dependencies: ['virtual-scroll', '@vueuse/core', 'gsap'],
-  devDependencies: [],
+  dependencies: ['virtual-scroll', '@vueuse/core'],
+  devDependencies: ['gsap'],
   files: ['modules/virtual-scroll', 'configs']
 }
