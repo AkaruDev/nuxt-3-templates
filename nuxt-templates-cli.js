@@ -1,8 +1,8 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'Viewport observer',
+    description: 'Add a directive to add Intersection Observer to elements',
+    category: 'Animations'
   },
   dependencies: ["defu"],
   devDependencies: [],
