@@ -4,6 +4,8 @@
     <nuxt-link to="/page">
       Go to page
     </nuxt-link>
+
+    <div v-observe="{ once: true }" />
   </div>
 </template>
 
