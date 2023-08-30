@@ -8,6 +8,12 @@
 </template>
 
 <script setup>
+
+const { $viewportObserver } = useNuxtApp()
+
+onMounted(() => {
+  console.info($viewportObserver.active.value)
+})
 </script>
 
 <style scoped></style>

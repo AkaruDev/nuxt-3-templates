@@ -4,7 +4,7 @@ module.exports = {
     description: 'Add feature',
     category: 'Feature category'
   },
-  dependencies: [],
+  dependencies: ["defu"],
   devDependencies: [],
-  files: ['modules/my-feature', 'configs']
+  files: ['modules/viewport-observer', 'configs']
 }

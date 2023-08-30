@@ -1,8 +1,8 @@
 ## Setup
 
-Create a new branch with name like `features/my-feature`
+Create a new branch with name like `features/viewport-observer`
 
-Replace folder name, config names `my-features` by the name of your new feature. 
+Replace folder name, config names `viewport-observers` by the name of your new feature. 
 
 In `nuxt-templates.cli.js` fill the field corresponding to your new feature.
 

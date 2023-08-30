@@ -1,14 +1,21 @@
-import { defineNuxtModule, addImports, addComponent, createResolver } from '@nuxt/kit'
+import { defineNuxtModule, addPlugin, createResolver } from '@nuxt/kit'
+import { defu } from "defu"
 
 export default defineNuxtModule({
   meta: {
-    name: 'my-feature',
-    configKey: 'myModule'
+    name: 'viewport-observer',
+    configKey: 'viewportObserver'
   },
   // Default configuration options of the Nuxt module
   defaults: {},
-  setup () { // options, nuxt
+  setup (options, nuxt) { // options, nuxt
     const resolver = createResolver(import.meta.url)
+    nuxt.options.runtimeConfig.public.viewportObserver = defu(options, {
+      active: true
+    })
+
+    // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
+    addPlugin(resolver.resolve('runtime/plugin'))
 
 
     // Exemples

@@ -1,8 +1,8 @@
 {
-  "name": "my-feature",
+  "name": "viewport-observer",
   "version": "1.0.0",
   "description": "Page transitions",
-  "repository": "akaru/my-feature",
+  "repository": "akaru/viewport-observer",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -28,7 +28,8 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.4.2"
+    "@nuxt/kit": "^3.4.2",
+    "defu": "^6.1.2"
   },
   "devDependencies": {
     "@nuxt/eslint-config": "^0.1.1",
