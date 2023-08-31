@@ -12,17 +12,16 @@ export default (nuxtApp) => {
   }
 
   return {
+    observer: null,
     /**
      * @param {HTMLElement} el
      * @param {*} bindings
      */
-    mounted (el, bindings) {
+    mounted (el, bindings, vnode) {
       const options = { ...optionsDefault, ...bindings.value }
       const { $viewportObserver } = nuxtApp
 
-      // Observer
-      // TODO test with page changes
-      // TODO find a way to clear the observer maybe ?
+      // Set observer
       /**
       * observer @type {IntersectionObserver}
       */
@@ -45,17 +44,23 @@ export default (nuxtApp) => {
         threshold: options.threshold
       })
       if ($viewportObserver.active.value) observer.observe(el)
+      vnode.observer = observer
 
-      // Watch
+      // Watch global active state
       watch($viewportObserver.active, (newValue) => {
         if (newValue) {
-          observer.observe(el)
+          vnode.observer.observe(el)
         } else {
-          observer?.disconnect()
+          vnode.observer?.disconnect()
           el.classList.remove(options.activeClass)
         }
       })
 
     },
+    unmounted (el, bindings, vnode) {
+      vnode?.observer?.disconnect()
+      vnode.observer = null
+    },
   }
+
 }
