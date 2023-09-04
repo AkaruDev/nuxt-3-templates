@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <span
-    v-if="currentIcon"
+    ref="el"
     class="AppSvg"
     v-html="currentIcon"
   />
@@ -11,6 +11,9 @@
 const props = defineProps({
   name: { type: String, required: true }
 })
+
+const el = ref()
+const currentIcon = ref()
 
 // Auto-load icons
 const icons = Object.fromEntries(
@@ -22,14 +25,25 @@ const icons = Object.fromEntries(
   ),
 )
 
-// Set icon, watch when props change to reset it
-// eslint-disable-next-line vue/no-setup-props-destructure
-const icon = await icons[props.name]?.()
-const currentIcon = ref(icon)
-
 watch(() => props.name, async (newName) => {
   currentIcon.value = await icons[newName]?.()
-}
-)
+})
+
+onMounted(async () => {
+  currentIcon.value = await icons[props.name]?.()
+})
+
+
+defineExpose({ el })
 
 </script>
+
+<style lang="scss" scoped>
+.AppSvg {
+
+  &:deep(svg) {
+    width: 100%;
+    height: 100%;
+  }
+}
+</style>
