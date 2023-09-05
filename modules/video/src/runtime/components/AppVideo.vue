@@ -120,7 +120,7 @@ const onIntersectionObserver = ([{ isIntersecting }]) => {
     cover.value = true
   }
 
-  if (isInView.value && props.autoplay) {
+  if (isInView.value && props.autoplay && !props.controls) {
     play()
   }
   if (!isInView.value) {
@@ -192,18 +192,18 @@ const onMouseLeave = () => {
   isMouseEnter.value = false
 }
 
-const onControlsChange = (newState) => {
-  if (newState.playing !== state.value.playing) {
+const onControlsChange = (control) => {
+  if (control?.togglePlayPause) {
     togglePlayPause()
   }
-  if (newState.mute !== state.value.mute) {
+  if (control?.toggleMute) {
     toggleMute()
   }
-  if (newState.fullscreen !== state.value.fullscreen) {
+  if (control?.toggleFullscreen) {
     toggleFullscreen()
   }
-  if (newState.progress !== state.value.progress) {
-    setProgress(newState.progress)
+  if (control?.progress) {
+    setProgress(control.progress)
   }
 }
 

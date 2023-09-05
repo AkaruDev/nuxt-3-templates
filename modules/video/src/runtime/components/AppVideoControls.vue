@@ -23,7 +23,7 @@
     <!-- Sound on/off -->
     <button
       class="AppVideoControls-bt"
-      @click="toggleVolume"
+      @click="toggleMute"
     >
       <svg
         class="AppVideoControls-mute"
@@ -105,29 +105,23 @@ const events = {
   change: 'change'
 }
 const emit = defineEmits(['change'])
-const state = ref({
-  ...props.state
-})
 
 const togglePlayPause = () => {
-  state.value.playing = !props.state.playing
-  emit(events.change, state.value)
+  emit(events.change, { togglePlayPause: true })
 }
-const toggleVolume = () => {
-  state.value.mute = !props.state.mute
-  emit(events.change, state.value)
+const toggleMute = () => {
+  emit(events.change, { toggleMute: true })
 }
 const toggleFullscreen = () => {
-  state.value.fullscreen = !props.state.fullscreen
-  emit(events.change, state.value)
+  emit(events.change, { toggleFullscreen: true })
 }
 
 /**
  * @param {MouseEvent} event
  */
 const onClickProgress = (event) => {
-  state.value.progress = event.offsetX / bar.value.clientWidth
-  emit(events.change, state.value)
+  const progress = event.offsetX / bar.value.clientWidth
+  emit(events.change, { progress })
 }
 
 
