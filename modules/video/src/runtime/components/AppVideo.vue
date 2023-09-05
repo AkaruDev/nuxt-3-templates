@@ -5,6 +5,7 @@
     :class="{ '--fullscreen': state.fullscreen }"
 
     @mouseenter="onMouseEnter"
+    @mousemove="onMouseMove"
     @mouseleave="onMouseLeave"
   >
     <!-- Cover -->
@@ -53,7 +54,7 @@
       v-if="controls"
       v-show="!cover"
       :state="state"
-      :style="{ opacity: isMouseEnter ? 1 : 0 }"
+      :style="{ opacity: showControls ? 1 : 0, pointerEvents: showControls ? 'auto' : 'none' }"
       :progress="player?.progress || 0"
       @change="onControlsChange"
     />
@@ -98,13 +99,14 @@ const slots = useSlots()
 const cover = ref(false)
 cover.value = slots.cover !== undefined
 const isInView = ref(false)
-const isMouseEnter = ref(false)
+const showControls = ref(false)
 const player = ref()
 const state = ref({
   mute: props.mute,
   playing: props.autoplay,
   fullscreen: false,
 })
+let timeoutId = null
 
 // Methods
 const onIntersectionObserver = ([{ isIntersecting }]) => {
@@ -186,10 +188,27 @@ const onPause = () => {
 }
 
 const onMouseEnter = () => {
-  isMouseEnter.value = true
+  showControls.value = true
+  hideControlsLater()
+}
+
+const onMouseMove = () => {
+  showControls.value = true
+  hideControlsLater()
 }
 const onMouseLeave = () => {
-  isMouseEnter.value = false
+  showControls.value = false
+  if (timeoutId) {
+    clearTimeout(timeoutId)
+    timeoutId = null
+  }
+}
+
+const hideControlsLater = () => {
+  if (timeoutId) clearTimeout(timeoutId)
+  timeoutId = setTimeout(() => {
+    showControls.value = false
+  }, 3000)
 }
 
 const onControlsChange = (control) => {
@@ -207,9 +226,16 @@ const onControlsChange = (control) => {
   }
 }
 
+// Lifecycle
+onUnmounted(() => {
+  if (timeoutId) {
+    clearTimeout(timeoutId)
+    timeoutId = null
+  }
+})
 
 // Expose
-defineExpose({ uid })
+defineExpose({ uid, play, pause })
 </script>
 
 <style  scoped>
