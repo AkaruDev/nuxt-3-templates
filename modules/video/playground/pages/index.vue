@@ -10,6 +10,7 @@
       <h2>Video with embed player and cover</h2>
       <AppVideo
         class="Page-video"
+        :autoplay="false"
         :embed="embed"
       >
         <template #cover>
@@ -32,7 +33,6 @@
     <div class="Page-demo">
       <h2>Video with vimeo player and cover</h2>
       <AppVideo
-        :autoplay="true"
         class="Page-video"
         vimeo="https://vimeo.com/265070712"
       >
@@ -57,7 +57,6 @@
       <h2>Video with Vimeo player and autoplay</h2>
       <AppVideo
         class="Page-video"
-        :autoplay="true"
         vimeo="https://vimeo.com/265070712"
       />
     </div>
@@ -66,7 +65,6 @@
       <h2>Video with Vimeo player and controls</h2>
       <AppVideo
         class="Page-video"
-        :autoplay="true"
         :controls="true"
         vimeo="https://vimeo.com/265070712"
       >
