@@ -66,9 +66,24 @@
       <h2>Video with Vimeo player and controls</h2>
       <AppVideo
         class="Page-video"
+        :autoplay="true"
         :controls="true"
         vimeo="https://vimeo.com/265070712"
-      />
+      >
+        <template #cover>
+          <img
+            class="Page-img"
+            src="/cover.jpg"
+          >
+        </template>
+        <template #btplay>
+          <button
+            type="button"
+            aria-label="Play"
+            class="Page-btplay"
+          />
+        </template>
+      </AppVideo>
     </div>
   </div>
 </template>
@@ -81,6 +96,7 @@ const embed = `<iframe width="200" height="113" src="https://www.youtube.com/emb
 <style scoped>
 .Page {
   min-height: 300vh;
+  padding-bottom: 50vh;
 }
 
 .Page-demo {

@@ -9,7 +9,6 @@
 </template>
 
 <script setup>
-
 import { fit } from '../utils/math'
 
 const props = defineProps({
@@ -42,6 +41,8 @@ const emit = defineEmits(['play', 'pause', 'progress'])
 
 const el = ref()
 const ready = ref(false)
+const progress = ref(0)
+let duration = 0
 
 let Vimeo = null
 let player = null
@@ -71,77 +72,57 @@ const load = (url) => {
   if (!ready.value) return
   if (!player) {
     player = new Vimeo(el.value, { ...options, url })
+
+    player.on('timeupdate', onTimeUpdate)
   }
 
-  player?.loadVideo(url)
-    .then(() => {
+  player
+    .loadVideo(url)
+    .then(async () => {
       if (!iframe) iframe = el.value.querySelector('iframe')
+      window.addEventListener('resize', onResize)
       onResize()
 
-      if (props.autoplay) {
-        play()
-      } else {
-        pause()
-      }
+      duration = await player.getDuration()
 
-
-    }).catch((error) => {
-      // eslint-disable-next-line no-console
-      console.warn(error)
+      if (props.autoplay) play()
+      else pause()
     })
 }
 
 
 const onResize = () => {
   resize()
-
 }
 
-const resize = (fullscreen = false) => {
+const resize = () => {
   if (!iframe) return
 
-  iframe.style.width = ``
-  iframe.style.height = ``
-  iframe.style.left = `0px`
-  iframe.style.top = `0px`
+  const from = iframe.getBoundingClientRect()
+  const to = el.value.getBoundingClientRect()
 
-  if (!fullscreen) {
-    const from = iframe.getBoundingClientRect()
-    const to = el.value.getBoundingClientRect()
-    console.info(to.width)
+  const { width, height, x, y } = fit(from, to)
 
-    const { width, height, x, y } = fit(from, to)
-
-    iframe.style.width = `${width}px`
-    iframe.style.height = `${height}px`
-    iframe.style.left = `${x}px`
-    iframe.style.top = `${y}px`
-  } else {
-    iframe.style.width = `100%`
-    iframe.style.height = `100%`
-    iframe.style.left = `0px`
-    iframe.style.top = `0px`
-  }
-
+  iframe.style.width = `${width}px`
+  iframe.style.height = `${height}px`
+  iframe.style.left = `${x}px`
+  iframe.style.top = `${y}px`
 }
 
+const onTimeUpdate = ({ percent }) => {
+  progress.value = percent
+}
 
 const play = () => {
   player?.play()
     .then(() => {
       emit(events.play)
-    }).catch((error) => {
-      // eslint-disable-next-line no-console
-      console.warn(error)
     })
 }
 const pause = () => {
   player?.pause()
     .then(() => {
       emit(events.pause)
-    }).catch((error) => {
-      // eslint-disable-next-line no-console
-      // console.warn(error)
     })
 }
 
@@ -150,8 +131,12 @@ const setVolume = (volume) => {
   player?.setVolume(volume)
 }
 
+const setProgress = (progress) => {
+  player?.setCurrentTime(progress * duration)
+}
+
 // Expose
-defineExpose({ play, pause, setVolume, resize })
+defineExpose({ play, pause, setVolume, resize, progress, setProgress })
 
 </script>
 

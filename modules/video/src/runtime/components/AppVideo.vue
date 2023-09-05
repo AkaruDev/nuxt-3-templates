@@ -2,8 +2,10 @@
   <div
     v-intersection-observer="onIntersectionObserver"
     class="AppVideo"
-
     :class="{ '--fullscreen': state.fullscreen }"
+
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
   >
     <!-- Cover -->
     <div
@@ -43,14 +45,16 @@
         @play="onPlay"
         @pause="onPause"
       />
-      <!-- TODO videoplayer with source -->
+      <!-- TODO videoplayer with file source -->
     </div>
 
     <!-- Controls -->
     <AppVideoControls
       v-if="controls"
       v-show="!cover"
-      :state="state.value"
+      :state="state"
+      :style="{ opacity: isMouseEnter ? 1 : 0 }"
+      :progress="player?.progress || 0"
       @change="onControlsChange"
     />
   </div>
@@ -63,7 +67,7 @@ import { vIntersectionObserver } from '@vueuse/components'
 const props = defineProps({
   autoplay: {
     type: Boolean,
-    default: false
+    default: true
   },
   controls: {
     type: Boolean,
@@ -94,10 +98,11 @@ const slots = useSlots()
 const cover = ref(false)
 cover.value = slots.cover !== undefined
 const isInView = ref(false)
+const isMouseEnter = ref(false)
 const player = ref()
 const state = ref({
   mute: props.mute,
-  playing: false,
+  playing: props.autoplay,
   fullscreen: false,
 })
 
@@ -149,19 +154,18 @@ const toggleFullscreen = () => {
   if (!document.fullscreenElement) {
     document?.documentElement?.requestFullscreen?.().then(() => {
       state.value.fullscreen = true
-      player?.value?.resize(true)
     });
   } else {
     document?.exitFullscreen?.().then(() => {
       state.value.fullscreen = false
-
-      nextTick(() => {
-        player?.value?.resize()
-      })
-
     });
   }
+}
 
+const setProgress = (progress) => {
+  state.value.progress = progress
+
+  player?.value?.setProgress?.(progress)
 }
 
 const show = () => {
@@ -181,6 +185,13 @@ const onPause = () => {
   state.value.playing = false
 }
 
+const onMouseEnter = () => {
+  isMouseEnter.value = true
+}
+const onMouseLeave = () => {
+  isMouseEnter.value = false
+}
+
 const onControlsChange = (newState) => {
   if (newState.playing !== state.value.playing) {
     togglePlayPause()
@@ -191,9 +202,11 @@ const onControlsChange = (newState) => {
   if (newState.fullscreen !== state.value.fullscreen) {
     toggleFullscreen()
   }
-
-  // TODO progress
+  if (newState.progress !== state.value.progress) {
+    setProgress(newState.progress)
+  }
 }
+
 
 // Expose
 defineExpose({ uid })
@@ -219,6 +232,8 @@ defineExpose({ uid })
 
 .AppVideo .AppVideoControls {
   z-index: 10;
+
+  transition: 0.3s opacity cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .AppVideo-cover {

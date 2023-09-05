@@ -2,7 +2,7 @@
   <div class="AppVideoControls">
     <!-- Play/pause -->
     <button
-      class="AppVideoControls-btPlayPause"
+      class="AppVideoControls-bt"
       @click="togglePlayPause"
     >
       <div
@@ -15,13 +15,18 @@
       />
     </button>
     <!-- TODO progress bar -->
-    <div class="AppVideoControls-progress" />
+    <div
+      ref="bar"
+      class="AppVideoControls-progress"
+      @click="onClickProgress"
+    />
     <!-- Sound on/off -->
     <button
-      class="AppVideoControls-btMute"
+      class="AppVideoControls-bt"
       @click="toggleVolume"
     >
       <svg
+        class="AppVideoControls-mute"
         width="15px"
         height="14px"
         viewBox="0 0 15 14"
@@ -44,12 +49,24 @@
         />
       </svg>
     </button>
-    <!-- TODO fullscreen -->
+
+    <!-- Fullscreen -->
     <button
-      class="AppVideoControls-btFullscrenn"
+      class="AppVideoControls-bt"
       @click="toggleFullscreen"
     >
-      fullscreen/exit fullscreen
+      <svg
+        width="15px"
+        height="15px"
+        class="AppVideoControls-fullscreen"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 12 12"
+      >
+        <path
+          fill="white"
+          d="M1.33333 1.33333h3.33334V0H0v4.66667h1.33333V1.33333zm3.33334 9.33337H1.33333V7.33333H0V12h4.66667v-1.3333zM12 7.33333h-1.3333v3.33337H7.33333V12H12V7.33333zm-1.3333-2.66666H12V0H7.33333v1.33333h3.33337v3.33334z"
+        />
+      </svg>
     </button>
   </div>
 </template>
@@ -81,27 +98,38 @@ const props = defineProps({
   }
 })
 
+const bar = ref()
+
 
 const events = {
   change: 'change'
 }
 const emit = defineEmits(['change'])
-const state = ref(props.state)
+const state = ref({
+  ...props.state
+})
 
 const togglePlayPause = () => {
-  state.value.playing = !state.value.playing
+  state.value.playing = !props.state.playing
   emit(events.change, state.value)
 }
 const toggleVolume = () => {
-  state.value.mute = !state.value.mute
+  state.value.mute = !props.state.mute
   emit(events.change, state.value)
 }
 const toggleFullscreen = () => {
-  state.value.fullscreen = !state.value.fullscreen
+  state.value.fullscreen = !props.state.fullscreen
   emit(events.change, state.value)
 }
 
-// TODO progress method on drag pls
+/**
+ * @param {MouseEvent} event
+ */
+const onClickProgress = (event) => {
+  state.value.progress = event.offsetX / bar.value.clientWidth
+  emit(events.change, state.value)
+}
+
 
 </script>
 
@@ -127,17 +155,40 @@ button {
   bottom: 0;
   left: 0;
 
-  padding: 20px;
+  padding: 0 20px;
 
-  gap: 10px;
+  box-sizing: border-box;
 
   color: white;
 }
 
-.AppVideoControls-btPlayPause {
+.AppVideoControls::before {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  top: 0;
+  left: 0;
+
+  pointer-events: none;
+
+  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 70%);
+
+  z-index: 0;
+
+  content: '';
+}
+
+.AppVideoControls-bt {
   position: relative;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
   width: 50px;
   height: 50px;
+  z-index: 1;
 }
 
 .AppVideoControls-play {
@@ -151,7 +202,6 @@ button {
   border-style: solid;
   border-width: 8px 0 8px 14px;
   border-color: transparent transparent transparent white;
-
 
   transform: translate3d(-50%, -50%, 0);
 }
@@ -168,7 +218,7 @@ button {
   gap: 5px;
 
   top: 0;
-  left: 0;
+  left: -2px;
 }
 
 .AppVideoControls-pause::before,
@@ -184,20 +234,42 @@ button {
 
 
 .AppVideoControls-progress {
+  position: relative;
+  width: 100%;
+  height: 50px;
+
+  cursor: pointer;
+
+  z-index: 1;
+}
+
+.AppVideoControls-progress::before,
+.AppVideoControls-progress::after {
+  position: absolute;
   width: 100%;
   height: 1px;
 
-  background-color: rgba(255, 255, 255, 0.5);
+  top: 50%;
+  left: 0;
+
+  content: "";
 }
 
-.AppVideoControls-btMute {
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  justify-content: center;
+.AppVideoControls-progress::before {
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 0;
+}
 
-  width: 50px;
-  height: 50px;
+.AppVideoControls-progress::after {
+  background-color: #9987c7;
 
+  transform-origin: 0;
+  transform: scaleX(v-bind('props.progress'));
+  z-index: 1;
+}
+
+.AppVideoControls-mute {
+  position: relative;
+  left: 5px;
 }
 </style>
