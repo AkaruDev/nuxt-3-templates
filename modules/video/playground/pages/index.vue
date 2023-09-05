@@ -7,85 +7,21 @@
 
     <!-- Embed player -->
     <div class="Page-demo">
-      <h2>Video with embed player and cover</h2>
-      <AppVideo
+      <h2>Video embed</h2>
+      <AppVideoEmbed
         class="Page-video"
-        :autoplay="false"
-        type="embed"
         :src="embed"
-      >
-        <template #cover>
-          <img
-            class="Page-img"
-            src="/cover.jpg"
-          >
-        </template>
-        <template #btplay>
-          <button
-            type="button"
-            aria-label="Play"
-            class="Page-btplay"
-          />
-        </template>
-      </AppVideo>
-    </div>
-
-    <!-- Vimeo player -->
-    <div class="Page-demo">
-      <h2>Video with vimeo player and cover</h2>
-      <AppVideo
-        type="vimeo"
-        class="Page-video"
-        src="https://vimeo.com/265070712"
-      >
-        <template #cover>
-          <img
-            class="Page-img"
-            src="/cover.jpg"
-          >
-        </template>
-
-        <template #btplay>
-          <button
-            type="button"
-            aria-label="Play"
-            class="Page-btplay"
-          />
-        </template>
-      </AppVideo>
-    </div>
-
-    <div class="Page-demo">
-      <h2>Video with Vimeo player and autoplay</h2>
-      <AppVideo
-        type="vimeo"
-        class="Page-video"
-        src="https://vimeo.com/265070712"
+        cover="/cover.jpg"
       />
     </div>
 
     <div class="Page-demo">
-      <h2>Video with Vimeo player and controls</h2>
-      <AppVideo
+      <h2>Video Vimeo</h2>
+      <AppVideoVimeo
         class="Page-video"
-        :controls="true"
-        type="vimeo"
-        src="https://vimeo.com/265070712"
-      >
-        <template #cover>
-          <img
-            class="Page-img"
-            src="/cover.jpg"
-          >
-        </template>
-        <template #btplay>
-          <button
-            type="button"
-            aria-label="Play"
-            class="Page-btplay"
-          />
-        </template>
-      </AppVideo>
+        url="https://vimeo.com/265070712"
+        cover="/cover.jpg"
+      />
     </div>
   </div>
 </template>
@@ -105,7 +41,8 @@ const embed = `<iframe width="200" height="113" src="https://www.youtube.com/emb
   margin-top: 80px;
 }
 
-.AppVideo.Page-video {
+.AppVideoEmbed.Page-video,
+.AppVideoVimeo.Page-video {
   position: relative;
   width: 60vw;
   aspect-ratio: 16/9;
@@ -113,28 +50,5 @@ const embed = `<iframe width="200" height="113" src="https://www.youtube.com/emb
   margin-top: 50px;
 
   background-color: black;
-}
-
-.Page-btplay {
-  width: 0;
-  height: 0;
-
-  background-color: transparent;
-  border-style: solid;
-  border-width: 30px 0 30px 60px;
-  border-color: transparent transparent transparent #52427a;
-
-  cursor: pointer;
-}
-
-.Page-img {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-
-  top: 0;
-  left: 0;
-
-  object-fit: cover;
 }
 </style>

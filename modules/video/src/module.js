@@ -20,6 +20,14 @@ export default defineNuxtModule({
 
     // Add components
     addComponent({
+      name: 'AppVideoVimeo',
+      filePath: resolver.resolve('runtime/components/AppVideoVimeo.vue')
+    })
+    addComponent({
+      name: 'AppVideoEmbed',
+      filePath: resolver.resolve('runtime/components/AppVideoEmbed.vue')
+    })
+    addComponent({
       name: 'AppVideo',
       filePath: resolver.resolve('runtime/components/AppVideo.vue')
     })

@@ -3,7 +3,6 @@
     v-intersection-observer="onIntersectionObserver"
     class="AppVideo"
     :class="{ '--fullscreen': state.fullscreen }"
-
     @mouseenter="onMouseEnter"
     @mousemove="onMouseMove"
     @mouseleave="onMouseLeave"
@@ -46,7 +45,7 @@
         @play="onPlay"
         @pause="onPause"
       />
-      <!-- TODO videoplayer with file source -->
+      <!-- TODO Player file -->
     </div>
 
     <!-- Controls -->
@@ -105,8 +104,7 @@ const uid = `video-${useUID()}`
 
 // Ref
 const slots = useSlots()
-const cover = ref(false)
-cover.value = slots.cover !== undefined
+const cover = ref(slots.cover !== undefined)
 const isInView = ref(false)
 const showControls = ref(false)
 const player = ref()
