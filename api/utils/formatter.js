@@ -258,7 +258,7 @@ class Formatter {
    */
 
   formatMetas (metasGroup, { defaults } = {}) {
-    let imageUrl = (this.formatImage(metasGroup?.meta_image) || defaults?.image)?.url
+    let imageUrl = (this.formatImage(metasGroup?.image) || defaults?.image)?.url
 
     if (imageUrl) {
       imageUrl = new URL(imageUrl)
@@ -268,8 +268,8 @@ class Formatter {
     }
 
     return {
-      title: this.formatKeyText(metasGroup?.meta_title) || defaults?.title,
-      description: this.formatKeyText(metasGroup?.meta_description) || stripTags(defaults?.description),
+      title: this.formatKeyText(metasGroup?.title) || defaults?.title,
+      description: this.formatKeyText(metasGroup?.description) || stripTags(defaults?.description),
       image: imageUrl
     }
   }
