@@ -31,7 +31,7 @@
       />
       <AppPlayerVimeo
         v-if="vimeo"
-        ref="vimeo"
+        ref="playerVimeo"
         :autoplay="autoplay"
         :url="vimeo"
         @play="onPlay"
@@ -78,18 +78,18 @@ const props = defineProps({
 // Data
 const uid = `video-${useUID()}`
 
+
 // Ref
 const slots = useSlots()
 const cover = ref(false)
 cover.value = slots.cover !== undefined
 const isInView = ref(false)
-const vimeo = ref()
+const playerVimeo = ref()
 
 // Methods
 const onIntersectionObserver = ([{ isIntersecting }]) => {
   isInView.value = isIntersecting
 
-  // TODO weird
   if (isInView.value && slots.cover === undefined) {
     cover.value = false
   }
