@@ -47,7 +47,7 @@ const emit = defineEmits(['play', 'pause', 'progress'])
 const el = ref()
 const ready = ref(false)
 const progress = ref(0)
-let duration = 0
+const duration = ref(0)
 
 let Vimeo = null
 let player = null
@@ -88,7 +88,7 @@ const load = (url) => {
       window.addEventListener('resize', onResize)
       onResize()
 
-      duration = await player.getDuration()
+      duration.value = await player.getDuration()
 
       if (props.autoplay) play()
       else pause()
@@ -131,17 +131,16 @@ const pause = () => {
     })
 }
 
-
 const setVolume = (volume) => {
   player?.setVolume(volume)
 }
 
 const setProgress = (progress) => {
-  player?.setCurrentTime(progress * duration)
+  player?.setCurrentTime(progress * duration.value)
 }
 
 // Expose
-defineExpose({ play, pause, setVolume, resize, progress, setProgress })
+defineExpose({ play, pause, setVolume, resize, progress, setProgress, duration })
 
 </script>
 

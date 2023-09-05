@@ -55,6 +55,7 @@
       :state="state"
       :style="{ opacity: showControls ? 1 : 0, pointerEvents: showControls ? 'auto' : 'none' }"
       :progress="player?.progress || 0"
+      :duration="player?.duration"
       @change="onControlsChange"
     />
   </div>

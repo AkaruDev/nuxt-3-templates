@@ -14,12 +14,19 @@
         class="AppVideoControls-pause"
       />
     </button>
-    <!-- TODO progress bar -->
+    <!-- Progress bar -->
     <div
       ref="bar"
       class="AppVideoControls-progress"
       @click="onClickProgress"
     />
+    <!-- Duration -->
+    <div
+      ref="bar"
+      class="AppVideoControls-duration"
+    >
+      {{ timing }}
+    </div>
     <!-- Sound on/off -->
     <button
       class="AppVideoControls-bt"
@@ -86,6 +93,10 @@ const props = defineProps({
     type: Number,
     default: 0
   },
+  duration: {
+    type: Number,
+    default: 0
+  },
   state: {
     type: Object,
     default: () => {
@@ -100,6 +111,9 @@ const props = defineProps({
 
 const bar = ref()
 
+const timing = computed(() => {
+  return `${(props.progress * props.duration)}/${props.duration}`
+})
 
 const events = {
   change: 'change'
