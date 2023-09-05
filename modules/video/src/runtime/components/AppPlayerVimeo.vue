@@ -19,6 +19,10 @@ const props = defineProps({
   autoplay: {
     type: Boolean,
     default: false
+  },
+  loop: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -29,6 +33,7 @@ const options = {
   keyboard: false,
   portrait: false,
   byline: false,
+  loop: props.loop,
   autoplay: props.autoplay
 }
 

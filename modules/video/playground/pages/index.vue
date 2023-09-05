@@ -11,7 +11,8 @@
       <AppVideo
         class="Page-video"
         :autoplay="false"
-        :embed="embed"
+        type="embed"
+        :src="embed"
       >
         <template #cover>
           <img
@@ -33,8 +34,9 @@
     <div class="Page-demo">
       <h2>Video with vimeo player and cover</h2>
       <AppVideo
+        type="vimeo"
         class="Page-video"
-        vimeo="https://vimeo.com/265070712"
+        src="https://vimeo.com/265070712"
       >
         <template #cover>
           <img
@@ -56,8 +58,9 @@
     <div class="Page-demo">
       <h2>Video with Vimeo player and autoplay</h2>
       <AppVideo
+        type="vimeo"
         class="Page-video"
-        vimeo="https://vimeo.com/265070712"
+        src="https://vimeo.com/265070712"
       />
     </div>
 
@@ -66,7 +69,8 @@
       <AppVideo
         class="Page-video"
         :controls="true"
-        vimeo="https://vimeo.com/265070712"
+        type="vimeo"
+        src="https://vimeo.com/265070712"
       >
         <template #cover>
           <img

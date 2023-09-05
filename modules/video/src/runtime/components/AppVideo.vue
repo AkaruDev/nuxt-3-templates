@@ -34,15 +34,15 @@
     >
       <!-- Player embed -->
       <AppPlayerEmbed
-        v-if="embed"
-        :embed="embed"
+        v-if="type === TYPES.EMBED"
+        :embed="src"
       />
       <!-- Player vimeo -->
       <AppPlayerVimeo
-        v-if="vimeo"
+        v-if="type === TYPES.VIMEO"
         ref="player"
         :autoplay="autoplay"
-        :url="vimeo"
+        :url="src"
         @play="onPlay"
         @pause="onPause"
       />
@@ -65,8 +65,17 @@
 import { vIntersectionObserver } from '@vueuse/components'
 
 // Props
+const TYPES = {
+  VIMEO: 'vimeo',
+  EMBED: 'embed',
+  file: 'file',
+}
 const props = defineProps({
   autoplay: {
+    type: Boolean,
+    default: true
+  },
+  loop: {
     type: Boolean,
     default: true
   },
@@ -74,13 +83,16 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  embed: {
+  src: {
     type: String,
-    default: undefined
+    required: true
   },
-  vimeo: {
+  type: {
     type: String,
-    default: undefined
+    default: undefined,
+    validator (value) {
+      return ['vimeo', 'embed', 'file'].includes(value)
+    }
   },
   mute: {
     type: Boolean,
