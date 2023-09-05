@@ -2,6 +2,8 @@
   <div
     v-intersection-observer="onIntersectionObserver"
     class="AppVideo"
+
+    :class="{ '--fullscreen': state.fullscreen }"
   >
     <!-- Cover -->
     <div
@@ -12,6 +14,7 @@
         name="cover"
       />
       <div
+
         class="AppVideo-btplay"
         @click="onClickBtplay"
       >
@@ -20,35 +23,36 @@
         />
       </div>
     </div>
+
     <!-- Player -->
     <div
       v-if="!cover"
       class="AppVideo-player"
     >
+      <!-- Player embed -->
       <AppPlayerEmbed
         v-if="embed"
         :embed="embed"
       />
+      <!-- Player vimeo -->
       <AppPlayerVimeo
         v-if="vimeo"
-        ref="playerVimeo"
+        ref="player"
         :autoplay="autoplay"
         :url="vimeo"
         @play="onPlay"
         @pause="onPause"
       />
+      <!-- TODO videoplayer with source -->
     </div>
 
     <!-- Controls -->
-    <div
+    <AppVideoControls
       v-if="controls"
       v-show="!cover"
-      class="AppVideo-controls"
-    >
-      <AppVideoControls
-        @change="onControlsChange"
-      />
-    </div>
+      :state="state.value"
+      @change="onControlsChange"
+    />
   </div>
 </template>
 
@@ -73,18 +77,29 @@ const props = defineProps({
     type: String,
     default: undefined
   },
+  mute: {
+    type: Boolean,
+    default: true
+  },
 })
+
+// TODO props loop
+// TODO props video type file, embed, vimeo
 
 // Data
 const uid = `video-${useUID()}`
-
 
 // Ref
 const slots = useSlots()
 const cover = ref(false)
 cover.value = slots.cover !== undefined
 const isInView = ref(false)
-const playerVimeo = ref()
+const player = ref()
+const state = ref({
+  mute: props.mute,
+  playing: false,
+  fullscreen: false,
+})
 
 // Methods
 const onIntersectionObserver = ([{ isIntersecting }]) => {
@@ -94,21 +109,90 @@ const onIntersectionObserver = ([{ isIntersecting }]) => {
     cover.value = false
   }
 
+  // If embed && cover && not in view then hide
+  // TODO if type embed
   if (!isInView.value && slots.cover !== undefined && props.embed !== undefined) {
     cover.value = true
   }
+
+  if (isInView.value && props.autoplay) {
+    play()
+  }
+  if (!isInView.value) {
+    pause()
+  }
 }
 
-const onClickBtplay = () => {
-  show()
+const play = () => {
+  player?.value?.play()
+}
+
+const pause = () => {
+  player?.value?.pause()
+}
+
+const togglePlayPause = () => {
+  if (!player.value) return
+  state.value.playing = !state.value.playing
+  if (state.value.playing) play()
+  else pause()
+}
+
+const toggleMute = () => {
+  state.value.mute = !state.value.mute
+
+  const volume = state.value.mute ? 0 : 1
+  player?.value?.setVolume(volume)
+}
+
+const toggleFullscreen = () => {
+  if (!document.fullscreenElement) {
+    document?.documentElement?.requestFullscreen?.().then(() => {
+      state.value.fullscreen = true
+      player?.value?.resize(true)
+    });
+  } else {
+    document?.exitFullscreen?.().then(() => {
+      state.value.fullscreen = false
+
+      nextTick(() => {
+        player?.value?.resize()
+      })
+
+    });
+  }
+
 }
 
 const show = () => {
   cover.value = false
 }
 
-const onControlsChange = (state) => {
-  vimeo?.value?.setState(state)
+// Events
+const onClickBtplay = () => {
+  show()
+}
+
+const onPlay = () => {
+  state.value.playing = true
+}
+
+const onPause = () => {
+  state.value.playing = false
+}
+
+const onControlsChange = (newState) => {
+  if (newState.playing !== state.value.playing) {
+    togglePlayPause()
+  }
+  if (newState.mute !== state.value.mute) {
+    toggleMute()
+  }
+  if (newState.fullscreen !== state.value.fullscreen) {
+    toggleFullscreen()
+  }
+
+  // TODO progress
 }
 
 // Expose
@@ -118,6 +202,23 @@ defineExpose({ uid })
 <style  scoped>
 .AppVideo {
   position: relative;
+}
+
+.AppVideo.--fullscreen {
+  position: fixed !important;
+  width: 100vw !important;
+  height: 100vh !important;
+
+  top: 0 !important;
+  left: 0 !important;
+
+  margin: 0 !important;
+
+  z-index: 999;
+}
+
+.AppVideo .AppVideoControls {
+  z-index: 10;
 }
 
 .AppVideo-cover {
@@ -154,5 +255,9 @@ defineExpose({ uid })
   left: 0;
 
   z-index: 0;
+
+  &:deep(.AppPlayerVimeo) {
+    pointer-events: none;
+  }
 }
 </style>

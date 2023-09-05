@@ -2,7 +2,6 @@
   <div
     v-if="url"
     ref="el"
-    v-intersection-observer="onIntersectionObserver"
     class="AppPlayerVimeo"
     :data-vimeo-url="url"
     data-vimeo-defer
@@ -11,7 +10,6 @@
 
 <script setup>
 
-import { vIntersectionObserver } from '@vueuse/components'
 import { fit } from '../utils/math'
 
 const props = defineProps({
@@ -21,17 +19,18 @@ const props = defineProps({
   },
   autoplay: {
     type: Boolean,
-    default: true
+    default: false
   }
 })
 
 const options = {
+  allowfullscreen: true,
   background: true,
   dnt: true,
   keyboard: false,
   portrait: false,
   byline: false,
-  autoplay: false
+  autoplay: props.autoplay
 }
 
 const events = {
@@ -56,7 +55,6 @@ onMounted(async () => {
   ready.value = true
 
   load(props.url)
-
 })
 
 onUnmounted(() => {
@@ -64,20 +62,9 @@ onUnmounted(() => {
 })
 
 // Methods
-const isInView = ref(false)
-const onIntersectionObserver = ([{ isIntersecting }]) => {
-  isInView.value = isIntersecting
-
-  if (isInView.value && props.autoplay) {
-    play()
-  }
-  if (!isInView.value) {
-    pause()
-  }
-}
 
 /**
- * Load url vide
+ * Load video by url
  * @param {String} url Vimeo url
  */
 const load = (url) => {
@@ -86,67 +73,85 @@ const load = (url) => {
     player = new Vimeo(el.value, { ...options, url })
   }
 
-  player?.loadVideo(url).then(() => {
-    if (!iframe) iframe = el.value.querySelector('iframe')
-    onResize()
+  player?.loadVideo(url)
+    .then(() => {
+      if (!iframe) iframe = el.value.querySelector('iframe')
+      onResize()
 
-    player.play().then(() => {
-      emit(events.play)
+      if (props.autoplay) {
+        play()
+      } else {
+        pause()
+      }
+
+
+    }).catch((error) => {
+      // eslint-disable-next-line no-console
+      console.warn(error)
     })
-
-  }).catch((error) => {
-    // eslint-disable-next-line no-console
-    console.warn(error)
-  })
-}
-
-const play = () => {
-  player?.play().then(() => {
-    emit(events.play)
-  })
-}
-const pause = () => {
-  player?.pause().then(() => {
-    emit(events.pause)
-  })
 }
 
 
 const onResize = () => {
+  resize()
+
+}
+
+const resize = (fullscreen = false) => {
   if (!iframe) return
 
-  const from = iframe.getBoundingClientRect()
-  const to = el.value.getBoundingClientRect()
+  iframe.style.width = ``
+  iframe.style.height = ``
+  iframe.style.left = `0px`
+  iframe.style.top = `0px`
 
-  const { width, height, x, y } = fit(from, to)
+  if (!fullscreen) {
+    const from = iframe.getBoundingClientRect()
+    const to = el.value.getBoundingClientRect()
+    console.info(to.width)
 
-  iframe.style.width = `${width}px`
-  iframe.style.height = `${height}px`
-  iframe.style.left = `${x}px`
-  iframe.style.top = `${y}px`
-}
+    const { width, height, x, y } = fit(from, to)
 
-const setState = ({ mute, playing, fullscreen }) => {
-  if (!player) return
-
-  const volume = mute ? 0 : 1
-  player.setVolume(volume)
-
-  if (playing) {
-    play()
+    iframe.style.width = `${width}px`
+    iframe.style.height = `${height}px`
+    iframe.style.left = `${x}px`
+    iframe.style.top = `${y}px`
   } else {
-    pause()
+    iframe.style.width = `100%`
+    iframe.style.height = `100%`
+    iframe.style.left = `0px`
+    iframe.style.top = `0px`
   }
-  if (fullscreen) {
-    // TODO toggle fullscreen
-  }
+
 }
 
-// TODO listen to progress events
 
+const play = () => {
+  player?.play()
+    .then(() => {
+      emit(events.play)
+    }).catch((error) => {
+      // eslint-disable-next-line no-console
+      console.warn(error)
+    })
+}
+const pause = () => {
+  player?.pause()
+    .then(() => {
+      emit(events.pause)
+    }).catch((error) => {
+      // eslint-disable-next-line no-console
+      // console.warn(error)
+    })
+}
+
+
+const setVolume = (volume) => {
+  player?.setVolume(volume)
+}
 
 // Expose
-defineExpose({ play, pause, load, setState })
+defineExpose({ play, pause, setVolume, resize })
 
 </script>
 
@@ -160,6 +165,8 @@ defineExpose({ play, pause, load, setState })
   left: 0;
 
   overflow: hidden;
+
+  z-index: 0;
 }
 
 .AppPlayerVimeo:deep(iframe) {
@@ -167,6 +174,8 @@ defineExpose({ play, pause, load, setState })
 
   top: 0;
   left: 0;
+
+  z-index: 0;
 
 }
 </style>

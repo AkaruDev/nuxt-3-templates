@@ -32,6 +32,7 @@
     <div class="Page-demo">
       <h2>Video with vimeo player and cover</h2>
       <AppVideo
+        :autoplay="true"
         class="Page-video"
         vimeo="https://vimeo.com/265070712"
       >
@@ -57,6 +58,15 @@
       <AppVideo
         class="Page-video"
         :autoplay="true"
+        vimeo="https://vimeo.com/265070712"
+      />
+    </div>
+
+    <div class="Page-demo">
+      <h2>Video with Vimeo player and controls</h2>
+      <AppVideo
+        class="Page-video"
+        :controls="true"
         vimeo="https://vimeo.com/265070712"
       />
     </div>
