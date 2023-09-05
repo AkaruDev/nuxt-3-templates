@@ -100,9 +100,6 @@ const props = defineProps({
   },
 })
 
-// TODO props loop
-// TODO props video type file, embed, vimeo
-
 // Data
 const uid = `video-${useUID()}`
 
@@ -129,8 +126,7 @@ const onIntersectionObserver = ([{ isIntersecting }]) => {
   }
 
   // If embed && cover && not in view then hide
-  // TODO if type embed
-  if (!isInView.value && slots.cover !== undefined && props.embed !== undefined) {
+  if (!isInView.value && slots.cover !== undefined && props.type === TYPES.EMBED) {
     cover.value = true
   }
 
