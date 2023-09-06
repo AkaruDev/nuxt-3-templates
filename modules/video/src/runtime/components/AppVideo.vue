@@ -132,21 +132,29 @@ let timeoutId = null
 
 // Methods
 const onIntersectionObserver = ([{ isIntersecting }]) => {
-  isInView.value = isIntersecting
+  if (isIntersecting) {
+    onEnter()
+  } else {
+    onLeave()
+  }
+}
 
-  if (isInView.value && props.autoplay) {
+const onEnter = () => {
+  isInView.value = true
+  if (props.autoplay) {
     if (slots.cover !== undefined) {
       cover.value = false
     }
     play()
   }
-  if (!isInView.value) {
-    pause()
+}
 
-    // If embed && cover then show cover
-    if (slots.cover !== undefined && props.type === TYPES.EMBED) {
-      cover.value = true
-    }
+const onLeave = () => {
+  isInView.value = false
+  pause()
+  // If embed && cover then show cover
+  if (slots.cover !== undefined && props.type === TYPES.EMBED) {
+    cover.value = true
   }
 }
 

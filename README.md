@@ -1,9 +1,26 @@
-## Setup
+# Readme
 
-Create a new branch with name like `features/video`
+## Description
+Videos components for vimeo, embed iframe and video files.
 
-Replace folder name, config names `my-features` by the name of your new feature. 
 
-In `nuxt-templates.cli.js` fill the field corresponding to your new feature.
+## Components
 
-Describe the feature in this README
+### AppVideoVimeo
+AppVideo wrapper for vimeo components and custom controls components.
+
+### AppVideoEmbed
+AppVideo wrapper for embed iframe.
+
+### AppVideoFile
+AppVideo wrapper for video file components and custom controls components.
+
+### AppVideoBackground
+AppVideo wrapper for vimeo or video file for video looping silently in the background.
+
+## Notes
+
+### Viewport observer
+If you use [features/viewport-observer](https://github.com/AkaruDev/nuxt-3-templates/tree/features/viewport-observer) you can replace in AppVideo.vue the directive `v-intersection-observer="onIntersectionObserver"` by `v-observe="{onEnter,onLeave,once:false}"`.
+Remove `import { vIntersectionObserver } from '@vueuse/components'`
+
