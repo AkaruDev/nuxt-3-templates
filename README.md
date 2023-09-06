@@ -1,9 +1,9 @@
-## Setup
+# Readme
 
-Create a new branch with name like `features/viewport-observer`
+## Descriptin
+Add a directive for listening to observe intersection of an element with viewport.
 
-Replace folder name, config names `viewport-observers` by the name of your new feature. 
-
-In `nuxt-templates.cli.js` fill the field corresponding to your new feature.
-
-Describe the feature in this README
+## Notes
+It can be activate/deactivate with the plugin active value.
+It's handy in case you need to delay the observer and their actions.
+Check [features/pages-transitions](https://github.com/AkaruDev/nuxt-3-templates/tree/features/pages-transitions) for an exemple.
