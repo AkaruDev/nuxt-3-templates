@@ -23,6 +23,12 @@
         cover="/cover.jpg"
       />
     </div>
+
+    <AppVideo
+      :style="{ width: '100%', height: '600px' }"
+      src="/videos/fall"
+      type="file"
+    />
   </div>
 </template>
 
