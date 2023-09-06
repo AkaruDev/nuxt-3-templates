@@ -24,10 +24,10 @@
       />
     </div>
 
-    <AppVideo
-      :style="{ width: '100%', height: '600px' }"
-      src="/videos/fall"
-      type="file"
+    <AppVideoFile
+      class="Page-video"
+      url="/videos/fall"
+      cover="/cover.jpg"
     />
   </div>
 </template>
@@ -47,6 +47,7 @@ const embed = `<iframe width="200" height="113" src="https://www.youtube.com/emb
   margin-top: 80px;
 }
 
+.AppVideoFile.Page-video,
 .AppVideoEmbed.Page-video,
 .AppVideoVimeo.Page-video {
   position: relative;

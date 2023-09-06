@@ -21,10 +21,7 @@
       @click="onClickProgress"
     />
     <!-- Duration -->
-    <div
-      ref="bar"
-      class="AppVideoControls-duration"
-    >
+    <div class="AppVideoControls-duration">
       {{ timing }}
     </div>
     <!-- Sound on/off -->
@@ -177,7 +174,7 @@ button {
 
   pointer-events: none;
 
-  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 70%);
+  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 70%);
 
   z-index: 0;
 

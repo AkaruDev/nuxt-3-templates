@@ -146,8 +146,8 @@ const setVolume = (volume) => {
   player?.setVolume(volume)
 }
 
-const setProgress = (progress) => {
-  player?.setCurrentTime(progress * duration.value)
+const setProgress = (percent) => {
+  player?.setCurrentTime(percent * duration.value)
 }
 
 // Expose

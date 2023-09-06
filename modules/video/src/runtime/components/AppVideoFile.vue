@@ -2,6 +2,7 @@
   <AppVideo
     class="AppVideoFile"
     :controls="true"
+    :autoplay="false"
     :muted="false"
     type="file"
     :src="url"

@@ -1,6 +1,7 @@
 <template>
   <AppVideo
     class="AppVideoVimeo"
+    :autoplay="false"
     :controls="true"
     :muted="false"
     type="vimeo"

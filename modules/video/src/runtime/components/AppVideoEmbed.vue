@@ -1,7 +1,7 @@
 <template>
   <AppVideo
     class="AppVideoEmbed"
-    :autoplay="false"
+    :autoplay="true"
     type="embed"
     :src="src"
   >

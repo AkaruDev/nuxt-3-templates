@@ -20,17 +20,10 @@ export default defineNuxtModule({
 
     // Add components
     addComponent({
-      name: 'AppVideoVimeo',
-      filePath: resolver.resolve('runtime/components/AppVideoVimeo.vue')
-    })
-    addComponent({
-      name: 'AppVideoEmbed',
-      filePath: resolver.resolve('runtime/components/AppVideoEmbed.vue')
-    })
-    addComponent({
       name: 'AppVideo',
       filePath: resolver.resolve('runtime/components/AppVideo.vue')
     })
+
     addComponent({
       name: 'AppPlayerEmbed',
       filePath: resolver.resolve('runtime/components/AppPlayerEmbed.vue')
@@ -46,6 +39,18 @@ export default defineNuxtModule({
     addComponent({
       name: 'AppVideoControls',
       filePath: resolver.resolve('runtime/components/AppVideoControls.vue')
+    })
+    addComponent({
+      name: 'AppVideoVimeo',
+      filePath: resolver.resolve('runtime/components/AppVideoVimeo.vue')
+    })
+    addComponent({
+      name: 'AppVideoEmbed',
+      filePath: resolver.resolve('runtime/components/AppVideoEmbed.vue')
+    })
+    addComponent({
+      name: 'AppVideoFile',
+      filePath: resolver.resolve('runtime/components/AppVideoFile.vue')
     })
 
   }

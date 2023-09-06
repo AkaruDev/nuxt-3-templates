@@ -52,15 +52,14 @@ const duration = ref(0)
 // Lifecycle
 onMounted(async () => {
   player.value.addEventListener('canplaythrough', onCanPlayThrough)
-  player.value.addEventListener('loadedmetadata', onCanPlayThrough)
   player.value.addEventListener('timeupdate', onTimeUpdate)
 
-  if (props.autoplay) play()
+  preload.value = "auto"
+  player?.value?.load()
 })
 
 onUnmounted(() => {
   player?.value?.removeEventListener('canplaythrough', onCanPlayThrough)
-  player?.value?.removeEventListener('loadedmetadata', onCanPlayThrough)
   player?.value?.removeEventListener('timeupdate', onTimeUpdate)
 })
 
@@ -78,22 +77,16 @@ const onTimeUpdate = () => {
 }
 
 const onCanPlayThrough = () => {
-  console.info("onCanPlayTrough")
+  player?.value?.removeEventListener('canplaythrough', onCanPlayThrough)
   duration.value = player?.value?.duration || 0
-  if (props.autoplay) play()
+  play()
 }
 
 const play = () => {
-  if (preload.value === "none") {
-    preload.value = "auto"
-    player?.value?.load()
-  } else {
-    player?.value?.play()
-      .then(() => {
-        emit(events.play)
-      })
-  }
-
+  player?.value?.play()
+    .then(() => {
+      emit(events.play)
+    })
 }
 const pause = () => {
   player?.value?.pause()
@@ -105,9 +98,9 @@ const setVolume = (volume) => {
   player.value.volume = volume
 }
 
-const setProgress = (progress) => {
+const setProgress = (percent) => {
   if (!player.value) return
-  player.value.currentTime = progress * duration.value
+  player.value.currentTime = percent * duration.value
 }
 
 // Expose
