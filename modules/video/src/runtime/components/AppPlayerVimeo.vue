@@ -23,6 +23,10 @@ const props = defineProps({
   loop: {
     type: Boolean,
     default: true
+  },
+  mute: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -89,6 +93,7 @@ const load = (url) => {
       onResize()
 
       duration.value = await player.getDuration()
+      setVolume(props.mute ? 0 : 1)
 
       if (props.autoplay) play()
       else pause()

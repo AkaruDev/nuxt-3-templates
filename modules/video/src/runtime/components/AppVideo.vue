@@ -42,6 +42,7 @@
         ref="player"
         :autoplay="autoplay"
         :url="src"
+        :mute="mute"
         @play="onPlay"
         @pause="onPause"
       />

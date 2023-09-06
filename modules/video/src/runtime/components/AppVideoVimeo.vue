@@ -2,6 +2,7 @@
   <AppVideo
     class="AppVideoVimeo"
     :controls="true"
+    :mute="false"
     type="vimeo"
     :src="url"
   >
