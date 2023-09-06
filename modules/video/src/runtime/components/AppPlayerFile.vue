@@ -17,7 +17,7 @@
 
 <script setup>
 // Props
-const props = defineProps({
+defineProps({
   url: {
     type: String,
     required: true
