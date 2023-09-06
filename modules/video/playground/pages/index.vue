@@ -24,11 +24,34 @@
       />
     </div>
 
-    <AppVideoFile
-      class="Page-video"
-      url="/videos/fall"
-      cover="/cover.jpg"
-    />
+    <div class="Page-demo">
+      <h2>Video with files</h2>
+      <AppVideoFile
+        class="Page-video"
+        url="/videos/fall"
+        cover="/cover.jpg"
+      />
+    </div>
+
+    <div class="Page-demo">
+      <h2>Vimeo as a background</h2>
+      <AppVideoBackground
+        class="Page-videoBackground"
+        url="https://vimeo.com/265070712"
+        type="vimeo"
+        cover="/cover.jpg"
+      />
+    </div>
+
+    <div class="Page-demo">
+      <h2>Video file as a background</h2>
+      <AppVideoBackground
+        class="Page-videoBackground"
+        url="/videos/fall"
+        type="file"
+        cover="/cover.jpg"
+      />
+    </div>
   </div>
 </template>
 
@@ -44,7 +67,21 @@ const embed = `<iframe width="200" height="113" src="https://www.youtube.com/emb
 }
 
 .Page-demo {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   margin-top: 80px;
+}
+
+.AppVideoBackground.Page-videoBackground,
+.AppVideoFile.Page-videoBackground {
+  width: 100%;
+  aspect-ratio: 16/9;
+  margin-top: 50px;
+
+  background-color: black;
 }
 
 .AppVideoFile.Page-video,
@@ -52,6 +89,7 @@ const embed = `<iframe width="200" height="113" src="https://www.youtube.com/emb
 .AppVideoVimeo.Page-video {
   position: relative;
   width: 60vw;
+  min-width: 375px;
   aspect-ratio: 16/9;
 
   margin-top: 50px;

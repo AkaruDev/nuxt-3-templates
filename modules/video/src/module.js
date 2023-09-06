@@ -52,6 +52,10 @@ export default defineNuxtModule({
       name: 'AppVideoFile',
       filePath: resolver.resolve('runtime/components/AppVideoFile.vue')
     })
+    addComponent({
+      name: 'AppVideoBackground',
+      filePath: resolver.resolve('runtime/components/AppVideoBackground.vue')
+    })
 
   }
 })

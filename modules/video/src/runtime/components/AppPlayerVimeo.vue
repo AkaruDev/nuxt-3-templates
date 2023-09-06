@@ -101,8 +101,8 @@ const load = (url) => {
       duration.value = await player.getDuration()
       setVolume(props.muted ? 0 : 1)
 
-      if (props.autoplay) play()
-      else pause()
+      play()
+
     })
 }
 
