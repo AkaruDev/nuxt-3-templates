@@ -81,14 +81,6 @@
 <script setup>
 
 const props = defineProps({
-  mute: {
-    type: Boolean,
-    default: true
-  },
-  playing: {
-    type: Boolean,
-    default: false
-  },
   progress: {
     type: Number,
     default: 0
@@ -111,8 +103,13 @@ const props = defineProps({
 
 const bar = ref()
 
+const formatSeconds = (seconds) => {
+  return new Date(seconds * 1000).toISOString().slice(14, 19)
+}
+
 const timing = computed(() => {
-  return `${(props.progress * props.duration)}/${props.duration}`
+  const currentTime = (props.progress * props.duration)
+  return `${formatSeconds(currentTime)} / ${formatSeconds(props.duration)}`
 })
 
 const events = {
@@ -274,6 +271,17 @@ button {
   transform-origin: 0;
   transform: scaleX(v-bind('props.progress'));
   z-index: 1;
+}
+
+.AppVideoControls-duration {
+  display: block;
+  font-size: 11px;
+  font-family: sans-serif;
+
+  padding: 0 10px;
+
+  text-align: center;
+  white-space: nowrap;
 }
 
 .AppVideoControls-mute {
