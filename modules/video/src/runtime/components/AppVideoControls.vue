@@ -33,7 +33,7 @@
       @click="toggleMute"
     >
       <svg
-        class="AppVideoControls-mute"
+        class="AppVideoControls-muted"
         width="15px"
         height="14px"
         viewBox="0 0 15 14"
@@ -45,12 +45,12 @@
           fill="white"
         />
         <path
-          v-show="!state.mute"
+          v-show="!state.muted"
           d="M11.5383 11.8648H12.6917V2.71414H11.5383V11.8648Z"
           fill="white"
         />
         <path
-          v-show="!state.mute"
+          v-show="!state.muted"
           d="M13.8467 10.7214H15V3.85756H13.8467V10.7214Z"
           fill="white"
         />
@@ -93,7 +93,7 @@ const props = defineProps({
     type: Object,
     default: () => {
       return {
-        mute: true,
+        muted: true,
         playing: false,
         fullscreen: false,
       }
@@ -284,7 +284,7 @@ button {
   white-space: nowrap;
 }
 
-.AppVideoControls-mute {
+.AppVideoControls-muted {
   position: relative;
   left: 5px;
 }

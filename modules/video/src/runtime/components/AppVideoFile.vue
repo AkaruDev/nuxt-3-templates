@@ -1,14 +1,15 @@
 <template>
   <AppVideo
-    class="AppVideoEmbed"
-    :autoplay="false"
-    type="embed"
-    :src="src"
+    class="AppVideoFile"
+    :controls="true"
+    :muted="false"
+    type="file"
+    :src="url"
   >
     <template #cover>
       <img
         v-if="cover"
-        class="AppVideoEmbed-img"
+        class="AppVideoFile-img"
         :src="cover"
       >
     </template>
@@ -16,7 +17,7 @@
       <button
         type="button"
         aria-label="Play"
-        class="AppVideoEmbed-btplay"
+        class="AppVideoFile-btplay"
       />
     </template>
   </AppVideo>
@@ -24,7 +25,7 @@
 
 <script setup>
 defineProps({
-  src: {
+  url: {
     type: String,
     required: true
   },
@@ -36,7 +37,7 @@ defineProps({
 </script>
 
 <style  scoped>
-.AppVideoEmbed-img {
+.AppVideoFile-img {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -47,7 +48,7 @@ defineProps({
   object-fit: cover;
 }
 
-.AppVideoEmbed-btplay {
+.AppVideoFile-btplay {
   width: 0;
   height: 0;
 

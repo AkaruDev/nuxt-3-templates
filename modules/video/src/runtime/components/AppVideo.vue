@@ -16,7 +16,6 @@
         name="cover"
       />
       <div
-
         class="AppVideo-btplay"
         @click="onClickBtplay"
       >
@@ -40,13 +39,23 @@
       <AppPlayerVimeo
         v-if="type === TYPES.VIMEO"
         ref="player"
-        :autoplay="autoplay"
         :url="src"
-        :mute="mute"
+        :autoplay="autoplay"
+        :muted="muted"
         @play="onPlay"
         @pause="onPause"
       />
-      <!-- TODO Player file -->
+      <!-- Player file -->
+      <AppPlayerFile
+        v-if="type === TYPES.FILE"
+        ref="player"
+        :url="src"
+        :extensions="extensions"
+        :autoplay="autoplay"
+        :muted="muted"
+        @play="onPlay"
+        @pause="onPause"
+      />
     </div>
 
     <!-- Controls -->
@@ -69,7 +78,7 @@ import { vIntersectionObserver } from '@vueuse/components'
 const TYPES = {
   VIMEO: 'vimeo',
   EMBED: 'embed',
-  file: 'file',
+  FILE: 'file',
 }
 const props = defineProps({
   autoplay: {
@@ -88,6 +97,10 @@ const props = defineProps({
     type: String,
     required: true
   },
+  extensions: {
+    type: [String, Array],
+    default: () => ["webm", "mp4"],
+  },
   type: {
     type: String,
     default: undefined,
@@ -95,7 +108,7 @@ const props = defineProps({
       return ['vimeo', 'embed', 'file'].includes(value)
     }
   },
-  mute: {
+  muted: {
     type: Boolean,
     default: true
   },
@@ -111,7 +124,7 @@ const isInView = ref(false)
 const showControls = ref(false)
 const player = ref()
 const state = ref({
-  mute: props.mute,
+  muted: props.muted,
   playing: props.autoplay,
   fullscreen: false,
 })
@@ -131,6 +144,7 @@ const onIntersectionObserver = ([{ isIntersecting }]) => {
   }
 
   if (isInView.value && props.autoplay && !props.controls) {
+    cover.value = false
     play()
   }
   if (!isInView.value) {
@@ -154,9 +168,9 @@ const togglePlayPause = () => {
 }
 
 const toggleMute = () => {
-  state.value.mute = !state.value.mute
+  state.value.muted = !state.value.muted
 
-  const volume = state.value.mute ? 0 : 1
+  const volume = state.value.muted ? 0 : 1
   player?.value?.setVolume(volume)
 }
 

@@ -11,6 +11,7 @@
 <script setup>
 import { fit } from '../utils/math'
 
+// Props
 const props = defineProps({
   url: {
     type: String,
@@ -24,12 +25,22 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  mute: {
+  muted: {
     type: Boolean,
     default: true
   }
 })
 
+
+// Events
+const events = {
+  play: 'play',
+  pause: 'pause',
+  progress: 'progress',
+}
+const emit = defineEmits(['play', 'pause', 'progress'])
+
+// Data
 const options = {
   allowfullscreen: true,
   background: true,
@@ -40,13 +51,6 @@ const options = {
   loop: props.loop,
   autoplay: props.autoplay
 }
-
-const events = {
-  play: 'play',
-  pause: 'pause',
-  progress: 'progress',
-}
-const emit = defineEmits(['play', 'pause', 'progress'])
 
 const el = ref()
 const ready = ref(false)
@@ -69,6 +73,8 @@ onMounted(async () => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', onResize)
+
+  player?.off?.('timeupdate', onTimeUpdate)
 })
 
 // Methods
@@ -93,7 +99,7 @@ const load = (url) => {
       onResize()
 
       duration.value = await player.getDuration()
-      setVolume(props.mute ? 0 : 1)
+      setVolume(props.muted ? 0 : 1)
 
       if (props.autoplay) play()
       else pause()
@@ -145,7 +151,7 @@ const setProgress = (progress) => {
 }
 
 // Expose
-defineExpose({ play, pause, setVolume, resize, progress, setProgress, duration })
+defineExpose({ play, pause, setVolume, progress, setProgress, duration })
 
 </script>
 
