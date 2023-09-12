@@ -153,8 +153,6 @@ const set = (direction = 0) => {
 }
 
 // Swipe
-
-// TODO test
 const { direction } = useSwipe(el, {
   onSwipeEnd () {
     if (!props.swipe) { return }

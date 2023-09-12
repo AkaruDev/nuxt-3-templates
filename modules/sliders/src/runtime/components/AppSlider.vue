@@ -32,7 +32,7 @@ import { clamp, lerp } from '../utils/math'
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
 
-import { useIntersectionObserver, useRafFn } from '@vueuse/core'
+import { useIntersectionObserver } from '@vueuse/core'
 
 // GSAP
 gsap.registerPlugin(Draggable)
@@ -131,11 +131,15 @@ useIntersectionObserver(
 //
 onMounted(() => {
   window.addEventListener('resize', onResize)
+  gsap.ticker.add(onTick)
   init()
   onResize()
 })
 
-onUnmounted(() => window.removeEventListener('resize', onResize))
+onUnmounted(() => {
+  window.removeEventListener('resize', onResize)
+  gsap.ticker.remove(onTick)
+})
 
 const init = () => {
   proxy = document.createElement('div')
@@ -320,7 +324,6 @@ const setX = ({ x }) => {
 }
 
 // Raf
-useRafFn(() => onTick())
 const onTick = () => {
   if (!isVisible.value || !isInit.value) return
 
@@ -347,6 +350,7 @@ const updateAutoplay = () => {
   })
   draggable[0].update()
   progress = wrap(draggable[0].x) / wrapWidth
+
   animation.progress(progress)
   updateProgress()
 }
