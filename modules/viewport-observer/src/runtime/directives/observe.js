@@ -49,7 +49,7 @@ export default (nuxtApp) => {
       // Watch global active state
       watch($viewportObserver.active, (newValue) => {
         if (newValue) {
-          vnode.observer.observe(el)
+          vnode.observer?.observe(el)
         } else {
           vnode.observer?.disconnect()
           el.classList.remove(options.activeClass)
