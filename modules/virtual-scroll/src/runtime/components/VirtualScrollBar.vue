@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="$virtualScroll.active.value"
+    v-show="$virtualScroll.active.value"
     ref="el"
     class="VirtualScrollScrollBar-component"
     :class="{
