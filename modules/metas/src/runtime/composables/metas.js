@@ -32,7 +32,7 @@ export const useMetas = (options) => {
 
   useSeoMeta({
     charset: 'utf-8',
-    viewport: 'width=device-width, initial-scale=1',
+    viewport: 'width=device-width,initial-scale=1',
     url,
     ogUrl: url,
     ...(title ? { title, ogTitle: title, twitterTitle: title, ogSiteName: title } : {}),
