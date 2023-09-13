@@ -97,6 +97,7 @@ function onIntersectionObserver ([{ isIntersecting }]) {
 <style scoped>
 .AppImage {
   width: 100%;
+  user-select: none;
 }
 
 .AppImage:deep(.AppImage-image) {
