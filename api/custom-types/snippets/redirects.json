@@ -1,0 +1,24 @@
+{
+  "redirects": {
+    "type": "Group",
+    "config": {
+      "fields": {
+        "from": {
+          "type": "Text",
+          "config": {
+            "label": "from"
+          }
+        },
+        "to": {
+          "type": "Link",
+          "config": {
+            "select": "document",
+            "customtypes": [],
+            "label": "to"
+          }
+        }
+      },
+      "label": "Liste des redirections"
+    }
+  }
+}
