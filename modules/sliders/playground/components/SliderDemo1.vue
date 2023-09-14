@@ -6,6 +6,7 @@
       class="Slider"
       :items="items"
       :has-snap="true"
+      :offset-factor="1"
       @ready="onReady"
       @change="onChange"
     >

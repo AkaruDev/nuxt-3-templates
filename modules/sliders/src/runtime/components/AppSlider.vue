@@ -77,6 +77,10 @@ const props = defineProps({
     required: false,
     default: () => { }
   },
+  offsetFactor: {
+    type: Number,
+    default: 2
+  }
 })
 
 // Define emits events
@@ -198,7 +202,7 @@ const setSlides = () => {
 
   if (props.infinite) {
     gsap.set(wrapper.value, {
-      x: -itemWidth
+      x: -itemWidth * props.offsetFactor
     })
   }
 
