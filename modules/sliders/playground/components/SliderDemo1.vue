@@ -78,11 +78,11 @@ const onReady = (slides) => {
   slides.forEach(slide => {
     const tl = gsap.timeline({ paused: true })
     const target = slide.el.querySelector('.Slider-item')
-    tl.set(target, { rotateY: 30 }, 0)
-    tl.to(target, { duration: step * slides.length }, 0)
-    tl.fromTo(target, { rotateY: 30 }, { rotateY: 0, duration: step * 2, ease: "power3.inOut" }, step * 0)
-    tl.fromTo(target, { rotateY: 0 }, { rotateY: -30, duration: step * 2, ease: "power3.inOut" }, step * 2)
-
+    const rotate = 2
+    tl.set(target, { rotateY: rotate }, 0)
+    tl.to({ value: 0 }, { value: 1, duration: step * slides.length }, 0)
+    tl.fromTo(target, { rotateY: rotate }, { rotateY: 0, duration: step, ease: "power3.inOut" }, step)
+    tl.fromTo(target, { rotateY: 0 }, { rotateY: -rotate, duration: step, ease: "power3.inOut" }, step * 2)
     tls.push(tl)
   })
 }
