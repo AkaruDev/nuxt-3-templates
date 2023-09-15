@@ -80,9 +80,9 @@ const onReady = (slides) => {
     const target = slide.el.querySelector('.Slider-item')
     const rotate = 2
     tl.set(target, { rotateY: rotate }, 0)
-    tl.to({ value: 0 }, { value: 1, duration: 1 }, 0)
     tl.fromTo(target, { rotateY: rotate }, { rotateY: 0, duration: step, ease: "power3.inOut" }, step)
     tl.fromTo(target, { rotateY: 0 }, { rotateY: -rotate, duration: step, ease: "power3.inOut" }, step * 2)
+    tl.set({}, {}, 1)
     tls.push(tl)
   })
 }
