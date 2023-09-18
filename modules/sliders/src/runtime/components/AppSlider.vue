@@ -125,7 +125,7 @@ let wrapWidth = 0
 
 
 // Intersection Observer
-const isVisible = ref(true)
+const isVisible = ref(false)
 useIntersectionObserver(
   el,
   ([{ isIntersecting }]) => {
