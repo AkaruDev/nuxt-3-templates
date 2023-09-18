@@ -309,6 +309,7 @@ const onRelease = () => {
 const updateProgress = () => {
   if (!draggable?.[0]) return
   if (props.infinite) {
+    currentX = draggable[0].x
     progress = (wrap(draggable[0].x) / wrapWidth).toPrecision(8)
     animation.progress(progress)
 
@@ -429,8 +430,7 @@ const onResize = () => {
   setSlides()
   setAnimation()
 
-  setX({ x: currentX })
-  updateProgress()
+  goTo(getCurrentIndex(), 0, 0)
 }
 
 // Expose
