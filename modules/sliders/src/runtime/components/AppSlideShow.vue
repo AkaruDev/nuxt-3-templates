@@ -154,6 +154,7 @@ const set = (direction = 0) => {
 
 // Swipe
 const { direction } = useSwipe(el, {
+  threshold: 20,
   onSwipeEnd () {
     if (!props.swipe) { return }
     if (direction.value === 'left') {
