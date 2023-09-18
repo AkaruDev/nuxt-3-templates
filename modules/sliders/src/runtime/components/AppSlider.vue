@@ -361,10 +361,12 @@ const updateSlider = () => {
 }
 
 const updateAutoplay = () => {
+  const x = (draggable[0].x - (props.speed * props.direction)) + 0.001 // Fix for weird trembling movement
   gsap.set(draggable[0].target, {
-    x: draggable[0].x -= props.speed * props.direction
+    x
   })
   draggable[0].update()
+
   updateProgress()
 }
 
