@@ -1,13 +1,13 @@
 <template>
   <div class="SliderDemo">
-    <h2>Auto scrolling text:</h2>
-    <AppSlider
-      ref="slider"
+    <h2>AutoScroller:</h2>
+    <AppAutoScroller
+      v-for="i in 3"
+      :key="`autoscroller-${i}`"
       class="Slider"
       :items="items"
-      :autoplay="true"
-      :has-drag="false"
-      :direction="1"
+      :duration="100"
+      :direction="i === 2 ? -1 : 1"
     >
       <template #item="{ item, i }">
         <div
@@ -17,53 +17,11 @@
           {{ item.label }}
         </div>
       </template>
-    </AppSlider>
-    <AppSlider
-      ref="slider"
-      class="Slider"
-      :items="items"
-      :autoplay="true"
-      :has-drag="false"
-      :direction="-1"
-    >
-      <template #item="{ item, i }">
-        <div
-          :id="`item-${i}`"
-          class="Slider-item"
-        >
-          {{ item.label }}
-        </div>
-      </template>
-    </AppSlider>
-    <AppSlider
-      ref="slider"
-      class="Slider"
-      :items="items"
-      :autoplay="true"
-      :has-drag="false"
-      :direction="1"
-    >
-      <template #item="{ item, i }">
-        <div
-          :id="`item-${i}`"
-          class="Slider-item"
-        >
-          {{ item.label }}
-        </div>
-      </template>
-    </AppSlider>
+    </AppAutoScroller>
   </div>
 </template>
 
 <script setup>
-import { gsap } from 'gsap'
-import { InertiaPlugin } from '../gsap/InertiaPlugin'
-
-gsap.registerPlugin(InertiaPlugin)
-
-// Set slider
-const slider = ref('slider')
-
 const items = []
 for (let i = 0; i < 5; i++) {
   items.push({ id: i, label: `AKARU AGENCE WEB LYON` })

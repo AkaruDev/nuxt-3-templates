@@ -16,6 +16,10 @@ export default defineNuxtModule({
       filePath: resolver.resolve('runtime/components/AppSlider.vue')
     })
     addComponent({
+      name: 'AppAutoScroller', // name of the component to be used in vue templates
+      filePath: resolver.resolve('runtime/components/AppAutoScroller.vue')
+    })
+    addComponent({
       name: 'AppSlideShow', // name of the component to be used in vue templates
       filePath: resolver.resolve('runtime/components/AppSlideShow.vue')
     })
