@@ -7,6 +7,7 @@
       :items="items"
       :has-snap="true"
       :offset-factor="1"
+      :autoplay="false"
       @ready="onReady"
       @change="onChange"
     >

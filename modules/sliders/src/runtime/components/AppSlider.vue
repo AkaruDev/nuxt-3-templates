@@ -32,7 +32,7 @@ import { clamp, lerp } from '../utils/math'
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
 
-import { useIntersectionObserver } from "vueuse/core"
+import { useIntersectionObserver } from "@vueuse/core"
 
 // GSAP
 gsap.registerPlugin(Draggable)
