@@ -32,7 +32,7 @@ import { clamp, lerp } from '../utils/math'
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
 
-import { useIntersectionObserver } from '@vueuse/core'
+import { useIntersectionObserver } from "vueuse/core"
 
 // GSAP
 gsap.registerPlugin(Draggable)
@@ -80,7 +80,7 @@ const props = defineProps({
   offsetFactor: {
     type: Number,
     default: 2
-  }
+  },
 })
 
 // Define emits events
@@ -114,6 +114,7 @@ let itemWidth = 0
 let itemHeight = 0
 let max = 0
 let progress = 0
+let progressInertia = 0
 let proxy = null
 let slides = []
 let total = 0
@@ -128,24 +129,36 @@ const isVisible = ref(true)
 useIntersectionObserver(
   el,
   ([{ isIntersecting }]) => {
-    isVisible.value = isIntersecting
+    if (isIntersecting) {
+      onEnter()
+    } else {
+      onLeave()
+    }
   },
 )
+
+const onEnter = () => {
+  isVisible.value = true
+  init()
+}
+const onLeave = () => {
+  isVisible.value = false
+}
 
 //
 onMounted(() => {
   window.addEventListener('resize', onResize)
   gsap.ticker.add(onTick)
-  init()
-  onResize()
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', onResize)
+  isInit.value = false
   gsap.ticker.remove(onTick)
+  window.removeEventListener('resize', onResize)
 })
 
 const init = () => {
+  if (isInit.value) return
   proxy = document.createElement('div')
   trigger = slots.dragzone ? dragzone.value : wrapper.value
 
@@ -182,14 +195,13 @@ const setSlides = () => {
     const bounds = item.getBoundingClientRect()
     itemHeight = bounds.height > itemHeight ? bounds.height : itemHeight
 
-    const progress = (i + 1) / total
+    const slideProgress = (i + 1) / total
     const x = bounds.width * (i + 1)
-    const width = (itemHeight * bounds.width) / bounds.height
-    const position = { x, width }
+    const position = { x }
     const slide = {
       el: item,
       bounds,
-      progress,
+      slideProgress,
       position
     }
 
@@ -297,7 +309,7 @@ const onRelease = () => {
 const updateProgress = () => {
   if (!draggable?.[0]) return
   if (props.infinite) {
-    progress = wrap(draggable[0].x) / wrapWidth
+    progress = (wrap(draggable[0].x) / wrapWidth).toPrecision(8)
     animation.progress(progress)
 
     index.value = progress === 0 ? 0 : total - Math.round(progress * total)
@@ -308,7 +320,7 @@ const updateProgress = () => {
   }
 
   emit(EVENT_CHANGE, {
-    index: index.value,
+    index: gsap.utils.clamp(0, slides.length - 1, index?.value || 0),
     progress: 1.0 - progress,
     slides: slides.map(slide => { return { el: slide.el, progress: slide.progress } })
   })
@@ -321,7 +333,7 @@ const setX = ({ x }) => {
   if (!currentDrag) return
   gsap.set(currentDrag.target, { x })
   currentDrag.update()
-  progress = wrap(currentDrag.x) / wrapWidth
+  progress = (wrap(currentDrag.x) / wrapWidth).toPrecision(8)
   animation.progress(progress)
 
   index.value = (total - 1) - Math.ceil(progress * total)
@@ -353,9 +365,6 @@ const updateAutoplay = () => {
     x: draggable[0].x -= props.speed * props.direction
   })
   draggable[0].update()
-  progress = wrap(draggable[0].x) / wrapWidth
-
-  animation.progress(progress)
   updateProgress()
 }
 
