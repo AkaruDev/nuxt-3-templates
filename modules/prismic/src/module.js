@@ -16,7 +16,7 @@ export default defineNuxtModule({
   async setup (option, nuxt) { // options, nuxt
     
     if (option.redirects === 'netlify') {
-      nuxt.options.modules.push('@aceforth/nuxt-netlify')
+      if (!option.modules?.includes('@aceforth/nuxt-netlify')) console.warn("Please install and uncomment netlify module in nuxt config file : npm install @aceforth/nuxt-netlify")
       const redirects = await getRedirects({ prismicEndpoint: nuxt.options.prismic.endpoint, prismic, fetch })
 
       if (!nuxt.options.netlify) nuxt.options.netlify = {}
