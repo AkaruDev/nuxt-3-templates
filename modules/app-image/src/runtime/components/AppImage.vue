@@ -8,7 +8,7 @@
       <ClientOnly>
         <nuxt-picture
           v-if="placeholder === 'blur'"
-          :modifiers="{ blur: 1000; ...modifiers }"
+          :modifiers="{ blur: 1000, ...modifiers }"
           :img-attrs="{ class: 'AppImage-image' }"
           :src="url"
           :alt="alt"
