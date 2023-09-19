@@ -8,7 +8,7 @@
       <ClientOnly>
         <nuxt-picture
           v-if="placeholder === 'blur'"
-          :modifiers="{ blur: 1000 }"
+          :modifiers="{ blur: 1000; ...modifiers }"
           :img-attrs="{ class: 'AppImage-image' }"
           :src="url"
           :alt="alt"
@@ -32,6 +32,7 @@
         :preload="preload"
         :sizes="sizes"
         @load="onLoad"
+        :modifiers="modifiers"
       />
     </div>
   </div>
@@ -80,7 +81,11 @@ defineProps({
     type: Number,
     default: 80,
     validator: value => value >= 0 && value <= 100
-  }
+  },
+  modifiers: {
+    type: Object,
+    default: undefined,
+  },
 })
 
 const onLoad = (event) => {
