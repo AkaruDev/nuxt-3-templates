@@ -64,14 +64,6 @@ export const useVirtualScroll = (() => {
 
       virtualScroll.on(virtualScrollCallback)
 
-      Object.assign(document.body.style, {
-        position: 'fixed',
-        top: '0px',
-        left: '0px',
-        width: '100%',
-        height: '100%',
-        overflow: 'hidden'
-      })
 
       // Resize
       resizeObserver = useResizeObserver(container, onResize)
@@ -174,7 +166,33 @@ export const useVirtualScroll = (() => {
   }
 
   const onResize = () => {
-    setBounds()
+    setTimeout(() => {
+      active.value = window.matchMedia("(pointer:fine)").matches
+
+      if (active.value) {
+        Object.assign(document.body.style, {
+          position: 'fixed',
+          top: '0px',
+          left: '0px',
+          width: '100%',
+          height: '100%',
+          overflow: 'hidden'
+        })
+      } else {
+        window.scrollTo(0, 0)
+        Object.assign(document.body.style, {
+          position: '',
+          top: '',
+          left: '',
+          width: '',
+          height: '',
+          overflow: ''
+        })
+      }
+
+      bus.emit('scroll', y)
+      setBounds()
+    }, 0)
   }
 
   const setBounds = () => {
@@ -363,9 +381,11 @@ export const useVirtualScroll = (() => {
     container,
     active,
     y,
+    directions,
     bounds,
     scrollTo,
     scrollOfOneViewport,
+    scrollToElement,
     goToTop,
     goToBottom,
     setPrecision,

@@ -1,4 +1,3 @@
-
 export default (nuxtApp) => {
   const SECTION_OFFSET_MARGIN = 100
   const getTranslate = el => {
@@ -31,39 +30,42 @@ export default (nuxtApp) => {
       // Optimize transform
       el.style.willChange = 'transform'
 
-
       let isVisible = false
 
       // Listen to scroll event and update element transform on each call
       el.__scroll_callback__ = ({ lerp }) => {
 
-        const { top, bottom } = el.getBoundingClientRect()
-        let offset = {
-          yStart: top - getTranslate(el).y - window.innerHeight - SECTION_OFFSET_MARGIN,
-          yStop: bottom - getTranslate(el).y + SECTION_OFFSET_MARGIN
-        }
+        if (!$virtualScroll.active.value) {
+          el.style.transform = ``
+          el.style.pointerEvents = ''
+          el.style.opacity = ''
+        } else {
 
-        if (lerp > offset.yStart && lerp < offset.yStop) {
-          el.style.transform = `matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,0,${(lerp * -1)},0,1)`
-          el.style.webkitTransform = `matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,0,${(lerp * -1)},0,1)`
-          el.style.msTransform = `matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,0,${(lerp * -1)},0,1)`
-
-          if (!isVisible) {
-            isVisible = true
-            el.style.pointerEvents = 'auto'
-            el.style.opacity = 1
+          const { top, bottom } = el.getBoundingClientRect()
+          let offset = {
+            yStart: top - getTranslate(el).y - window.innerHeight - SECTION_OFFSET_MARGIN,
+            yStop: bottom - getTranslate(el).y + SECTION_OFFSET_MARGIN
           }
-        } else if (isVisible) {
-          isVisible = false
 
-          el.style.transform = 'translate3d(0px, 0px, 0px)'
-          el.style.webkitTransform = 'translate3d(0px, 0px, 0px)'
-          el.style.msTransform = 'translate3d(0px, 0px, 0px)'
+          if (lerp > offset.yStart && lerp < offset.yStop) {
 
-          el.style.pointerEvents = 'none'
-          el.style.opacity = 0
+            el.style.transform = `matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,0,${(lerp * -1)},0,1)`
+
+            if (!isVisible) {
+              isVisible = true
+              el.style.pointerEvents = 'auto'
+              el.style.opacity = 1
+            }
+          } else if (isVisible) {
+            isVisible = false
+
+            el.style.transform = 'translate3d(0px, 0px, 0px)'
+            el.style.pointerEvents = 'none'
+            el.style.opacity = 0
+          }
         }
       }
+
       $virtualScroll.on('scroll', el.__scroll_callback__)
     },
     unmounted (el) {
