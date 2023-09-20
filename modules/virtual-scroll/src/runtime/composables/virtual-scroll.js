@@ -285,9 +285,9 @@ export const useVirtualScroll = (() => {
    */
   const scrollToElement = (element = null, offset = 0, force = false) => {
     if (isLocked.value && !force) return
-    if (!element || !element.getboundsClientRect) return
+    if (!element || !element.getBoundingClientRect) return
 
-    scrollTo(y.lerp + element.getboundsClientRect().top + offset, force)
+    scrollTo(y.lerp + element.getBoundingClientRect().top + offset, force)
   }
 
   const destroy = () => {
