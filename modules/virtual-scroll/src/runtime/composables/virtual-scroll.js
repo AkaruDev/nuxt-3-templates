@@ -290,6 +290,33 @@ export const useVirtualScroll = (() => {
     scrollTo(y.lerp + element.getBoundingClientRect().top + offset, force)
   }
 
+  /**
+   * Ease scroll to element top
+   * @param {Element} element
+   * @param {Number} offset
+   * @param {Boolean} force bypass isLocked
+   * @param {Number} duration
+   * @param {Function} done called on scroll end
+   * @returns
+   */
+  const easeToElement = (element = null, offset = 0, force = false, duration = 0.6, done = null) => {
+    gsap.killTweensOf(y)
+    setRatio(0.1)
+    if (isLocked.value && !force) return
+    if (!element || !element.getBoundingClientRect) return
+
+    setRatio(1)
+    const yValue = y.lerp + element.getBoundingClientRect().top + offset
+    gsap.to(y, {
+      value: yValue, duration, ease: "power3.out", onUpdate: () => {
+        scrollTo(y.value, force)
+      }, onComplete: () => {
+        setRatio(0.1)
+        done?.()
+      }
+    })
+  }
+
   const destroy = () => {
     gsap.ticker.remove(onTick)
     virtualScroll?.destroy()
@@ -386,6 +413,7 @@ export const useVirtualScroll = (() => {
     scrollTo,
     scrollOfOneViewport,
     scrollToElement,
+    easeToElement,
     goToTop,
     goToBottom,
     setPrecision,
