@@ -243,6 +243,20 @@ export const useVirtualScroll = (() => {
   }
 
   /**
+   *  Go to element top
+   * @param {HTMLElement} element
+   * @param {Number} offset
+   * @param {Boolean} force bypass isLocked
+   * @returns
+   */
+  const goToElement = (element, offset = 0, force = false) => {
+    if (isLocked.value && !force) return
+    if (!element || !element.getBoundingClientRect) return
+    const yValue = y.lerp + element.getBoundingClientRect().top + offset
+    goTo(yValue, force)
+  }
+
+  /**
    *  Go to top
    * @param {Boolean} force bypass isLocked
    * @returns
@@ -287,7 +301,8 @@ export const useVirtualScroll = (() => {
     if (isLocked.value && !force) return
     if (!element || !element.getBoundingClientRect) return
 
-    scrollTo(y.lerp + element.getBoundingClientRect().top + offset, force)
+    const yValue = y.lerp + element.getBoundingClientRect().top + offset
+    scrollTo(yValue, force)
   }
 
   /**
@@ -414,6 +429,7 @@ export const useVirtualScroll = (() => {
     scrollOfOneViewport,
     scrollToElement,
     easeToElement,
+    goToElement,
     goToTop,
     goToBottom,
     setPrecision,
