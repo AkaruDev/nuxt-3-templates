@@ -16,7 +16,6 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useBusTransition } from '../composables/bus-transition';
 import { useTransition } from '../composables/transition';
 
 const el = ref()
