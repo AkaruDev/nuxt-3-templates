@@ -54,10 +54,10 @@ const resolvePromises = async () => {
 const hide = () => {
   document.body.classList.add('cursor-loading')
   isShown.value = false
+  busTransition.onEnterDone()
   setTimeout(() => {
     document.body.classList.remove('cursor-loading')
     preloader.reset()
-    busTransition.onEnterDone()
   }, 300)
 }
 
@@ -84,7 +84,8 @@ const preloadPromisesCallback = () => {
 
   gap: 10px;
 
-  background-color: white;
+  background-color: var(--primary, white);
+  color: var(--secondary, black);
 
   z-index: 100;
   transition: 0.3s opacity cubic-bezier(0.65, 0, 0.35, 1);

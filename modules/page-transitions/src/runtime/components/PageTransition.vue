@@ -26,20 +26,21 @@ const total = ref(1)
 const progress = ref(0)
 const fulfilledPromises = ref(0)
 
-const { preloader } = useTransition()
-const transitionBus = useBusTransition()
+const { preloader, busTransition } = useTransition()
+
+const { $viewportObserver } = useNuxtApp()
 
 const onEnter = async ({ el, done, from, to }) => {
   await resolvePromises()
   hide({ el, done, from, to })
 }
-transitionBus.on('transition:enter', onEnter)
+busTransition.on('transition:enter', onEnter)
 
 const onLeave = async ({ el, done, from, to }) => {
   total.value = preloader.promises.value.length
   show({ el, done, from, to })
 }
-transitionBus.on('transition:leave', onLeave)
+busTransition.on('transition:leave', onLeave)
 
 
 const resolvePromises = async () => {
@@ -61,6 +62,8 @@ const resolvePromises = async () => {
 const hide = ({ done }) => {// { to, from, promises = [], done } = {}
   document.body.classList.remove('cursor-loading')
   isShown.value = false
+  $viewportObserver.active.value = true
+  busTransition.onEnterDone()
   setTimeout(() => {
     preloader.reset()
     fulfilledPromises.value = 0
@@ -72,6 +75,8 @@ const hide = ({ done }) => {// { to, from, promises = [], done } = {}
 const show = ({ done }) => {
   document.body.classList.add('cursor-loading')
   isShown.value = true
+  $viewportObserver.active.value = false
+  busTransition.onLeaveDone()
   setTimeout(() => {
     done()
   }, 300)
@@ -98,9 +103,12 @@ const preloadPromisesCallback = () => {
   top: 0;
   left: 0;
 
+  overflow: hidden;
+
   gap: 20px;
 
-  background-color: white;
+  background-color: var(--primary, white);
+  color: var(--secondary, black);
 
   z-index: 100;
 
