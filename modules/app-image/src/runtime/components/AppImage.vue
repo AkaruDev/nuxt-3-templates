@@ -17,6 +17,7 @@
           quality="10"
           :loading="loading"
           :preload="preload"
+          fit="cover"
           @load="onLoad"
         />
       </ClientOnly>
@@ -31,6 +32,7 @@
         :loading="loading"
         :preload="preload"
         :sizes="sizes"
+        fit="cover"
         @load="onLoad"
         :modifiers="modifiers"
       />
