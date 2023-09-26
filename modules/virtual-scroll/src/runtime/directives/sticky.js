@@ -22,6 +22,7 @@ export default () => {
       onScroll: () => onScroll(sticky),
       options: { ...options, ...elOptions.value }
     }
+
     el.style.willChange = 'transform'
     stickys.push(sticky)
 
@@ -55,7 +56,7 @@ export default () => {
         const max = sticky.parentBounds.height - sticky.elBounds.height
         const value = sticky.parentBounds.top * -1
         const y = clamp(value, 0, max) + 0.001
-        sticky.el.style.transform = `translate3D(0,${y}px,0) `
+        sticky.el.style.transform = `translate3d(0,${y}px,0) `
 
         sticky.progress = (sticky.elBounds.top - sticky.parentBounds.top) / (sticky.parentBounds.height - sticky.elBounds.height)
         if (isNaN(sticky.progress)) sticky.progress = 0
@@ -88,7 +89,7 @@ export default () => {
         sticky.el.style.width = ''
 
         if (sticky.parentBounds.top <= 0) {
-          sticky.el.style.transform = `translateY(${sticky.parentBounds.height - sticky.elBounds.height}px)`
+          sticky.el.style.transform = `translate3d(0,${sticky.parentBounds.height - sticky.elBounds.height}px,0)`
         }
 
         if (!isInBounds && sticky.progress <= 0.2 && sticky.progress > 0) {
@@ -96,8 +97,6 @@ export default () => {
           sticky.progress = clamp(sticky.progress, 0, 1)
           sendProgress(sticky)
         }
-
-
       }
     }
 
