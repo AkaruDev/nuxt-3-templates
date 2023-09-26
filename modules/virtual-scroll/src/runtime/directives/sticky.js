@@ -54,7 +54,7 @@ export default () => {
       if (isInBounds) {
         const max = sticky.parentBounds.height - sticky.elBounds.height
         const value = sticky.parentBounds.top * -1
-        const y = clamp(value, 0, max)
+        const y = clamp(value, 0, max) + 0.001
         sticky.el.style.transform = `translate3D(0,${y}px,0) `
 
         sticky.progress = (sticky.elBounds.top - sticky.parentBounds.top) / (sticky.parentBounds.height - sticky.elBounds.height)
