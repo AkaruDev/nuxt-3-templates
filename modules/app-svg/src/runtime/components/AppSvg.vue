@@ -15,6 +15,8 @@ const props = defineProps({
 const el = ref()
 const currentIcon = ref()
 
+defineExpose({ el })
+
 // Auto-load icons
 const icons = Object.fromEntries(
   Object.entries(import.meta.glob('~/assets/svg/*.svg', { as: 'raw' })).map(
@@ -25,6 +27,8 @@ const icons = Object.fromEntries(
   ),
 )
 
+currentIcon.value = await icons[props.name]?.()
+
 watch(() => props.name, async (newName) => {
   currentIcon.value = await icons[newName]?.()
 })
@@ -34,7 +38,6 @@ onMounted(async () => {
 })
 
 
-defineExpose({ el })
 
 </script>
 
