@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="$virtualScroll.active.value"
+    v-show="show"
     ref="el"
     class="VirtualScrollScrollBar-component"
     :class="{
@@ -28,6 +28,10 @@ const $virtualScroll = useVirtualScroll()
 const isScrolling = computed(() => {
   if (!$virtualScroll) return false
   return Math.abs($virtualScroll.y.value - $virtualScroll.y.lerp) > 10
+})
+
+const show = computed(() => {
+  return $virtualScroll?.active?.value && ($virtualScroll?.container?.value?.clientHeight || 0) >= height.value
 })
 
 onMounted(() => {
