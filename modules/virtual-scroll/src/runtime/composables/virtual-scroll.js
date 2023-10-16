@@ -11,7 +11,7 @@ export const useVirtualScroll = (() => {
   /**
    * @type {Element}
    */
-  let container = null
+  let container = ref(null)
   let directions = {
     up: 'up',
     down: 'down'
@@ -48,7 +48,7 @@ export const useVirtualScroll = (() => {
    * @param {Element} el
    */
   const start = (el) => {
-    container = el
+    container.value = el
     // Check if pointer is a mouse
     active.value = window.matchMedia("(pointer:fine)").matches
     if (active.value) {
@@ -66,7 +66,7 @@ export const useVirtualScroll = (() => {
 
 
       // Resize
-      resizeObserver = useResizeObserver(container, onResize)
+      resizeObserver = useResizeObserver(container.value, onResize)
       onResize()
 
       // Key events
@@ -196,9 +196,9 @@ export const useVirtualScroll = (() => {
   }
 
   const setBounds = () => {
-    if (!active.value || !container) return
+    if (!active.value || !container.value) return
 
-    bounds.value = container.clientHeight - window.innerHeight
+    bounds.value = container.value.clientHeight - window.innerHeight
 
     scrollOf(0, true)
   }
