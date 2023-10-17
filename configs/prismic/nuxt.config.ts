@@ -14,6 +14,7 @@ export default defineNuxtConfig(
         modules: [
             '@nuxtjs/prismic',
             '@/modules/prismic/src/module',
+            // '@aceforth/nuxt-netlify' // Use if redirects === "netlify"
         ],
         prismic: {
             endpoint,
@@ -29,6 +30,9 @@ export default defineNuxtConfig(
                 endpoint,
                 langIso: process?.env?.LANG_ISO || 'fr-fr'
             }
-        }
+        },
+        // "akaru-prismic": {
+        //     redirects: "netlify" // Options : "netlify" or null
+        // }
     }
 )
