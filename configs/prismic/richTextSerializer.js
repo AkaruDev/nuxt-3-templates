@@ -8,7 +8,7 @@ export default {
 			: ''
 
 		const nuxtLink = node.data.link_type === 'Document' ? 'data-nuxt-link' : ''
-		return `<a ${target} href="${node.data.url}" ${nuxtLink}>${children}</a>`
+		return `<a ${target} href="${node.data?.url || '/'}" ${nuxtLink}>${children}</a>`
 	}
 }
 
