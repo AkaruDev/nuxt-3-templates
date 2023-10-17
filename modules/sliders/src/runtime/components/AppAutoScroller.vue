@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import gsap from 'gsap';
+import { gsap } from 'gsap'
 
 import { useIntersectionObserver } from "@vueuse/core"
 
