@@ -34,6 +34,7 @@ export default () => {
     if (sticky) $virtualScroll.off('scroll', sticky.onScroll)
     stickys = stickys.filter((sticky) => sticky.el !== el)
 
+    el.style.transform = ``
     el.style.willChange = ''
   }
 
@@ -68,6 +69,7 @@ export default () => {
       if (!isInBounds && sticky.progress <= 0.2 && sticky.progress > 0) {
         sticky.progress -= 0.01
         sticky.progress = clamp(sticky.progress, 0, 1)
+        sticky.el.style.transform = `translate3d(0,0,0)`
         sendProgress(sticky)
       }
     } else {
