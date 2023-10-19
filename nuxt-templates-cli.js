@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'Sitemap',
+    description: 'Generate a sitemap',
+    category: 'Hosting / Deployment'
   },
   dependencies: [],
-  devDependencies: [],
-  files: ['modules/my-feature', 'configs']
+  devDependencies: ['nuxt-simple-sitemap'],
+  files: ['configs']
 }
