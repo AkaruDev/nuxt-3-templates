@@ -313,7 +313,8 @@ const updateProgress = () => {
     progress = (wrap(draggable[0].x) / wrapWidth).toPrecision(8)
     animation.progress(progress)
 
-    index.value = progress === 0 ? 0 : total - Math.round(progress * total)
+    const betweenLastAndFirst = (1 / total) * 0.5
+    index.value = progress < betweenLastAndFirst ? 0 : total - Math.round(progress * total)
   } else {
     x = draggable[0].x
     progress = clamp((draggable[0].x / -max), 0, 1)
