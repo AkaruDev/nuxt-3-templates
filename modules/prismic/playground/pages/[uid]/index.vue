@@ -17,7 +17,7 @@ const route = useRoute();
 const { data: api, error } = await useAsyncData(() => getPage(route.params.uid))
 if (error.value) {
   console.warn(error)
-  error({ statusCode: 404, message: 'Page not found' })
+  error({ statusCode: 404, message: 'Page not found', fatal: true })
 }
 </script>
 

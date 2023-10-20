@@ -27,7 +27,7 @@ const { data: api, error } = await useAsyncData(getHome);
 
 if (!api || error.value) {
   console.warn(error.value);
-  throw createError({ statusCode: 404, statusMessage: 'Page Not Found' })
+  throw createError({ statusCode: 404, statusMessage: 'Page Not Found', fatal: true })
 }
 </script>
 
