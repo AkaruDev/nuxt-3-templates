@@ -1,28 +1,25 @@
 <template>
   <div
-    v-intersection-observer="onIntersectionObserver"
+    ref="el"
+    v-intersection-observer="[onIntersectionObserver]"
     class="AppImage"
     :style="{ aspectRatio: width / height }"
   >
     <div class="AppImage-container">
-      <ClientOnly>
-        <nuxt-picture
-          v-if="placeholder === 'blur'"
-          :modifiers="{ blur: 1000, ...modifiers }"
-          :img-attrs="{ class: 'AppImage-image' }"
-          :src="url"
-          :alt="alt"
-          :width="width * 0.1"
-          :height="height * 0.1"
-          quality="10"
-          :loading="loading"
-          :preload="preload"
-          fit="cover"
-          @load="onLoad"
-        />
-      </ClientOnly>
       <nuxt-picture
-        v-if="isVisible"
+        v-if="placeholder === 'blur'"
+        :img-attrs="{ class: 'AppImage-image --placeholder' }"
+        :src="url"
+        :alt="alt"
+        :width="width * 0.1"
+        :height="height * 0.1"
+        quality="10"
+        fit="cover"
+        :loading="loading"
+        :sizes="`small:100vw medium:${width / 1440}vw`"
+      />
+      <nuxt-picture
+        v-show="isVisible"
         :img-attrs="{ class: 'AppImage-image' }"
         :src="url"
         :alt="alt"
@@ -32,9 +29,9 @@
         :loading="loading"
         :preload="preload"
         :sizes="sizes"
+        :modifiers="modifiers"
         fit="cover"
         @load="onLoad"
-        :modifiers="modifiers"
       />
     </div>
   </div>
@@ -44,7 +41,7 @@
 import { ref } from 'vue'
 import { vIntersectionObserver } from '@vueuse/components'
 
-defineProps({
+const props = defineProps({
   url: {
     type: String,
     required: true
@@ -75,6 +72,11 @@ defineProps({
     default: "blur",
     validator: value => ['none', 'blur'].includes(value)
   },
+  fit: {
+    type: String,
+    default: "cover",
+    validator: value => ['cover', 'contain', 'fill', 'none'].includes(value)
+  },
   sizes: {
     type: String,
     default: "small:100vw medium:100vw large:100vw"
@@ -90,20 +92,27 @@ defineProps({
   },
 })
 
-const onLoad = (event) => {
-  event?.target?.classList?.add("--loaded")
+const el = ref()
+
+const onLoad = () => {
+  el.value?.querySelector('.AppImage-image:not(.--loaded,.--placeholder)').classList?.add("--loaded")
 }
 
 const isVisible = ref(false)
 
-function onIntersectionObserver ([{ isIntersecting }]) {
-  isVisible.value = isVisible.value || isIntersecting
+const onIntersectionObserver = ([{ isIntersecting }]) => {
+  if (isIntersecting && !isVisible.value) {
+    isVisible.value = true
+  }
 }
+
 </script>
 
 <style scoped>
 .AppImage {
+  position: relative;
   width: 100%;
+
   user-select: none;
 }
 
@@ -117,11 +126,12 @@ function onIntersectionObserver ([{ isIntersecting }]) {
 
   opacity: 0;
 
-  object-fit: cover;
+  object-fit: v-bind('props.fit');
 
   transition: 0.3s opacity cubic-bezier(0.65, 0, 0.35, 1);
 }
 
+.AppImage:deep(.AppImage-image.--placeholder),
 .AppImage:deep(.AppImage-image.--loaded) {
   opacity: 1;
 }
