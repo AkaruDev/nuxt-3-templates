@@ -19,13 +19,13 @@ export const useDevice = () => {
   const { width, height } = useWindowSize()
 
   // Breakpoints
-  const mobile = ref(false)
+  const mobile = ref(true)
   const tablet = ref(false)
   const desktop = ref(false)
 
   // Screen orientation
-  const landscape = ref(true)
-  const portrait = ref(false)
+  const landscape = ref(false)
+  const portrait = ref(true)
 
   // Virtualkeyboard
   let previousWidth = ref(0)
@@ -33,7 +33,7 @@ export const useDevice = () => {
   const virtualKeyboardIsOpen = ref(false)
 
   // Pointers
-  const mouse = ref(true)
+  const mouse = ref(false)
   const touch = ref(true)
 
   // Browser
