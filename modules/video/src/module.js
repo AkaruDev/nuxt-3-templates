@@ -7,7 +7,7 @@ export default defineNuxtModule({
   },
   // Default configuration options of the Nuxt module
   defaults: {},
-  setup () { // options, nuxt
+  setup() { // options, nuxt
     const resolver = createResolver(import.meta.url)
 
     // Exemples
@@ -55,6 +55,10 @@ export default defineNuxtModule({
     addComponent({
       name: 'AppVideoBackground',
       filePath: resolver.resolve('runtime/components/AppVideoBackground.vue')
+    })
+    addComponent({
+      name: 'AppPlayerYoutube',
+      filePath: resolver.resolve('runtime/components/AppPlayerYoutube.vue')
     })
 
   }

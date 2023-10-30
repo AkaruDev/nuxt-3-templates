@@ -21,7 +21,7 @@ const html = computed(() => {
     modified = modified.replace("<iframe", "<iframe loading='lazy'")
   }
   return modified
-})
+});
 
 
 </script>

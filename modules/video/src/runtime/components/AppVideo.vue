@@ -12,16 +12,12 @@
       v-show="cover"
       class="AppVideo-cover"
     >
-      <slot
-        name="cover"
-      />
+      <slot name="cover" />
       <div
         class="AppVideo-btplay"
         @click="onClickBtplay"
       >
-        <slot
-          name="btplay"
-        />
+        <slot name="btplay" />
       </div>
     </div>
 
@@ -30,6 +26,16 @@
       v-if="!cover"
       class="AppVideo-player"
     >
+      <!-- PLayer YouTube -->
+      <AppPlayerYoutube
+        v-if="type === TYPES.YOUTUBE"
+        ref="player"
+        :url="src"
+        :height="height"
+        :width="width"
+        @play="onPlay"
+        @pause="onPause"
+      />
       <!-- Player embed -->
       <AppPlayerEmbed
         v-if="type === TYPES.EMBED"
@@ -79,6 +85,7 @@ const TYPES = {
   VIMEO: 'vimeo',
   EMBED: 'embed',
   FILE: 'file',
+  YOUTUBE: 'youtube'
 }
 const props = defineProps({
   autoplay: {
@@ -104,14 +111,24 @@ const props = defineProps({
   type: {
     type: String,
     default: undefined,
-    validator (value) {
-      return ['vimeo', 'embed', 'file'].includes(value)
+    validator(value) {
+      return ['vimeo', 'embed', 'file', 'youtube'].includes(value)
     }
   },
   muted: {
     type: Boolean,
     default: true
   },
+  width: {
+    required: false,
+    type: Number,
+    default: 1920
+  },
+  height: {
+    required: false,
+    type: Number,
+    default: 1080
+  }
 })
 
 // Data

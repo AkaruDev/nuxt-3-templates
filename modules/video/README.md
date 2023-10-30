@@ -23,9 +23,10 @@ My new Nuxt module for doing amazing things.
 ## Features
 
 <!-- Highlight some of the features your module provide here -->
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
+- Vimeo player
+- File player
+- Embed player
+- YouTube player
 
 ## Quick Setup
 
@@ -92,3 +93,44 @@ npm run release
 
 [nuxt-src]: https://img.shields.io/badge/Nuxt-18181B?logo=nuxt.js
 [nuxt-href]: https://nuxt.com
+
+# Features informations
+
+## YouTube player
+Use the ``youtube-player`` [library](https://github.com/gajus/youtube-player#readme) to get access to some events from iframe.
+
+It create a youtube player Object and load a video with his ID, all options are available on [library doc](https://github.com/gajus/youtube-player#readme)
+
+### Props
+- ``url`` url of video (embed or link from youtube)
+- ``width`` width set to the player
+- ``height`` height set to the player
+
+### Events
+- ``@play`` video is play
+- ``@pause`` video is paused
+- ``@videoend`` video has reach the end
+
+Event are listen based on the [YouTube Iframe API documentation](https://developers.google.com/youtube/iframe_api_reference?hl=fr#Events)
+
+### Example
+With ``AppVideo``
+```
+      <AppVideo
+        src="https://www.youtube.com/watch?v=nymgT8zIIco"
+        type="youtube"
+        :width="1920"
+        :height="1080"
+      />
+```
+With ``AppPlayerYoutube``
+```
+      <AppPlayerYoutube
+        ref="player"
+        :url="src"
+        :height="height"
+        :width="width"
+        @play="onPlay"
+        @pause="onPause"
+      />
+```
