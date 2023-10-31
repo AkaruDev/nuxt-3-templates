@@ -95,7 +95,7 @@ const props = defineProps({
 const el = ref()
 
 const onLoad = () => {
-  el.value?.querySelector('.AppImage-image:not(.--loaded,.--placeholder)').classList?.add("--loaded")
+  el.value?.querySelector('.AppImage-image:not(.--loaded,.--placeholder)')?.classList?.add("--loaded")
 }
 
 const isVisible = ref(false)
