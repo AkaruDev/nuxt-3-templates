@@ -336,7 +336,7 @@ export const useVirtualScroll = (() => {
     gsap.ticker.remove(onTick)
     virtualScroll?.destroy()
     resizeObserver?.disconnect()
-    window.removeEventListener('keydown', this.onKeyDown)
+    window.removeEventListener('keydown', onKeyDown)
   }
 
   /**
