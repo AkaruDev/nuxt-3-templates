@@ -6,5 +6,5 @@ module.exports = {
   },
   dependencies: [],
   devDependencies: ['@vueuse/core', 'detect-gpu'],
-  files: ['modules/device', 'configs']
+  files: ['modules/device/src', 'configs']
 }
