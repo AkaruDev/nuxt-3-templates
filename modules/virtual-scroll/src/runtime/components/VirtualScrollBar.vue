@@ -17,11 +17,13 @@
 </template>
 
 <script setup>
+import { useWindowSize } from '@vueuse/core';
 import { useVirtualScroll } from '../composables/virtual-scroll'
 
 const el = ref(null)
 const thumb = ref(null)
 const mouseDown = ref(false)
+const { height } = useWindowSize()
 
 const $virtualScroll = useVirtualScroll()
 
