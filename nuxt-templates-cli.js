@@ -6,5 +6,5 @@ module.exports = {
   },
   dependencies: [],
   devDependencies: ['@vueuse/core', 'npm:@gsap/shockingly'],
-  files: ['modules/sliders', 'configs']
+  files: ['modules/sliders/src', 'configs']
 }
