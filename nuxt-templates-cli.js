@@ -6,5 +6,5 @@ module.exports = {
   },
   dependencies: ['@vueuse/core'],
   devDependencies: [],
-  files: ['modules/page-transitions', 'configs']
+  files: ['modules/page-transitions/src', 'configs']
 }
