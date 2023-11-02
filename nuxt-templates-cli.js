@@ -6,5 +6,5 @@ module.exports = {
   },
   dependencies: ["defu"],
   devDependencies: [],
-  files: ['modules/viewport-observer', 'configs']
+  files: ['modules/viewport-observer/src', 'configs']
 }
