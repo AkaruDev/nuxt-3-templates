@@ -6,5 +6,5 @@ module.exports = {
   },
   dependencies: [],
   devDependencies: [],
-  files: ['modules/metas', 'configs']
+  files: ['modules/metas/src', 'configs']
 }
