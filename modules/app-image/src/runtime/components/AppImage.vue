@@ -8,7 +8,7 @@
     <div class="AppImage-container">
       <nuxt-picture
         v-if="placeholder === 'blur'"
-        :img-attrs="{ class: 'AppImage-image --placeholder' }"
+        :img-attrs="{ class: `AppImage-image --placeholder --${loading}` }"
         :src="url"
         :alt="alt"
         :width="width * 0.1"
@@ -20,7 +20,7 @@
       />
       <nuxt-picture
         v-show="isVisible"
-        :img-attrs="{ class: 'AppImage-image' }"
+        :img-attrs="{ class: `AppImage-image --${loading}` }"
         :src="url"
         :alt="alt"
         :width="width"
@@ -124,16 +124,18 @@ const onIntersectionObserver = ([{ isIntersecting }]) => {
   top: 0;
   left: 0;
 
-  opacity: 0;
-
   object-fit: v-bind('props.fit');
+}
 
+.AppImage:deep(.AppImage-image.--lazy) {
+  opacity: 0;
   transition: 0.3s opacity cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .AppImage:deep(.AppImage-image.--placeholder),
-.AppImage:deep(.AppImage-image.--loaded) {
+.AppImage:deep(.AppImage-image.--loaded.--lazy) {
   opacity: 1;
+  transition: 0.3s opacity cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .AppImage-container {
