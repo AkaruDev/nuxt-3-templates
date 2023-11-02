@@ -6,5 +6,5 @@ module.exports = {
   },
   dependencies: [],
   devDependencies: ['@nuxt/image@rc', '@vueuse/core', '@vueuse/components'],
-  files: ['modules/app-image', 'configs']
+  files: ['modules/app-image/src', 'configs']
 }
