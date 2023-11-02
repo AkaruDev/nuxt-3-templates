@@ -6,5 +6,5 @@ module.exports = {
   },
   dependencies: ['virtual-scroll', '@vueuse/core'],
   devDependencies: ['gsap'],
-  files: ['modules/virtual-scroll', 'configs']
+  files: ['modules/virtual-scroll/src', 'configs']
 }
