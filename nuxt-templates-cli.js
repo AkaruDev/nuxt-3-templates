@@ -6,5 +6,5 @@ module.exports = {
   },
   dependencies: ['vite-svg-loader'],
   devDependencies: [],
-  files: ['assets/svg', 'modules/app-svg', 'configs']
+  files: ['assets/svg', 'modules/app-svg/src', 'configs']
 }
