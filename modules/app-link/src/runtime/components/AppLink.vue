@@ -42,6 +42,11 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false
+  },
+  trailingSlash: {
+    type: Boolean,
+    required: false,
+    default: true
   }
 })
 
@@ -110,7 +115,12 @@ const getComponentAttributes = () => {
 
   } else if ('path' in props.to || 'name' in props.to) {
     if (props.forceReload) {
-      attributes.href = router.resolve(props.to).href
+      let href = router.resolve(props.to).href
+      if (props.trailingSlash) {
+        href = href.replace('?', '/?')
+        if (!href.endsWith('/') && !href.includes('?')) href += '/'
+      }
+      attributes.href = href
     } else {
       attributes.to = props.to
     }
