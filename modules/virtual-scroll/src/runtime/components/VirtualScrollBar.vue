@@ -33,7 +33,7 @@ const isScrolling = computed(() => {
 })
 
 const show = computed(() => {
-  return $virtualScroll?.active?.value && ($virtualScroll?.container?.value?.clientHeight || 0) >= height.value
+  return $virtualScroll?.active?.value && ($virtualScroll?.container?.value?.clientHeight || 0) > height.value
 })
 
 onMounted(() => {
