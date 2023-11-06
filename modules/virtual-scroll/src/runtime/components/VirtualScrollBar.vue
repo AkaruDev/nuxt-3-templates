@@ -1,11 +1,11 @@
 <template>
   <div
-    v-show="show"
     ref="el"
     class="VirtualScrollScrollBar-component"
     :class="{
       '--is-scrolling': isScrolling,
-      '--is-dragging': mouseDown
+      '--is-dragging': mouseDown,
+      '--show': show,
     }"
   >
     <div
@@ -24,6 +24,7 @@ const el = ref(null)
 const thumb = ref(null)
 const mouseDown = ref(false)
 const { height } = useWindowSize()
+const show = ref(false)
 
 const $virtualScroll = useVirtualScroll()
 
@@ -32,12 +33,9 @@ const isScrolling = computed(() => {
   return Math.abs($virtualScroll.y.value - $virtualScroll.y.lerp) > 10
 })
 
-const show = computed(() => {
-  return $virtualScroll?.active?.value && ($virtualScroll?.container?.value?.clientHeight || 0) > height.value
-})
-
 onMounted(() => {
   $virtualScroll.on('scroll', onScroll)
+  $virtualScroll.on('resize', onResize)
 
   window.addEventListener('mouseup', onScrollBarRelease)
   window.addEventListener('mousemove', onScrollbarDrag)
@@ -77,6 +75,10 @@ const onScrollbarDrag = (e) => {
   $virtualScroll.scrollTo(y)
 }
 
+const onResize = () => {
+  show.value = $virtualScroll?.active?.value && ($virtualScroll?.container?.value?.clientHeight || 0) > height.value
+}
+
 </script>
 
 <style>
@@ -89,6 +91,10 @@ const onScrollbarDrag = (e) => {
   z-index: 1000;
   transform-origin: center right;
   transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.3s cubic-bezier(0.65, 0, 0.35, 1);
+  opacity: 0;
+}
+
+.VirtualScrollScrollBar-component.--show {
   opacity: 0.5;
 }
 
@@ -116,7 +122,7 @@ const onScrollbarDrag = (e) => {
   left: 0;
   width: 7px;
   height: 80px;
-  background-color: #C1C1C1;
+  background-color: #2B2B2B;
   border-radius: 14px;
   opacity: 0.5;
   margin: 2px;

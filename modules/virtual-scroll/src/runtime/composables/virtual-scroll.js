@@ -191,6 +191,7 @@ export const useVirtualScroll = (() => {
       }
 
       bus.emit('scroll', y)
+      bus.emit('resize')
       setBounds()
     }, 0)
   }
