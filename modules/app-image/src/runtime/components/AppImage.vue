@@ -6,21 +6,22 @@
     :style="{ aspectRatio: width / height }"
   >
     <div class="AppImage-container">
-      <nuxt-picture
+      <nuxt-img
         v-if="placeholder === 'blur'"
-        :img-attrs="{ class: `AppImage-image --placeholder --${loading}` }"
+        :class="`AppImage-image --placeholder --${loading}`"
         :src="url"
         :alt="alt"
-        :width="width * 0.1"
-        :height="height * 0.1"
-        quality="10"
-        fit="cover"
+        :quality="10"
+        :fit="fit"
+        :width="width"
+        :height="height"
         :loading="loading"
-        :sizes="`small:100vw medium:${width / 1440}vw`"
+        :sizes="sizes"
+        :modifiers="{ blur: 80 }"
       />
-      <nuxt-picture
+      <nuxt-img
         v-show="isVisible"
-        :img-attrs="{ class: `AppImage-image --${loading}` }"
+        :class="`AppImage-image --${loading}`"
         :src="url"
         :alt="alt"
         :width="width"
@@ -30,7 +31,7 @@
         :preload="preload"
         :sizes="sizes"
         :modifiers="modifiers"
-        fit="cover"
+        :fit="fit"
         @load="onLoad"
       />
     </div>
@@ -79,7 +80,7 @@ const props = defineProps({
   },
   sizes: {
     type: String,
-    default: "small:100vw medium:100vw large:100vw"
+    default: "small:100vw medium:100vw large:66vw"
   },
   quality: {
     type: Number,
@@ -132,7 +133,10 @@ const onIntersectionObserver = ([{ isIntersecting }]) => {
   transition: 0.3s opacity cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-.AppImage:deep(.AppImage-image.--placeholder),
+.AppImage:deep(.AppImage-image.--placeholder) {
+  opacity: 1;
+}
+
 .AppImage:deep(.AppImage-image.--loaded.--lazy) {
   opacity: 1;
   transition: 0.3s opacity cubic-bezier(0.65, 0, 0.35, 1);
