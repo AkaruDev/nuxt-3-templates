@@ -17,7 +17,7 @@
         :height="height"
         :loading="loading"
         :sizes="sizes"
-        :modifiers="{ blur: 80 }"
+        :modifiers="{ blur: 500 }"
       />
       <nuxt-img
         v-show="isVisible"
