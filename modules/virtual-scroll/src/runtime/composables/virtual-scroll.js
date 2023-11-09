@@ -193,6 +193,7 @@ export const useVirtualScroll = (() => {
       bus.emit('scroll', y)
       bus.emit('resize')
       setBounds()
+      y.lerp = y.value
     }, 0)
   }
 
