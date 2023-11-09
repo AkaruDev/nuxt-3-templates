@@ -21,6 +21,7 @@
       />
       <nuxt-img
         v-show="isVisible"
+        ref="img"
         :class="`AppImage-image --${loading}`"
         :src="url"
         :alt="alt"
@@ -94,12 +95,18 @@ const props = defineProps({
 })
 
 const el = ref()
+const img = ref()
 
 const onLoad = () => {
   el.value?.querySelector('.AppImage-image:not(.--loaded,.--placeholder)')?.classList?.add("--loaded")
 }
 
 const isVisible = ref(false)
+
+onMounted(() => {
+  // Fix img already loaded and does not emit load event
+  if (img?.value?.$el?.complete) onLoad()
+})
 
 const onIntersectionObserver = ([{ isIntersecting }]) => {
   if (isIntersecting && !isVisible.value) {
