@@ -81,6 +81,11 @@ const props = defineProps({
     type: Number,
     default: 2
   },
+  orientation: {
+    type: String,
+    default: 'horizontal',
+    validator: (value) => ['horizontal', 'vertical'].includes(value),
+  },
 })
 
 // Define emits events
@@ -93,13 +98,13 @@ const emit = defineEmits(['ready', 'change', 'press', 'release'])
 // Refs
 const el = ref()
 const dragging = ref(false)
-const dragzone = ref('dragzone')
+const dragzone = ref()
 const index = ref(0);
 const isInit = ref(false)
 const slideItems = ref('items')
 const slots = useSlots()
 const touchDevice = ref(false)
-const wrapper = ref('wrapper')
+const wrapper = ref()
 
 // Data
 const directions = {
@@ -108,6 +113,7 @@ const directions = {
 }
 let animation = gsap.timeline()
 let currentX = 0
+let currentY = 0
 let draggable = null
 let ease = 0.1
 let itemWidth = 0
@@ -120,8 +126,18 @@ let slides = []
 let total = 0
 let trigger = null
 let viewWidth = 0
+let viewHeight = 0
 let wrap = null
 let wrapWidth = 0
+let wrapHeight = 0
+
+const orientations = {
+  horizontal: 'horizontal',
+  vertical: 'vertical',
+}
+const isHorizontal = computed(() => {
+  return props.orientation === orientations.horizontal
+})
 
 
 // Intersection Observer
@@ -149,6 +165,7 @@ const onLeave = () => {
 onMounted(() => {
   window.addEventListener('resize', onResize)
   gsap.ticker.add(onTick)
+
 })
 
 onUnmounted(() => {
@@ -158,7 +175,6 @@ onUnmounted(() => {
 })
 
 const init = () => {
-  if (isInit.value) return
   proxy = document.createElement('div')
   trigger = slots.dragzone ? dragzone.value : wrapper.value
 
@@ -168,6 +184,7 @@ const init = () => {
 
   isInit.value = true
   emit(EVENT_READY, slides)
+  updateProgress()
 }
 
 const setSlides = () => {
@@ -179,12 +196,15 @@ const setSlides = () => {
   itemsSorted.unshift(last)
 
   total = itemsSorted.length
-  wrapWidth = 0
-  itemHeight = 0
 
-  viewWidth = wrapper.value.getBoundingClientRect().width
+  // Set widths, heights
+  const wrapperBounds = wrapper.value.getBoundingClientRect()
+  viewWidth = wrapperBounds.width
+  viewHeight = wrapperBounds.height
   itemWidth = itemsSorted?.[0]?.offsetWidth || 0
+  itemHeight = itemsSorted?.[0]?.offsetHeight || 0
   wrapWidth = itemWidth * total
+  wrapHeight = itemHeight * total
 
   // Loop items and create slides object
   slides = []
@@ -193,11 +213,16 @@ const setSlides = () => {
     item.setAttribute('data-index', i)
 
     const bounds = item.getBoundingClientRect()
-    itemHeight = bounds.height > itemHeight ? bounds.height : itemHeight
+    if (isHorizontal.value) {
+      itemHeight = bounds.height > itemHeight ? bounds.height : itemHeight
+    } else {
+      itemWidth = bounds.width > itemWidth ? bounds.width : itemWidth
+    }
 
     const slideProgress = (i + 1) / total
     const x = bounds.width * (i + 1)
-    const position = { x }
+    const y = bounds.height * (i + 1)
+    const position = { x, y }
     const slide = {
       el: item,
       bounds,
@@ -205,40 +230,71 @@ const setSlides = () => {
       position
     }
 
-    gsap.set(item, { position: 'absolute', x: slide.position.x, })
+    if (isHorizontal.value) {
+      gsap.set(item, { position: 'absolute', x: slide.position.x, })
+    } else {
+      gsap.set(item, { position: 'absolute', y: slide.position.y, })
+    }
 
     slides.push(slide)
   })
 
-  gsap.set(el.value, { height: itemHeight })
-
-  if (props.infinite) {
-    gsap.set(wrapper.value, {
-      x: -itemWidth * props.offsetFactor
-    })
+  if (isHorizontal.value) {
+    gsap.set(el.value, { height: itemHeight })
+  } else {
+    gsap.set(el.value, { width: itemWidth })
   }
 
-  wrap = gsap.utils.wrap(0, wrapWidth)
-  max = wrapWidth - viewWidth
+  if (props.infinite) {
+    if (isHorizontal.value) {
+      gsap.set(wrapper.value, { x: -itemWidth * props.offsetFactor })
+    } else {
+      gsap.set(wrapper.value, { y: -itemHeight * props.offsetFactor })
+    }
+  }
+
+  if (isHorizontal.value) {
+    wrap = gsap.utils.wrap(0, wrapWidth)
+    max = wrapWidth - viewWidth
+  } else {
+    wrap = gsap.utils.wrap(0, wrapHeight)
+    max = wrapHeight - viewHeight
+  }
+}
+
+const modifyPosition = (value, target, wrapBounds) => {
+  const i = parseInt(target.dataset.index)
+  const modulo = parseInt(value) % wrapBounds
+  const to = props.infinite ? (`${modulo}px`) : value
+  slides[i].progress = modulo / wrapBounds
+  return to
 }
 
 const setAnimation = () => {
   animation.kill()
   animation = gsap.timeline({ paused: true })
 
-  animation.to(slideItems.value, {
-    duration: 1,
-    x: `+=${props.infinite ? wrapWidth : max}`,
-    ease: 'none',
-    modifiers: {
-      x: (x, target) => {
-        const i = parseInt(target.dataset.index)
-        const modulo = parseInt(x) % wrapWidth
-        const xTo = props.infinite ? (`${modulo}px`) : x
-        slides[i].progress = modulo / wrapWidth
-        return xTo
+  const value = isHorizontal.value ?
+    {
+      x: `+=${props.infinite ? wrapWidth : max}`,
+      modifiers: {
+        x: (x, target) => {
+          return modifyPosition(x, target, wrapWidth)
+        }
+      }
+    } : {
+      y: `+=${props.infinite ? wrapHeight : max}`,
+      modifiers: {
+        y: (y, target) => {
+          return modifyPosition(y, target, wrapHeight)
+        }
       }
     }
+
+  animation.to(slideItems.value, {
+    ...value,
+    duration: 1,
+    ease: 'none',
   })
 }
 
@@ -250,7 +306,7 @@ const setDraggable = () => {
 
 const getDraggableOptions = () => {
   let options = {
-    type: 'x',
+    type: isHorizontal.value ? 'x' : 'y',
     trigger,
     edgeResistance: 0.0,
     dragResistance: 0.0,
@@ -274,7 +330,7 @@ const getDraggableOptions = () => {
       throwProps: true,
       edgeResistance: 0.0,
       dragResistance: 0.0,
-      bounds: { minX: 0, maxX: -max },
+      bounds: isHorizontal.value ? { minX: 0, maxX: -max } : { minY: 0, maxY: -max },
       throwResistance: 0.5,
       maxDuration: 0.5,
       overshootTolerance: 0,
@@ -286,11 +342,20 @@ const getDraggableOptions = () => {
   }
 
   if (props.hasSnap) {
-    options.snap = {
-      x: x => {
-        return Math.round(x / itemWidth) * itemWidth
+    if (isHorizontal.value) {
+      options.snap = {
+        x: x => {
+          return Math.round(x / itemWidth) * itemWidth
+        }
+      }
+    } else {
+      options.snap = {
+        y: y => {
+          return Math.round(y / itemHeight) * itemHeight
+        }
       }
     }
+
   }
 
   return options
@@ -308,16 +373,22 @@ const onRelease = () => {
 // Progress
 const updateProgress = () => {
   if (!draggable?.[0]) return
+
+  const value = isHorizontal.value ? draggable[0].x : draggable[0].y
+  const wrapBounds = isHorizontal.value ? wrapWidth : wrapHeight
   if (props.infinite) {
-    currentX = draggable[0].x
-    progress = (wrap(draggable[0].x) / wrapWidth).toPrecision(8)
+    currentX = value
+    currentY = value
+    progress = (wrap(value) / wrapBounds).toPrecision(8)
+
     animation.progress(progress)
 
     const betweenLastAndFirst = (1 / total) * 0.5
     index.value = progress < betweenLastAndFirst ? 0 : total - Math.round(progress * total)
   } else {
-    x = draggable[0].x
-    progress = clamp((draggable[0].x / -max), 0, 1)
+    x = value
+    y = value
+    progress = clamp((value / -max), 0, 1)
     index.value = Math.round((total - 1) * progress)
   }
 
@@ -328,14 +399,17 @@ const updateProgress = () => {
   })
 }
 
-const setX = ({ x }) => {
+const setPosition = ({ x, y }) => {
   currentX = x
+  currentY = y
 
   const currentDrag = draggable?.[0] || null
   if (!currentDrag) return
-  gsap.set(currentDrag.target, { x })
+  const value = isHorizontal.value ? currentDrag.x : currentDrag.y
+  const wrapBounds = isHorizontal.value ? wrapWidth : wrapHeight
+  gsap.set(currentDrag.target, { x, y })
   currentDrag.update()
-  progress = (wrap(currentDrag.x) / wrapWidth).toPrecision(8)
+  progress = (wrap(value) / wrapBounds).toPrecision(8)
   animation.progress(progress)
 
   index.value = (total - 1) - Math.ceil(progress * total)
@@ -363,10 +437,15 @@ const updateSlider = () => {
 }
 
 const updateAutoplay = () => {
-  const x = (draggable[0].x - (props.speed * props.direction)) + 0.001 // Fix for weird trembling movement
-  gsap.set(draggable[0].target, {
-    x
-  })
+  const fixJiggle = 0.001 // Fix for weird trembling movement
+  if (isHorizontal.value) {
+    const x = (draggable[0].x - (props.speed * props.direction)) + fixJiggle // Fix for weird trembling movement
+    gsap.set(draggable[0].target, { x })
+  } else {
+    const y = (draggable[0].y - (props.speed * props.direction)) + fixJiggle // Fix for weird trembling movement
+    gsap.set(draggable[0].target, { y })
+  }
+
   draggable[0].update()
 
   updateProgress()
@@ -376,7 +455,7 @@ const updateAutoplay = () => {
 
 // Nav
 const getCurrentIndex = () => {
-  return Math.round(currentX / itemWidth)
+  return isHorizontal.value ? Math.round(currentX / itemWidth) : Math.round(currentY / itemHeight)
 }
 
 /**
@@ -407,15 +486,17 @@ const prev = (duration = 1, ease = 'power3.out') => {
  * @param {String} ease from gsap
  */
 const goTo = (index, direction = 0, duration = 1, ease = 'power3.out') => {
-  const target = { currentX }
+  const target = { currentX, currentY }
   const diff = index - getCurrentIndex()
   const indexDiffDirection = diff === 0 ? 1 : -1
   const x = (index * itemWidth * indexDiffDirection) + (itemWidth * direction)
+  const y = (index * itemHeight * indexDiffDirection) + (itemHeight * direction)
   gsap.to(target, {
     currentX: x,
+    currentY: y,
     duration,
     onUpdate: () => {
-      setX({ x: target.currentX })
+      setPosition({ x: target.currentX, y: target.currentY })
       updateProgress()
     },
     ease
