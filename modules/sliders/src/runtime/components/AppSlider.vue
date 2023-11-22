@@ -175,6 +175,7 @@ onUnmounted(() => {
 })
 
 const init = () => {
+  if (isInit.value) return
   proxy = document.createElement('div')
   trigger = slots.dragzone ? dragzone.value : wrapper.value
 
@@ -386,8 +387,6 @@ const updateProgress = () => {
     const betweenLastAndFirst = (1 / total) * 0.5
     index.value = progress < betweenLastAndFirst ? 0 : total - Math.round(progress * total)
   } else {
-    x = value
-    y = value
     progress = clamp((value / -max), 0, 1)
     index.value = Math.round((total - 1) * progress)
   }
