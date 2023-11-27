@@ -198,6 +198,14 @@ class Formatter {
     return number
   }
 
+  formatText (text, { removeWrappingPTag = false, ellispsis } = {}) {
+    if (Array.isArray(text)) {
+      return this.formatRichText(text, { removeWrappingPTag, ellispsis })
+    } else {
+      return this.formatKeyText(text, { ellispsis })
+    }
+  }
+
   formatKeyText (text, { ellispsis } = {}) {
     if (!text) { return undefined }
 
