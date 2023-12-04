@@ -86,6 +86,10 @@ const props = defineProps({
     default: 'horizontal',
     validator: (value) => ['horizontal', 'vertical'].includes(value),
   },
+  sortOffsetBy1: {
+    type: Boolean,
+    default: true
+  },
 })
 
 // Define emits events
@@ -165,7 +169,6 @@ const onLeave = () => {
 onMounted(() => {
   window.addEventListener('resize', onResize)
   gsap.ticker.add(onTick)
-
 })
 
 onUnmounted(() => {
@@ -193,8 +196,11 @@ const setSlides = () => {
 
   // Reorder
   const itemsSorted = [...slideItems.value]
-  const last = itemsSorted.pop()
-  itemsSorted.unshift(last)
+  if (props.sortOffsetBy1) {
+    const last = itemsSorted.pop()
+    itemsSorted.unshift(last)
+  }
+
 
   total = itemsSorted.length
 
@@ -387,6 +393,8 @@ const updateProgress = () => {
     const betweenLastAndFirst = (1 / total) * 0.5
     index.value = progress < betweenLastAndFirst ? 0 : total - Math.round(progress * total)
   } else {
+    currentX = value
+    currentY = value
     progress = clamp((value / -max), 0, 1)
     index.value = Math.round((total - 1) * progress)
   }
