@@ -68,8 +68,8 @@ class Formatter {
           alt,
           ...(includeDimensions
             ? {
-              width: dimensions.width,
-              height: dimensions.height
+              width: dimensions?.width,
+              height: dimensions?.height
             }
             : {})
         }
