@@ -295,6 +295,23 @@ class Formatter {
       ...link
     }
   }
+
+  formatAlternates (document) {
+    return document?.alternate_languages?.map(item => {
+      const route = this.$prismic.client.routes.find(r => r.type === item.type)
+      const lang = item?.lang?.split("-")?.[0] || "fr"
+      let path = route?.path || ''
+      if (path.includes(":uid")) {
+        path = path.replace(":uid", item?.uid)
+      }
+      const toLang = lang === "fr" ? "" : `/${lang}`
+      const to = `${toLang}${path}`
+      return {
+        to,
+        lang,
+      }
+    }) || []
+  }
 }
 
 export default new Formatter()
