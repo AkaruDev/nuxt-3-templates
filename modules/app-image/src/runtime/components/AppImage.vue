@@ -15,9 +15,9 @@
         :fit="fit"
         :width="width"
         :height="height"
-        :loading="loading"
-        :sizes="sizes"
-        :modifiers="{ blur: 500 }"
+        loading="eager"
+        sizes="small:10vw"
+        :modifiers="{ blur: 2000 }"
       />
       <nuxt-img
         v-show="isVisible"
@@ -30,7 +30,7 @@
         :quality="quality"
         :loading="loading"
         :preload="preload"
-        :sizes="sizes"
+        :sizes="getSizes"
         :modifiers="modifiers"
         :fit="fit"
         @load="onLoad"
@@ -58,7 +58,7 @@ const props = defineProps({
   },
   width: {
     type: Number,
-    default: undefined
+    default: 1440
   },
   height: {
     type: Number,
@@ -81,7 +81,7 @@ const props = defineProps({
   },
   sizes: {
     type: String,
-    default: "small:100vw medium:100vw large:66vw"
+    default: undefined
   },
   quality: {
     type: Number,
@@ -96,6 +96,11 @@ const props = defineProps({
 
 const el = ref()
 const img = ref()
+
+const getSizes = computed(() => {
+  const size = (props.width / 1440) * 100
+  return props.sizes || `small:100vw medium:${size}vw large:${size}vw xxxlarge:${size}vw`
+})
 
 const onLoad = () => {
   el.value?.querySelector('.AppImage-image:not(.--loaded,.--placeholder)')?.classList?.add("--loaded")
