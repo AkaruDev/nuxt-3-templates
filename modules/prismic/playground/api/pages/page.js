@@ -1,4 +1,4 @@
-import Formatter from '../utils/formatter'
+import formatter from '../utils/formatter'
 
 import usePrismicApi from '../prismic'
 
@@ -8,7 +8,7 @@ const getPage = async (uid) => {
   const { prismic, lang } = usePrismicApi()
   if (prismic.client === undefined) return null
 
-  Formatter.setPrismic(prismic)
+  formatter.setPrismic(prismic)
   const document = await prismic.client.getByUID(
     'page',
     uid,
@@ -26,7 +26,7 @@ const getPage = async (uid) => {
 
   // Format document here
   const hero = {
-    title: Formatter.formatKeyText(document.data?.hero?.[0].title)
+    title: formatter.formatKeyText(document.data?.hero?.[0].title)
   }
 
   // Return formated content

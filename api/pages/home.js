@@ -1,4 +1,4 @@
-import Formatter from '../utils/formatter'
+import formatter from '../utils/formatter'
 
 import usePrismicApi from '../prismic'
 
@@ -24,9 +24,9 @@ const getHome = async () => {
 
   // Format document here
   const hero = {
-    title: Formatter.formatKeyText(document.data?.hero?.[0].title),
+    title: formatter.formatKeyText(document.data?.hero?.[0].title),
     link: document.data?.hero?.[0].link,
-    text: Formatter.formatRichText(document.data?.hero?.[0].text),
+    text: formatter.formatRichText(document.data?.hero?.[0].text),
     text2: document.data?.hero?.[0].text
   }
 

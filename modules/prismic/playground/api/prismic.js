@@ -1,6 +1,6 @@
 import { createPrismic, usePrismic } from '@prismicio/vue'
 import { useRuntimeConfig } from '#app'
-import Formatter from './utils/formatter'
+import formatter from './utils/formatter'
 
 import routes from "../app/prismic/routes"
 
@@ -18,7 +18,7 @@ const usePrismicApi = () => {
   const endpoint = config?.public?.endpoint
 
   const prismic = usePrismic() || createPrismic({ endpoint, clientConfig: { routes }, richTextSerializer })
-  Formatter.setPrismic(prismic)
+  formatter.setPrismic(prismic)
 
   return { prismic, lang }
 }
