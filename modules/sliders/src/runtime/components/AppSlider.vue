@@ -252,12 +252,10 @@ const setSlides = () => {
     gsap.set(el.value, { width: itemWidth })
   }
 
-  if (props.infinite) {
-    if (isHorizontal.value) {
-      gsap.set(wrapper.value, { x: -itemWidth * props.offsetFactor })
-    } else {
-      gsap.set(wrapper.value, { y: -itemHeight * props.offsetFactor })
-    }
+  if (isHorizontal.value) {
+    gsap.set(wrapper.value, { x: -itemWidth * props.offsetFactor })
+  } else {
+    gsap.set(wrapper.value, { y: -itemHeight * props.offsetFactor })
   }
 
   if (isHorizontal.value) {
@@ -283,14 +281,14 @@ const setAnimation = () => {
 
   const value = isHorizontal.value ?
     {
-      x: `+=${props.infinite ? wrapWidth : max}`,
+      x: `+=${props.infinite ? wrapWidth : -max}`,
       modifiers: {
         x: (x, target) => {
           return modifyPosition(x, target, wrapWidth)
         }
       }
     } : {
-      y: `+=${props.infinite ? wrapHeight : max}`,
+      y: `+=${props.infinite ? wrapHeight : -max}`,
       modifiers: {
         y: (y, target) => {
           return modifyPosition(y, target, wrapHeight)
@@ -386,7 +384,7 @@ const updateProgress = () => {
   if (props.infinite) {
     currentX = value
     currentY = value
-    progress = (wrap(value) / wrapBounds).toPrecision(8)
+    progress = ((wrap?.(value) / wrapBounds) || 0).toPrecision(8)
 
     animation.progress(progress)
 
@@ -416,7 +414,7 @@ const setPosition = ({ x, y }) => {
   const wrapBounds = isHorizontal.value ? wrapWidth : wrapHeight
   gsap.set(currentDrag.target, { x, y })
   currentDrag.update()
-  progress = (wrap(value) / wrapBounds).toPrecision(8)
+  progress = ((wrap?.(value) / wrapBounds) || 0).toPrecision(8)
   animation.progress(progress)
 
   index.value = (total - 1) - Math.ceil(progress * total)
