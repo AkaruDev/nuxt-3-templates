@@ -1,7 +1,7 @@
 <template>
   <div
     ref="el"
-    v-intersection-observer="[onIntersectionObserver]"
+    v-intersection-observer="[onIntersectionObserver, { rootMargin: '0px 0px 200px 0px' }]"
     class="AppImage"
     :style="{ aspectRatio: width / height }"
   >
@@ -18,6 +18,7 @@
         loading="eager"
         sizes="small:10vw"
         :modifiers="{ blur: 2000 }"
+        :style="{ objectFit: fit }"
       />
       <nuxt-img
         v-show="isVisible"
@@ -33,6 +34,7 @@
         :sizes="getSizes"
         :modifiers="modifiers"
         :fit="fit"
+        :style="{ objectFit: fit }"
         @load="onLoad"
       />
     </div>
@@ -127,6 +129,11 @@ const onIntersectionObserver = ([{ isIntersecting }]) => {
   width: 100%;
 
   user-select: none;
+
+  transform: rotate(0.001deg);
+
+  z-index: 0;
+
 }
 
 .AppImage:deep(.AppImage-image) {
@@ -136,8 +143,6 @@ const onIntersectionObserver = ([{ isIntersecting }]) => {
 
   top: 0;
   left: 0;
-
-  object-fit: v-bind('props.fit');
 }
 
 .AppImage:deep(.AppImage-image.--lazy) {
@@ -147,16 +152,19 @@ const onIntersectionObserver = ([{ isIntersecting }]) => {
 
 .AppImage:deep(.AppImage-image.--placeholder) {
   opacity: 1;
+  z-index: 0;
 }
 
 .AppImage:deep(.AppImage-image.--loaded.--lazy) {
   opacity: 1;
   transition: 0.3s opacity cubic-bezier(0.65, 0, 0.35, 1);
+  z-index: 1;
 }
 
 .AppImage-container {
   position: relative;
   width: 100%;
   height: 100%;
+
 }
 </style>
