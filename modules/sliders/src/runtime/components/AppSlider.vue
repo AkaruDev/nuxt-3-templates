@@ -201,7 +201,6 @@ const setSlides = () => {
     itemsSorted.unshift(last)
   }
 
-
   total = itemsSorted.length
 
   // Set widths, heights
@@ -306,6 +305,7 @@ const setAnimation = () => {
 // Draggable
 const setDraggable = () => {
   const options = getDraggableOptions()
+  draggable?.[0]?.kill()
   draggable = Draggable.create(proxy, options)
 }
 
@@ -494,6 +494,11 @@ const goTo = (index, direction = 0, duration = 1, ease = 'power3.out') => {
   const target = { currentX, currentY }
   const diff = index - getCurrentIndex()
   const indexDiffDirection = diff === 0 ? 1 : -1
+
+  if (!props.infinite && index === 0 && direction === directions.previous) return
+  if (!props.infinite && index <= ((total - 2 - props.offsetFactor) * directions.next) && direction === directions.next) return
+
+
   const x = (index * itemWidth * indexDiffDirection) + (itemWidth * direction)
   const y = (index * itemHeight * indexDiffDirection) + (itemHeight * direction)
   gsap.to(target, {
