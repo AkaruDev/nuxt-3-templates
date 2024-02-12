@@ -3,6 +3,7 @@
     ref="el"
     class="AppSlider"
     :class="{ '--no-drag': !hasDrag }"
+    :tabindex="tabIndex"
   >
     <div ref="dragzone">
       <slot name="dragzone" />
@@ -88,8 +89,12 @@ const props = defineProps({
   },
   sortOffsetBy1: {
     type: Boolean,
-    default: true
+    default: true,
   },
+  tabIndex: {
+    type: Number,
+    default: 1,
+  }
 })
 
 // Define emits events
@@ -168,12 +173,14 @@ const onLeave = () => {
 //
 onMounted(() => {
   window.addEventListener('resize', onResize)
+  window.addEventListener('keydown', onKeyboard)
   gsap.ticker.add(onTick)
 })
 
 onUnmounted(() => {
   isInit.value = false
   gsap.ticker.remove(onTick)
+  window.removeEventListener('keydown', onKeyboard)
   window.removeEventListener('resize', onResize)
 })
 
@@ -513,6 +520,19 @@ const goTo = (index, direction = 0, duration = 1, ease = 'power3.out') => {
   })
 }
 
+const onKeyboard = (event) => {
+  if (el.value !== document.activeElement || !isVisible.value) return
+  const keyName = event.key
+
+  const nextKeys = ["ArrowLeft", "q"]
+  const prevKeys = ["ArrowRight", "d"]
+  if (nextKeys.includes(keyName)) {
+    next()
+  } else if (prevKeys.includes(keyName)) {
+    prev()
+  }
+}
+
 // Resize
 const setTouchDevice = () => {
   touchDevice.value = window.matchMedia?.('(hover: none) and (pointer: coarse)')?.matches || false
@@ -533,6 +553,10 @@ defineExpose({ prev, next, goTo })
 <style scoped>
 .AppSlider {
   position: relative;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .AppSlider.--no-drag {

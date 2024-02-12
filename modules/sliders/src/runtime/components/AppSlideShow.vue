@@ -3,6 +3,7 @@
     ref="el"
     class="AppSlideShow"
     :class="{ '--inactive': items.length < 2 }"
+    :tabindex="tabIndex"
   >
     <div class="AppSlideShow-items">
       <div
@@ -52,6 +53,10 @@ const props = defineProps({
   swipe: {
     type: Boolean,
     default: true
+  },
+  tabIndex: {
+    type: Number,
+    default: 1,
   }
 })
 
@@ -66,6 +71,7 @@ const index = ref(0)
 const slideItems = ref('items')
 const pause = ref(true)
 const progress = ref(0)
+const isVisible = ref(false)
 
 // Data
 const directions = {
@@ -89,10 +95,12 @@ useIntersectionObserver(
 )
 
 const onEnter = () => {
+  isVisible.value = true
   pause.value = false
   tls?.autoplay?.play()
 }
 const onLeave = () => {
+  isVisible.value = false
   pause.value = true
   tls?.autoplay?.pause()
 }
@@ -100,9 +108,11 @@ const onLeave = () => {
 // Lifecycle
 onUnmounted(() => {
   tls.autoplay.kill()
+  window.removeEventListener('keydown', onKeyboard)
 })
 
 onMounted(() => {
+  window.addEventListener('keydown', onKeyboard)
   play(directions.forward)
 })
 
@@ -150,6 +160,19 @@ const set = (direction = 0) => {
   index.value = loop(index.value, 0, props.items.length - 1)
   emit(EVENT_CHANGE, { oldValue, newValue: index.value })
   play(direction)
+}
+
+const onKeyboard = (event) => {
+  if (el.value !== document.activeElement || !isVisible.value) return
+  const keyName = event.key
+
+  const nextKeys = ["ArrowRight", "d"]
+  const prevKeys = ["ArrowLeft", "q"]
+  if (nextKeys.includes(keyName)) {
+    next()
+  } else if (prevKeys.includes(keyName)) {
+    prev()
+  }
 }
 
 // Swipe
