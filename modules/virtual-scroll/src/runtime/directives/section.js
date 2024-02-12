@@ -25,21 +25,20 @@ export default (nuxtApp) => {
     mounted (el) {
       const { $virtualScroll } = nuxtApp
 
-      if (!$virtualScroll.active.value) return
-
-      // Optimize transform
-      el.style.willChange = 'transform'
 
       let isVisible = false
 
       // Listen to scroll event and update element transform on each call
-      el.__scroll_callback__ = ({ lerp }) => {
-
+      el.setPosition = () => {
         if (!$virtualScroll.active.value) {
-          el.style.transform = ``
-          el.style.pointerEvents = ''
-          el.style.opacity = ''
+          if (el.style.transform !== ``) {
+            el.style.transform = ``
+            el.style.pointerEvents = ''
+            el.style.opacity = ''
+            el.style.willChange = ''
+          }
         } else {
+          el.style.willChange = 'transform'
 
           const { top, bottom } = el.getBoundingClientRect()
           let offset = {
@@ -47,9 +46,9 @@ export default (nuxtApp) => {
             yStop: bottom - getTranslate(el).y + SECTION_OFFSET_MARGIN
           }
 
-          if (lerp > offset.yStart && lerp < offset.yStop) {
+          if ($virtualScroll.y.lerp > offset.yStart && $virtualScroll.y.lerp < offset.yStop) {
 
-            el.style.transform = `matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,0,${(lerp * -1)},0,1)`
+            el.style.transform = `matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,0,${($virtualScroll.y.lerp * -1)},0,1)`
 
             if (!isVisible) {
               isVisible = true
@@ -65,8 +64,16 @@ export default (nuxtApp) => {
           }
         }
       }
+      el.onScroll = () => {
+        el.setPosition()
+      }
 
-      $virtualScroll.on('scroll', el.__scroll_callback__)
+      el.onResize = () => {
+        el.setPosition()
+      }
+
+      $virtualScroll.on('scroll', el.onScroll)
+      $virtualScroll.on('resize', el.onResize)
     },
     unmounted (el) {
       // Get virtualScroll plugin

@@ -45,7 +45,7 @@ h1 {
 }
 
 .Page {
-  padding: 30px 0 100vh 30px;
+  padding: 30px 30px 100vh 30px;
 
 }
 

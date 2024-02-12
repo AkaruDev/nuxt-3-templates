@@ -48,11 +48,46 @@ export const useVirtualScroll = (() => {
    * @param {Element} el
    */
   const start = (el) => {
+
     container.value = el
     // Check if pointer is a mouse
     active.value = window.matchMedia("(pointer:fine)").matches
     if (active.value) {
       setBounds()
+
+      initVirtualScroll()
+
+      // Key events
+      window.addEventListener('keydown', onKeyDown, {
+        capture: false,
+        passive: true
+      })
+
+      gsap.ticker.add(onTick)
+    } else {
+
+      window.addEventListener('scroll', onScroll, {
+        capture: false,
+        passive: true
+      })
+    }
+
+    // Resize
+    resizeObserver = useResizeObserver(container.value, onResize)
+    onResize()
+
+  }
+
+  const initVirtualScroll = () => {
+    if (!virtualScroll) {
+      Object.assign(document.body.style, {
+        position: 'fixed',
+        top: '0px',
+        left: '0px',
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden'
+      })
 
       virtualScroll = new VirtualScroll({
         mouseMultiplier: navigator.platform.includes('Win') ? 1 : 0.4,
@@ -65,18 +100,7 @@ export const useVirtualScroll = (() => {
       virtualScroll.on(virtualScrollCallback)
 
 
-      // Resize
-      resizeObserver = useResizeObserver(container.value, onResize)
-      onResize()
-
-      // Key events
-      window.addEventListener('keydown', onKeyDown, {
-        capture: false,
-        passive: true
-      })
     }
-
-    gsap.ticker.add(onTick)
   }
 
   /**
@@ -103,6 +127,10 @@ export const useVirtualScroll = (() => {
   }
 
   const onTick = () => {
+    onScroll()
+  }
+
+  const onScroll = () => {
     setY()
     setDirection()
     bus.emit('scroll', y)
@@ -137,7 +165,6 @@ export const useVirtualScroll = (() => {
 
     if (isLocked.value) return
 
-
     scrollOf(e.deltaY * -1)
   }
 
@@ -166,33 +193,19 @@ export const useVirtualScroll = (() => {
   }
 
   const onResize = () => {
-    setTimeout(() => {
-      active.value = window.matchMedia("(pointer:fine)").matches
+    const newActiveValue = window.matchMedia("(pointer:fine)").matches
+    if (newActiveValue !== active.value) {
+      destroy()
+      window.scrollTo(0, 0)
+      y.value = 0
+      y.lerp = y.value
+      start(container.value)
+    }
 
-      if (active.value) {
-        Object.assign(document.body.style, {
-          position: 'fixed',
-          top: '0px',
-          left: '0px',
-          width: '100%',
-          height: '100%',
-          overflow: 'hidden'
-        })
-      } else {
-        window.scrollTo(0, 0)
-        Object.assign(document.body.style, {
-          position: '',
-          top: '',
-          left: '',
-          width: '',
-          height: '',
-          overflow: ''
-        })
-      }
+    setTimeout(() => {
 
       bus.emit('scroll', y)
       bus.emit('resize')
-      setBounds()
       if ((y.lerp - y.value) >= bounds.value) {
         y.lerp = y.value
       }
@@ -337,10 +350,22 @@ export const useVirtualScroll = (() => {
   }
 
   const destroy = () => {
+    Object.assign(document.body.style, {
+      position: '',
+      top: '',
+      left: '',
+      width: '',
+      height: '',
+      overflow: ''
+    })
+
     gsap.ticker.remove(onTick)
     virtualScroll?.destroy()
-    resizeObserver?.disconnect()
+    virtualScroll = null
+    resizeObserver?.stop()
+    resizeObserver = null
     window.removeEventListener('keydown', onKeyDown)
+    window.removeEventListener('scroll', onScroll)
   }
 
   /**
