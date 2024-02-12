@@ -2,6 +2,12 @@
 
 Add PageLoader and PageTransition components for preloading assets before entering the site.
 
+## How to use in every pages
+```
+// Last line in your setup function
+definePageMeta(useTransition())
+```
+
 ## How to use with featues/viewport-observer
 In the configs/viewport-observer set active to false.
 In PageLoader.vue set active value just before hide is complete.
