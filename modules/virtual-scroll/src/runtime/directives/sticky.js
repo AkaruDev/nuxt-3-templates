@@ -64,6 +64,8 @@ export default () => {
   const onScroll = (sticky) => {
     if (!sticky.options.active) return
 
+    console.info(sticky.elBounds.top - sticky.parentBounds.top)
+
     const parentTop = sticky.parentBounds.top - $virtualScroll.y.lerp
     const elTop = sticky.elBounds.top - $virtualScroll.y.lerp
 
@@ -91,21 +93,24 @@ export default () => {
         sendProgress(sticky)
       }
     } else {
-      sticky.el.style.transform = ''
-      const isInBounds = parentTop <= sticky.options.marge && parentTop + (sticky.parentBounds.height - sticky.elBounds.height * 2) >= sticky.options.marge
+      const isInBounds =
+        parentTop <= 0
+        && parentTop + sticky.parentBounds.height - sticky.elBounds.height >= 0
       if (isInBounds) {
         sticky.el.style.position = 'fixed'
+        sticky.el.style.transform = `translate3d(0,0,0)`
 
-        sticky.progress = (sticky.parentBounds.top - elTop) / (sticky.parentBounds.height - sticky.elBounds.height)
+        sticky.progress = (sticky.elBounds.top - elTop) / (sticky.parentBounds.height - sticky.elBounds.height)
         if (isNaN(sticky.progress)) sticky.progress = 0
 
         sticky.progress = clamp(sticky.progress, 0, 1)
         sendProgress(sticky)
       } else {
+        console.info("cc")
         sticky.el.style.position = ''
 
         if (parentTop <= 0) {
-          sticky.el.style.transform = `translate3d(0,${(sticky.parentBounds.height) - (sticky.elBounds.height * 2)}px,0)`
+          sticky.el.style.transform = `translate3d(0,${sticky.parentBounds.height - sticky.elBounds.height}px,0)`
         }
 
         if (sticky.timeoutId) clearTimeout(sticky.timeoutId)
