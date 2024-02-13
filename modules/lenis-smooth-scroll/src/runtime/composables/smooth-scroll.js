@@ -53,7 +53,7 @@ export const useSmoothScroll = (() => {
         lenis = new Lenis({
           autoResize: false,
           lerp: 0.07,
-          wheelMultiplier: 2
+          wheelMultiplier: 1,
         })
         gsap.ticker.add(onTick)
         gsap.ticker.lagSmoothing(0)

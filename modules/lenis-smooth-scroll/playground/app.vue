@@ -13,12 +13,16 @@
 }
 
 html {
+  scrollbar-width: none;
+
   ::-webkit-scrollbar {
     width: 0;
     /* Remove scrollbar space */
     background: transparent;
     /* Optional: just make scrollbar invisible */
   }
+
+
 }
 
 html,

@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'Lenis smooth scroll',
+    description: 'Add module for using Lenis smooth scroll',
+    category: 'Scroll'
   },
   dependencies: [],
   devDependencies: ['@vueuse/core', 'gsap', '@studio-freight/lenis'],
-  files: ['modules/lenis-smooth-scroll/src', 'configs']
+  files: ['modules/lenis-smooth-scroll/src', 'app', 'configs']
 }
