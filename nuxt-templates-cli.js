@@ -6,5 +6,5 @@ module.exports = {
   },
   dependencies: ['@nuxt/image', 'sharp'],
   devDependencies: ['@vueuse/core', '@vueuse/components'],
-  files: ['modules/app-image/src', 'configs']
+  files: ['.yarnrc', 'modules/app-image/src', 'configs']
 }

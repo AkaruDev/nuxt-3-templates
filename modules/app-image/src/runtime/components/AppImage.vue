@@ -170,7 +170,7 @@ const onIntersectionObserver = ([{ isIntersecting }]) => {
 
 .AppImage:deep(.AppImage-image.--loaded.--lazy) {
   opacity: 1;
-  transition: 10.3s opacity cubic-bezier(0.65, 0, 0.35, 1);
+  transition: 0.3s opacity cubic-bezier(0.65, 0, 0.35, 1);
   z-index: 1;
 }
 
