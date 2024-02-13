@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'Robots',
+    description: 'Add a robots.txt file',
+    category: 'Hosting / Deployment'
   },
-  dependencies: [],
+  dependencies: ['@nuxtjs/robots'],
   devDependencies: [],
-  files: ['modules/my-feature/src', 'configs']
+  files: ['configs']
 }
