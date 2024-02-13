@@ -1,12 +1,9 @@
 <template>
   <div class="Page home">
     <h1>Home</h1>
-    <nuxt-link to="/page">
-      Go to page
-    </nuxt-link>
 
-    <AppImage v-if="dog" :url="dog" :width="300" :height="300" :style="{ width: '300px', height: '300px' }" placeholder="blur"/>
-    <AppImage v-if="dog" :url="dog" :width="300" :height="300" :style="{ width: '300px', height: '300px' }" loading="eager" placeholder="blur"/>
+    <AppImage v-if="dog" :url="dog" :width="300" :height="300" :style="{ width: '300px', height: '300px' }" loading="eager" placeholder="none"/>
+    <AppImage v-if="dog" :url="dog" :width="300" :height="300" :style="{ width: '300px', height: '300px' }" placeholder="none"/>
     <AppImage url="/doggo.jpg" :width="300" :height="300" :style="{ width: '300px', height: '300px' }" placeholder="blur"/>
   </div>
 </template>

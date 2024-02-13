@@ -4,7 +4,7 @@ module.exports = {
     description: 'Add image component',
     category: 'Components'
   },
-  dependencies: [],
-  devDependencies: ['@nuxt/image', '@vueuse/core', '@vueuse/components'],
+  dependencies: ['@nuxt/image', 'sharp --ignore-engines'],
+  devDependencies: ['@vueuse/core', '@vueuse/components'],
   files: ['modules/app-image/src', 'configs']
 }

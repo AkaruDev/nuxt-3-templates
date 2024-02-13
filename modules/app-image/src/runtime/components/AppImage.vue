@@ -6,18 +6,27 @@
     :style="{ aspectRatio: width / height }"
   >
     <div class="AppImage-container">
+
+      <!-- Prismic settings
+        :quality="10"
+        :modifiers="{ blur: 2000 }"
+      -->
+      <!-- IPX settings
+        :quality="100"
+        :modifiers="{ blur: 100 }"
+      -->
       <nuxt-img
         v-if="placeholder === 'blur'"
         :class="`AppImage-image --placeholder --${loading}`"
         :src="url"
         :alt="alt"
-        :quality="10"
         :fit="fit"
         :width="width"
         :height="height"
         loading="eager"
-        sizes="small:10vw"
-        :modifiers="{ blur: 2000 }"
+        sizes="xs:10vw"
+        :quality="100"
+        :modifiers="{ blur: 100 }"
         :style="{ objectFit: fit }"
       />
       <nuxt-img
@@ -99,6 +108,8 @@ const props = defineProps({
 const el = ref()
 const img = ref()
 
+const config = useRuntimeConfig()
+
 const getSizes = computed(() => {
   const designWidth = 1440
   const size = (props.width / designWidth) * 100
@@ -114,6 +125,8 @@ const isVisible = ref(false)
 onMounted(() => {
   // Fix img already loaded and does not emit load event
   if (img?.value?.$el?.complete) onLoad()
+
+  console.info(config)
 })
 
 const onIntersectionObserver = ([{ isIntersecting }]) => {
@@ -134,7 +147,6 @@ const onIntersectionObserver = ([{ isIntersecting }]) => {
   transform: rotate(0.001deg);
 
   z-index: 0;
-
 }
 
 .AppImage:deep(.AppImage-image) {
@@ -158,7 +170,7 @@ const onIntersectionObserver = ([{ isIntersecting }]) => {
 
 .AppImage:deep(.AppImage-image.--loaded.--lazy) {
   opacity: 1;
-  transition: 0.3s opacity cubic-bezier(0.65, 0, 0.35, 1);
+  transition: 10.3s opacity cubic-bezier(0.65, 0, 0.35, 1);
   z-index: 1;
 }
 
