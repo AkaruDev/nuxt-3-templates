@@ -1,8 +1,8 @@
 {
-  "name": "my-feature",
+  "name": "corgi",
   "version": "1.0.0",
   "description": "Page transitions",
-  "repository": "akaru/my-feature",
+  "repository": "akaru/corgi",
   "license": "MIT",
   "type": "module",
   "exports": {

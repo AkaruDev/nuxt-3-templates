@@ -1,8 +1,8 @@
 ## Setup
 
-Create a new branch with name like `features/my-feature`
+Create a new branch with name like `features/corgi`
 
-Replace folder name, config names `my-features` by the name of your new feature. 
+Replace folder name, config names `corgis` by the name of your new feature. 
 
 In `nuxt-templates.cli.js` fill the field corresponding to your new feature.
 

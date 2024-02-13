@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'Corgi',
+    description: 'Add 3D components utils',
+    category: '3D'
   },
   dependencies: [],
   devDependencies: [],
-  files: ['modules/my-feature/src', 'configs']
+  files: ['modules/corgi/src', 'configs']
 }
