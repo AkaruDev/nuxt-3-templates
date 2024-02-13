@@ -11,11 +11,13 @@ export default defineNuxtConfig(
             provider: "prismic",
             prismic: {},
             */
-            screens: { // Example of custom breakpoints
-                small: 768,
-                medium: 1080,
-                large: 1440,
-                xxxlarge: 2560,
+            screens: { // All Breakpoints exist, only values are modifiable  :(
+                xs: 768,
+                sm: 768,
+                md: 768,
+                lg: 1080,
+                xl: 1440,
+                xxl: 1920,
             },
         },
     }

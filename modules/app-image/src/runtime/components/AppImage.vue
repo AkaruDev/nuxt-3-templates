@@ -100,8 +100,9 @@ const el = ref()
 const img = ref()
 
 const getSizes = computed(() => {
-  const size = (props.width / 1440) * 100
-  return props.sizes || `small:100vw medium:${size}vw large:${size}vw xxxlarge:${size}vw`
+  const designWidth = 1440
+  const size = (props.width / designWidth) * 100
+  return props.sizes || `xs:100vw sm:100vw md:100vw lg:${size}vw xl:${size}vw xxl:${size}vw`
 })
 
 const onLoad = () => {
