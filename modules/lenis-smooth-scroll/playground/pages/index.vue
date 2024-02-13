@@ -1,5 +1,5 @@
 <template>
-  <div class="Page home">
+  <div class=" Home">
     <h1>Home</h1>
     <nuxt-link to="/page">
       Go to page
@@ -7,7 +7,3 @@
   </div>
 </template>
 
-<script setup>
-</script>
-
-<style scoped></style>

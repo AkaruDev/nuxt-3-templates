@@ -5,6 +5,6 @@ module.exports = {
     category: 'Feature category'
   },
   dependencies: [],
-  devDependencies: [],
-  files: ['modules/my-feature/src', 'configs']
+  devDependencies: ['@vueuse/core', 'gsap', '@studio-freight/lenis'],
+  files: ['modules/lenis-smooth-scroll/src', 'configs']
 }

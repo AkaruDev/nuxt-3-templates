@@ -1,8 +1,7 @@
-
 export default defineNuxtConfig(
     {
         modules: [
-            '@/modules/my-feature/src/module',
+            '@/modules/lenis-smooth-scroll/src/module',
         ]
     }
 )
