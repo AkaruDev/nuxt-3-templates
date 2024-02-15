@@ -503,7 +503,7 @@ const goTo = (index, direction = 0, duration = 1, ease = 'power3.out') => {
   const indexDiffDirection = diff === 0 ? 1 : -1
 
   if (!props.infinite && index === 0 && direction === directions.previous) return
-  if (!props.infinite && index <= ((total - 2 - props.offsetFactor) * directions.next) && direction === directions.next) return
+  if (!props.infinite && index === (total - 1) * direction && direction === directions.next) return
 
 
   const x = (index * itemWidth * indexDiffDirection) + (itemWidth * direction)
