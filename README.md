@@ -1,5 +1,8 @@
 ## TODO
 
+[ ] - Resources factory
+[ ] - Mouse event normalisé
+[ ] - Scroll event
 [ ] - Post process
 [ ] - Planes
 [ ] - HDRI
@@ -9,6 +12,5 @@
 [ ] - Debug utils
 [ ] - Camera resize
 [ ] - Custom shaders demo
-[ ] - Resources factory
 [ ] - Add pixel ratio based on quality (to determine with gpu tier for exemple)
 [ ] - Flowmap utils with offscreen canvas check OGL js implementation
