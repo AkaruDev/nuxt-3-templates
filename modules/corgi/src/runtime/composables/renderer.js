@@ -40,7 +40,7 @@ export default function useRenderer (options) {
   }
 
   /**
-   * Resize the renderer
+   *
    * @param {Number} width
    * @param {Number} height
    */
