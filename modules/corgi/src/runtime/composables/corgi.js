@@ -3,6 +3,9 @@ import useScene from "./scene"
 import useCamera from "./camera"
 import { ref } from "vue"
 
+import { useResizeObserver } from '@vueuse/core'
+import { gsap } from "gsap"
+
 /**
  *
  * @param {HTMLCanvasElement | OffscreenCanvas | void} canvas
@@ -15,29 +18,42 @@ export default function useCorgi (canvas) {
   const camera = useCamera()
   const ellapsed = ref(0)
 
+  // Methods
+
   /**
-   *
    * @param {Number} time - Total time ellapsed in seconds
    */
-  const render = (time) => {
+  const onTick = (time) => {
     ellapsed.value = time// TODO maybe call an update method with ellapsed time or store it un a time manager
+    render()
+  }
 
+  const render = () => {
     renderer.render(scene, camera)
   }
 
   /**
    * Resize to fit given size
-   * @param {Number} width
-   * @param {Number} height
    */
-  const resize = (width, height) => {
+  const onResize = () => {
+    const width = canvas?.clientWidth || 0
+    const height = canvas?.clientHeight || 0
     renderer.resize(width, height)
+
+    // TODO camera resize
   }
+
+  const unmount = () => {
+    gsap?.ticker?.remove(onTick)
+  }
+
+  // Observer
+  gsap.ticker.add(onTick)
+  useResizeObserver(canvas, onResize)
 
   return {
     scene,
     renderer,
-    render,
-    resize,
+    unmount,
   }
 }

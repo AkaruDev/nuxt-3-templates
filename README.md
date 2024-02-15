@@ -1,9 +1,12 @@
-## Setup
+## TODO
 
-Create a new branch with name like `features/corgi`
-
-Replace folder name, config names `corgis` by the name of your new feature. 
-
-In `nuxt-templates.cli.js` fill the field corresponding to your new feature.
-
-Describe the feature in this README
+[ ] - Post process
+[ ] - Planes
+[ ] - HDRI
+[ ] - Three points light preset
+[ ] - Shadow utils
+[ ] - Pixel to 3d size utils
+[ ] - Debug utils
+[ ] - Camera resize
+[ ] - Custom shaders demo
+[ ] - Resources factory
