@@ -20,11 +20,22 @@ import { gsap } from "gsap"
  * @param {HTMLCanvasElement | OffscreenCanvas | void} canvas
  * @returns {UseCorgi}
  */
-export default function useCorgi (canvas) {
+export default function useCorgi (canvas, quality = 2) {
 
-  const { scene, dispose: sceneDispose } = useScene()
-  const { renderer, render: rendererRender, resize: rendererResize, dispose: rendererDispose } = useRenderer({ canvas })
-  const { camera, resize: cameraResize } = useCamera()
+  const {
+    scene,
+    dispose: sceneDispose
+  } = useScene()
+  const {
+    renderer,
+    render: rendererRender,
+    resize: rendererResize,
+    dispose: rendererDispose,
+  } = useRenderer({ canvas })
+  const {
+    camera,
+    resize: cameraResize
+  } = useCamera()
   const ellapsed = ref(0)
 
   // Methods
@@ -40,6 +51,15 @@ export default function useCorgi (canvas) {
   const render = () => {
     rendererRender(scene, camera)
   }
+
+  // Set the quality of the render, may be used for to change shadow quality for exemple
+  // TODO make this a separete file with constant
+  const QUALITIES = {
+    BASIC: 0,
+    HIGH: 1,
+  }
+  const pixelRatio = quality === QUALITIES.HIGH ? 2 : 1
+  renderer?.setPixelRatio(pixelRatio)
 
   /**
    * Resize to fit given size

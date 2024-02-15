@@ -11,7 +11,9 @@ import { WebGLRenderer } from "three"
  * @param {THREE.WebGLRendererParameters} options
  * @returns {UseRenderer}
  */
-export default function useRenderer (options) {
+export default function useRenderer (options, quality = 1) {
+
+
 
   /**
    * @type {THREE.WebGLRendererParameters}
@@ -39,8 +41,9 @@ export default function useRenderer (options) {
     renderer.render(scene, camera)
   }
 
+
   /**
-   *
+   * Resize the renderer
    * @param {Number} width
    * @param {Number} height
    */
