@@ -5,6 +5,6 @@ module.exports = {
     category: '3D'
   },
   dependencies: [],
-  devDependencies: [],
+  devDependencies: ["@vueuse/core", "gsap", "three", "postprocess"],
   files: ['modules/corgi/src', 'configs']
 }

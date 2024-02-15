@@ -1,4 +1,4 @@
-import { defineNuxtModule, addImports, addComponent, createResolver } from '@nuxt/kit'
+import { defineNuxtModule, addComponent, createResolver, addImports } from '@nuxt/kit'
 
 export default defineNuxtModule({
   meta: {
@@ -13,21 +13,32 @@ export default defineNuxtModule({
 
     // Exemples
     // Add composables
-    /*
     addImports({
-      name: 'useMyComposable',
-      as: 'useMyComposable',
-      from: resolver.resolve('runtime/composables/my-composable')
+      name: 'useCorgi',
+      as: 'useCorgi',
+      from: resolver.resolve('runtime/composables/corgi')
     })
-    */
+    addImports({
+      name: 'useScene',
+      as: 'useScene',
+      from: resolver.resolve('runtime/composables/scene')
+    })
+    addImports({
+      name: 'useRenderer',
+      as: 'useRenderer',
+      from: resolver.resolve('runtime/composables/renderer')
+    })
+    addImports({
+      name: 'useCamera',
+      as: 'useCamera',
+      from: resolver.resolve('runtime/composables/camera')
+    })
 
     // Add components
-    /*
     addComponent({
-      name: 'MyComponent', // name of the component to be used in vue templates
-      filePath: resolver.resolve('runtime/components/MyComponent.vue')
+      name: 'CorgiCanvas', // name of the component to be used in vue templates
+      filePath: resolver.resolve('runtime/components/CorgiCanvas.vue')
     })
-    */
 
   }
 })
