@@ -48,5 +48,12 @@ export default function useRenderer (options) {
     renderer.setSize(width, height)
   }
 
-  return { render, resize }
+  /**
+   * Frees the GPU-related resources allocated by this instance. Call this method whenever this instance is no longer used in your app.
+   */
+  const dispose = () => {
+    renderer?.dispose()
+  }
+
+  return { renderer, render, resize, dispose }
 }

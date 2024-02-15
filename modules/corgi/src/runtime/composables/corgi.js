@@ -16,14 +16,14 @@ import { gsap } from "gsap"
  */
 
 /**
- *
+ * @function
  * @param {HTMLCanvasElement | OffscreenCanvas | void} canvas
  * @returns {UseCorgi}
  */
 export default function useCorgi (canvas) {
 
-  const scene = useScene()
-  const renderer = useRenderer({ canvas })
+  const { scene, dispose: sceneDispose } = useScene()
+  const { renderer, render: rendererRender, resize: rendererResize, dispose: rendererDispose } = useRenderer({ canvas })
   const { camera, resize: cameraResize } = useCamera()
   const ellapsed = ref(0)
 
@@ -38,7 +38,7 @@ export default function useCorgi (canvas) {
   }
 
   const render = () => {
-    renderer.render(scene, camera)
+    rendererRender(scene, camera)
   }
 
   /**
@@ -49,11 +49,17 @@ export default function useCorgi (canvas) {
     const height = canvas?.clientHeight || 0
 
     cameraResize(width, height)
-    renderer.resize(width, height)
+    rendererResize(width, height)
   }
 
+  /**
+   * Remove all event listener, clear all that need to be cleaned (textures etc)
+   */
   const unmount = () => {
     gsap?.ticker?.remove(onTick)
+
+    rendererDispose()
+    sceneDispose()
   }
 
   // Observer

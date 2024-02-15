@@ -10,8 +10,9 @@ import useCorgi from "../composables/corgi"
 
 // Data
 const el = ref()
+
 /**
- * @type {useCorgi}
+ * @type {import('../composables/corgi').UseCorgi}
  */
 let corgi = null
 
@@ -28,7 +29,7 @@ onUnmounted(() => {
 
 <style scoped>
 .CorgiCanvas {
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
 }
 </style>
