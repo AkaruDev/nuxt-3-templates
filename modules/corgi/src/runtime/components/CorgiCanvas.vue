@@ -10,6 +10,9 @@ import useCorgi from "../composables/corgi"
 
 // Data
 const el = ref()
+/**
+ * @type {useCorgi}
+ */
 let corgi = null
 
 // Lifecycle

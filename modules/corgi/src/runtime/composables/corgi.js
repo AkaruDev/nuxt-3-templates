@@ -6,16 +6,25 @@ import { ref } from "vue"
 import { useResizeObserver } from '@vueuse/core'
 import { gsap } from "gsap"
 
+
+/**
+ * @typedef {Object} UseCorgi
+ * @property {THREE.Scene} scene - THREE.Scene
+ * @property {THREE.WebGLRenderer} renderer - THREE.WebGLRenderer
+ * @property {THREE.PerspectiveCamera} camera - THREE.PerspectiveCamera
+ * @property {Function} unmount - Remove all event listener, clear all that need to be cleaned (textures etc)
+ */
+
 /**
  *
  * @param {HTMLCanvasElement | OffscreenCanvas | void} canvas
- * @returns
+ * @returns {UseCorgi}
  */
 export default function useCorgi (canvas) {
 
   const scene = useScene()
   const renderer = useRenderer({ canvas })
-  const camera = useCamera()
+  const { camera, resize: cameraResize } = useCamera()
   const ellapsed = ref(0)
 
   // Methods
@@ -24,7 +33,7 @@ export default function useCorgi (canvas) {
    * @param {Number} time - Total time ellapsed in seconds
    */
   const onTick = (time) => {
-    ellapsed.value = time// TODO maybe call an update method with ellapsed time or store it un a time manager
+    ellapsed.value = time // TODO maybe call an update method with ellapsed time or store it un a time manager
     render()
   }
 
@@ -38,9 +47,9 @@ export default function useCorgi (canvas) {
   const onResize = () => {
     const width = canvas?.clientWidth || 0
     const height = canvas?.clientHeight || 0
-    renderer.resize(width, height)
 
-    // TODO camera resize
+    cameraResize(width, height)
+    renderer.resize(width, height)
   }
 
   const unmount = () => {
@@ -54,6 +63,7 @@ export default function useCorgi (canvas) {
   return {
     scene,
     renderer,
+    camera,
     unmount,
   }
 }

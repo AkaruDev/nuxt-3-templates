@@ -11,3 +11,4 @@
 [ ] - Custom shaders demo
 [ ] - Resources factory
 [ ] - Add pixel ratio based on quality (to determine with gpu tier for exemple)
+[ ] - Flowmap utils with offscreen canvas check OGL js implementation
