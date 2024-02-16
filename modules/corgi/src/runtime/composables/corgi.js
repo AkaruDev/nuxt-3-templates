@@ -16,7 +16,7 @@ import { gsap } from "gsap"
  */
 
 /**
- * @function
+ * Return a new Corgi instance
  * @param {HTMLCanvasElement | OffscreenCanvas | void} canvas
  * @returns {UseCorgi}
  */
