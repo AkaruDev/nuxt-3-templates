@@ -43,7 +43,7 @@ export const useMetas = (options) => {
     twitterCard: 'summary_large_image',
     ...(noIndex ? {
       robots: {
-        noIndex: true
+        noindex: true
       }
     } : {})
 
