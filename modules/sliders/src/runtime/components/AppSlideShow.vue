@@ -132,7 +132,7 @@ const play = (direction) => {
   })
     .fromTo(progress, { value: 0 }, { value: 1, duration: props.duration, ease: 'linear' }, props.delay)
     .call(() => {
-      if (direction === directions.forward) {
+      if (direction !== directions.backward) {
         next()
       } else {
         prev()
