@@ -2,7 +2,7 @@ module.exports = {
   metas: {
     title: 'Virtual scroll',
     description: 'Add virtual scroll',
-    category: 'Animations'
+    category: 'Scroll'
   },
   dependencies: [],
   devDependencies: ['gsap', 'virtual-scroll', '@vueuse/core'],
