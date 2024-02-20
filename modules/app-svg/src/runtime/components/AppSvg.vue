@@ -1,10 +1,6 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <span
-    ref="el"
-    class="AppSvg"
-    v-html="currentIcon"
-  />
+  <span ref="el" class="AppSvg" v-html="currentIcon" />
 </template>
 
 <script setup>
@@ -19,7 +15,7 @@ defineExpose({ el })
 
 // Auto-load icons
 const icons = Object.fromEntries(
-  Object.entries(import.meta.glob('~/assets/svg/*.svg', { as: 'raw' })).map(
+  Object.entries(import.meta.glob('~/assets/svg/*.svg', { query: '?raw', import: 'default' })).map(
     ([key, value]) => {
       const filename = key.split('/').pop().split('.').shift()
       return [filename, value]
