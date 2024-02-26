@@ -1,10 +1,10 @@
 module.exports = {
   metas: {
-    title: 'Feature name',
-    description: 'Add feature',
-    category: 'Feature category'
+    title: 'Netlify',
+    description: 'Add Netlify module (build _redirects/_headers) for Nuxt 3',
+    category: 'Hosting / Deployment'
   },
   dependencies: [],
   devDependencies: [],
-  files: ['modules/my-feature', 'configs']
+  files: ['modules/netlify', 'configs']
 }

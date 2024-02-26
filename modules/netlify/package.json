@@ -1,8 +1,8 @@
 {
-  "name": "my-feature",
+  "name": "netlify-module",
   "version": "1.0.0",
-  "description": "Page transitions",
-  "repository": "akaru/my-feature",
+  "description": "My new Nuxt module",
+  "repository": "your-org/netlify-module",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -18,28 +18,28 @@
     "dist"
   ],
   "scripts": {
-    "prepack": "nuxt-module-build",
+    "prepack": "nuxt-module-build build",
     "dev": "nuxi dev playground",
     "dev:build": "nuxi build playground",
-    "dev:prepare": "nuxt-module-build --stub && nuxi prepare playground",
+    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
     "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.4.2"
+    "@nuxt/kit": "^3.10.2"
   },
   "devDependencies": {
-    "@nuxt/eslint-config": "^0.1.1",
-    "@nuxt/module-builder": "^0.4.0",
-    "@nuxt/schema": "^3.4.2",
-    "@nuxt/test-utils": "^3.4.2",
-    "@nuxtjs/eslint-module": "^4.1.0",
-    "@types/node": "^20.4.4",
-    "changelogen": "^0.5.3",
-    "eslint": "^8.38.0",
-    "nuxt": "^3.4.2",
-    "vitest": "^0.33.0"
+    "@types/node": "^20.11.17",
+    "@nuxt/devtools": "latest",
+    "@nuxt/eslint-config": "^0.2.0",
+    "@nuxt/module-builder": "^0.5.5",
+    "@nuxt/schema": "^3.10.2",
+    "@nuxt/test-utils": "^3.11.0",
+    "changelogen": "^0.5.5",
+    "eslint": "^8.56.0",
+    "nuxt": "^3.10.1",
+    "vitest": "^1.2.2"
   }
 }
