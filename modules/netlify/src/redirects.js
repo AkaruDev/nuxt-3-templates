@@ -8,7 +8,5 @@ export const generateRedirects = (options) => {
     content += createRedirectContent(r)
   })
 
-  console.log(content)
-
   return content
 }
