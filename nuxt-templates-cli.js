@@ -6,5 +6,5 @@ module.exports = {
   },
   dependencies: [],
   devDependencies: [],
-  files: ['modules/netlify', 'configs']
+  files: ['modules/netlify/src', 'configs']
 }
