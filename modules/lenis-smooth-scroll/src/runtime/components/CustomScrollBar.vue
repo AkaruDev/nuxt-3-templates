@@ -31,7 +31,8 @@ const isScrolling = computed(() => {
 })
 
 const show = computed(() => {
-  return $smoothScroll?.active?.value && ($smoothScroll?.container?.value?.clientHeight || 0) > (el?.value?.getBoundingClientRect()?.height || 0)
+  console.info($smoothScroll?.container?.value?.clientHeight, window?.innerHeight)
+  return $smoothScroll?.active?.value && ($smoothScroll?.container?.value?.clientHeight || 0) > (window?.innerHeight || 0)
 })
 
 onMounted(() => {
@@ -91,6 +92,7 @@ const onScrollbarDrag = (e) => {
   opacity: 0.5;
 }
 
+
 .ScrollBar-component:hover,
 .ScrollBar-component.--is-dragging,
 .ScrollBar-component.--is-scrolling {
@@ -115,9 +117,9 @@ const onScrollbarDrag = (e) => {
   left: 0;
   width: 5px;
   height: 80px;
-  background-color: #9E9E9E;
+  background-color: #2B2B2B;
   border-radius: 14px;
-  opacity: 0.5;
+  opacity: 0.8;
   margin: 2px;
   cursor: grab;
   will-change: transform;
