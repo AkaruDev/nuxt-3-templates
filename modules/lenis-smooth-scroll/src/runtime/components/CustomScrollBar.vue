@@ -31,7 +31,7 @@ const isScrolling = computed(() => {
 })
 
 const show = computed(() => {
-  return $smoothScroll?.active?.value && ($smoothScroll?.container?.value?.clientHeight || 0) >= (el?.value?.getBoundingClientRect()?.height || 0)
+  return $smoothScroll?.active?.value && ($smoothScroll?.container?.value?.clientHeight || 0) > (el?.value?.getBoundingClientRect()?.height || 0)
 })
 
 onMounted(() => {
