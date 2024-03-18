@@ -20,6 +20,8 @@ export const useResources = (() => {
     resources = [...value]
   }
 
+  // TODO Add progress ref if needed for loading ux
+
   /**
    * Get asset and available load promise.
    * @param {String} name
