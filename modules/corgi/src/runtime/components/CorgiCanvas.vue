@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import useCorgi from "../composables/corgi"
+import { useCorgi } from "../composables/corgi"
 
 // Data
 const el = ref()

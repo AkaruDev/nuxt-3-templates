@@ -2,6 +2,7 @@ import useRenderer from "./renderer"
 import useScene from "./scene"
 import useCamera from "./camera"
 import { ref } from "vue"
+import { QUALITIES } from "../utils/types"
 
 import { useResizeObserver } from '@vueuse/core'
 import { gsap } from "gsap"
@@ -20,7 +21,7 @@ import { gsap } from "gsap"
  * @param {HTMLCanvasElement | OffscreenCanvas | void} canvas
  * @returns {UseCorgi}
  */
-export default function useCorgi (canvas, quality = 2) {
+export default function useCorgi (canvas, quality = 1) {
 
   const {
     scene,
@@ -54,10 +55,6 @@ export default function useCorgi (canvas, quality = 2) {
 
   // Set the quality of the render, may be used for to change shadow quality for exemple
   // TODO make this a separete file with constant
-  const QUALITIES = {
-    BASIC: 0,
-    HIGH: 1,
-  }
   const pixelRatio = quality === QUALITIES.HIGH ? 2 : 1
   renderer?.setPixelRatio(pixelRatio)
 
