@@ -1,17 +1,19 @@
-// eslint-disable-next-line no-unused-vars
-import Resource from '../utils/Resource'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { RESOURCES_TYPES } from '../utils/types'
 
 export const useResources = (() => {
 
+  const modelLoader = new GLTFLoader()
+
   /**
    * resources
-   * @type {Array<Resource>}
+   * @type {Array<import("./resource").UseResource>}
    */
   let resources = []
 
   /**
    * Add
-   * @param {Resource | Array<Resource>} value
+   * @param {import("./resource").UseResource | Array<import("./resource").UseResource>} value
    */
   const add = (value) => {
     if (!Array.isArray(value)) {
@@ -19,8 +21,6 @@ export const useResources = (() => {
     }
     resources = [...value]
   }
-
-  // TODO Add progress ref if needed for loading ux
 
   /**
    * Get asset and available load promise.
@@ -30,14 +30,26 @@ export const useResources = (() => {
    */
   const get = (name, done = null) => {
     const item = resources.find(item => item?.name === name)
-    // TODO if resource already loaded (file exist) returns it directly
-    // TODO get promise with avalaible loader
-    if (done) {
-      // TODO Execute promise
-      // TODO store file in resource.file
-      done?.(item)
+
+    // Get promise with avalaible loader
+    let promise = undefined
+    if (item.type === RESOURCES_TYPES.gltf) {
+      promise = modelLoader.loadAsync(item.path)
     }
-    // TODO return promise
+
+    if (done) {
+      // If resource is already loaded (file exist) returns it directly
+      if (item.file) {
+        done(item)
+      } else {
+        promise.then((result) => {
+          item.file = result
+          done?.(item)
+        })
+      }
+    }
+    // TODO Add progress ref if needed for loading ui
+    return promise
   }
 
   // TODO method get resources, that load the resource with appropriate loader

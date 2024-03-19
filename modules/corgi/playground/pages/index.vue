@@ -1,6 +1,9 @@
 <template>
   <div class="Home">
-    <CorgiCanvas class="Home-canvas" />
+    <canvas
+      ref="canvas"
+      class="Home-canvas"
+    />
     <article>
       <h1>Home</h1>
       <nuxt-link to="/page">
@@ -11,6 +14,36 @@
 </template>
 
 <script setup>
+import { RESOURCES_TYPES } from '../../src/runtime/utils/types';
+
+// Data
+const canvas = ref()
+
+/**
+ * @type {import('../../src/runtime/composables/corgi').UseCorgi}
+ */
+let corgi = null
+const resources = useResources()
+
+// Lifecycle
+onMounted(() => {
+  corgi = useCorgi(canvas.value)
+
+  resources.add(
+    [
+      useResource('suzanne', '/suzanne.glb', RESOURCES_TYPES.gltf),
+      useResource('suzanne-draco', '/suzanne-draco.glb', RESOURCES_TYPES.draco),
+    ]
+  )
+
+  resources.get('suzanne', (resource) => {
+    console.info(resource)
+  })
+})
+
+onUnmounted(() => {
+  corgi?.unmount()
+})
 </script>
 
 <style scoped>
@@ -38,6 +71,8 @@
 
 .Home-canvas {
   position: absolute;
+  width: 100%;
+  height: 100%;
 
   top: 0;
   left: 0;

@@ -11,7 +11,7 @@ import { WebGLRenderer } from "three"
  * @param {THREE.WebGLRendererParameters} options
  * @returns {UseRenderer}
  */
-export default function useRenderer (options) {
+export const useRenderer = (options) => {
 
   /**
    * @type {THREE.WebGLRendererParameters}

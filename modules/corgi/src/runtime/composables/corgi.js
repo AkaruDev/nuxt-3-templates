@@ -1,12 +1,10 @@
-import useRenderer from "./renderer"
-import useScene from "./scene"
-import useCamera from "./camera"
+import { useRenderer } from "./renderer"
+import { useScene } from "./scene"
+import { useCamera } from "./camera"
 import { ref } from "vue"
 import { QUALITIES } from "../utils/types"
-
 import { useResizeObserver } from '@vueuse/core'
 import { gsap } from "gsap"
-
 
 /**
  * @typedef {Object} UseCorgi
@@ -21,7 +19,7 @@ import { gsap } from "gsap"
  * @param {HTMLCanvasElement | OffscreenCanvas | void} canvas
  * @returns {UseCorgi}
  */
-export default function useCorgi (canvas, quality = 1) {
+export const useCorgi = (canvas, quality = 1) => {
 
   const {
     scene,

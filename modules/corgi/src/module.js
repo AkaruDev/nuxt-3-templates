@@ -3,7 +3,7 @@ import { defineNuxtModule, addComponent, createResolver, addImports } from '@nux
 export default defineNuxtModule({
   meta: {
     name: 'corgi',
-    configKey: 'myModule'
+    configKey: 'corgi'
   },
   // Default configuration options of the Nuxt module
   defaults: {},
@@ -32,6 +32,16 @@ export default defineNuxtModule({
       name: 'useCamera',
       as: 'useCamera',
       from: resolver.resolve('runtime/composables/camera')
+    })
+    addImports({
+      name: 'useResources',
+      as: 'useResources',
+      from: resolver.resolve('runtime/composables/resources')
+    })
+    addImports({
+      name: 'useResource',
+      as: 'useResource',
+      from: resolver.resolve('runtime/composables/resource')
     })
 
     // Add components
