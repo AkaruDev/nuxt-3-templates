@@ -14,7 +14,8 @@
 </template>
 
 <script setup>
-import { RESOURCES_TYPES } from '../../src/runtime/utils/types';
+import { RESOURCES_TYPES } from '../../src/runtime/utils/types'
+import { Color, AmbientLight } from "three"
 
 // Data
 const canvas = ref()
@@ -29,6 +30,10 @@ const resources = useResources()
 onMounted(() => {
   corgi = useCorgi(canvas.value)
 
+  corgi.camera.position.set(0, 0, 5)
+
+  corgi.scene.add(new AmbientLight(new Color("white"), 2))
+
   resources.add(
     [
       useResource('suzanne', '/suzanne.glb', RESOURCES_TYPES.gltf),
@@ -37,7 +42,12 @@ onMounted(() => {
   )
 
   resources.get('suzanne', (resource) => {
-    console.info(resource)
+    /**
+     * @type {import('three').Mesh}
+     */
+    const suzanne = resource.file.scene?.children?.find(child => child.name === "Suzanne")
+    // suzanne.material = new MeshBasicMaterial({ color: new Color("#FFFFFF") })
+    corgi.scene.add(suzanne)
   })
 })
 
