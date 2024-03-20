@@ -52,7 +52,6 @@ export const useCorgi = (canvas, quality = 1) => {
   }
 
   // Set the quality of the render, may be used for to change shadow quality for exemple
-  // TODO make this a separete file with constant
   const pixelRatio = quality === QUALITIES.HIGH ? 2 : 1
   renderer?.setPixelRatio(pixelRatio)
 

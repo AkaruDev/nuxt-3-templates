@@ -15,6 +15,7 @@
 
 <script setup>
 import { RESOURCES_TYPES } from '../../src/runtime/utils/types'
+import { getChild } from '../../src/runtime/utils/gltf'
 import { Color, AmbientLight } from "three"
 
 // Data
@@ -42,11 +43,7 @@ onMounted(() => {
   )
 
   resources.get('suzanne', (resource) => {
-    /**
-     * @type {import('three').Mesh}
-     */
-    const suzanne = resource.file.scene?.children?.find(child => child.name === "Suzanne")
-    // suzanne.material = new MeshBasicMaterial({ color: new Color("#FFFFFF") })
+    const suzanne = getChild(resource.file.scene, "Suzanne")
     corgi.scene.add(suzanne)
   })
 })
