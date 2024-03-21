@@ -39,6 +39,8 @@ export const useCorgi = (canvas, quality = 1) => {
     resize: cameraResize
   } = useCamera()
 
+  const orbitControls = null
+
   const ellapsed = ref(0)
 
   const pmremGenerator = new PMREMGenerator(renderer)
@@ -68,6 +70,7 @@ export const useCorgi = (canvas, quality = 1) => {
   }
 
   const render = () => {
+    orbitControls?.update?.()
     rendererRender(scene, camera)
   }
 
@@ -84,6 +87,16 @@ export const useCorgi = (canvas, quality = 1) => {
 
     cameraResize(width, height)
     rendererResize(width, height)
+  }
+
+  /**
+   * Add orbit controls
+   */
+  const addOrbitControls = () => {
+    import('three/addons/controls/OrbitControls.js').then(rs => {
+      const controls = new rs.OrbitControls(camera, canvas)
+      controls.update()
+    })
   }
 
   /**
@@ -105,6 +118,7 @@ export const useCorgi = (canvas, quality = 1) => {
     renderer,
     camera,
     addEnvmap,
+    addOrbitControls,
     unmount,
   }
 }

@@ -4,7 +4,8 @@
 [X] - HDRI
 [X] - Add pixel ratio based on quality (to determine with gpu tier for exemple)
 [X] - Camera resize
-[ ] - Orbit controls
+[X] - Orbit controls
+[ ] - Optionnal CorgiCanvas.vue that has props for loading and using different resources in props ?
 [ ] - Mouse event normalisé
 [ ] - Scroll event
 [ ] - Post process

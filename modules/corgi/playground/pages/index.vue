@@ -16,7 +16,7 @@
 <script setup>
 import { RESOURCES_TYPES } from '../../src/runtime/utils/types'
 import { getChild } from '../../src/runtime/utils/gltf'
-import { Mesh, MeshStandardMaterial, PlaneGeometry } from 'three'
+import { AgXToneMapping, DoubleSide, Mesh, MeshStandardMaterial, PlaneGeometry } from 'three'
 
 // Data
 const canvas = ref()
@@ -32,13 +32,16 @@ onMounted(() => {
   corgi = useCorgi(canvas.value)
 
   corgi.camera.position.set(0, 0, 5)
+  corgi.addOrbitControls()
+
+  corgi.renderer.toneMapping = AgXToneMapping
 
   resources.add(
     [
       useResource('envmap', '/envmap.exr', RESOURCES_TYPES.EXR),
       useResource('suzanne', '/suzanne.glb', RESOURCES_TYPES.GLTF),
+      useResource('suzanne-draco', '/suzanne-draco.glb', RESOURCES_TYPES.GLTF),
       useResource('akaru', '/akaru-texture.png', RESOURCES_TYPES.IMAGE),
-      // useResource('suzanne-draco', '/suzanne-draco.glb', RESOURCES_TYPES.GLTF),
     ]
   )
 
@@ -57,6 +60,7 @@ onMounted(() => {
     const material = new MeshStandardMaterial({
       map: resource.asset,
       metalness: 1,
+      side: DoubleSide,
     })
     const plane = new Mesh(geometry, material)
     plane.position.x = 2
