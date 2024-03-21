@@ -3,7 +3,6 @@ import { useScene } from "./scene"
 import { useCamera } from "./camera"
 import { ref } from "vue"
 import { QUALITIES } from "../utils/types"
-import { useResizeObserver } from '@vueuse/core'
 import { gsap } from "gsap"
 import { PMREMGenerator } from "three"
 
@@ -104,6 +103,7 @@ export const useCorgi = (canvas, quality = 1) => {
    */
   const unmount = () => {
     gsap?.ticker?.remove(onTick)
+    window.removeEventListener("resize", onResize)
 
     rendererDispose()
     sceneDispose()
@@ -111,7 +111,8 @@ export const useCorgi = (canvas, quality = 1) => {
 
   // Observer
   gsap.ticker.add(onTick)
-  useResizeObserver(canvas, onResize)
+  window.addEventListener("resize", onResize)
+  onResize()
 
   return {
     scene,

@@ -43,6 +43,11 @@ export default defineNuxtModule({
       as: 'useResource',
       from: resolver.resolve('runtime/composables/resource')
     })
+    addImports({
+      name: 'useNormalizedMouse',
+      as: 'useNormalizedMouse',
+      from: resolver.resolve('runtime/composables/normalized-mouse')
+    })
 
     // Add components
     addComponent({

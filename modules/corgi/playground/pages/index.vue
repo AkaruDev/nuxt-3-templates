@@ -10,6 +10,11 @@
         Go to page
       </nuxt-link>
     </article>
+
+    <div class="MouseHelper">
+      <div>x: {{ mouse.normalized.x }}</div>
+      <div>y: {{ mouse.normalized.y }}</div>
+    </div>
   </div>
 </template>
 
@@ -27,8 +32,11 @@ const canvas = ref()
 let corgi = null
 const resources = useResources()
 
+const mouse = ref({ normalized: { x: 0, y: 0 } })
+
 // Lifecycle
 onMounted(() => {
+
   corgi = useCorgi(canvas.value)
 
   corgi.camera.position.set(0, 0, 5)
@@ -66,6 +74,9 @@ onMounted(() => {
     plane.position.x = 2
     corgi.scene.add(plane)
   })
+
+
+  mouse.value = useNormalizedMouse(canvas.value)
 
   /*
   resources.get('suzanne-draco').then((resource) => {
@@ -117,12 +128,32 @@ onUnmounted(() => {
 
 .Home-canvas {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
 
   top: 0;
   left: 0;
 
   z-index: 0;
+}
+
+.MouseHelper {
+  position: absolute;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  gap: 5px;
+  padding: 20px;
+
+
+  font-size: 16px;
+  color: white;
+
+  top: 0;
+  left: 0;
+
+  z-index: 1;
 }
 </style>
