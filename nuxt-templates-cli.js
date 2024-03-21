@@ -6,5 +6,5 @@ module.exports = {
   },
   dependencies: [],
   devDependencies: ["@vueuse/core", "gsap", "three", "postprocess"],
-  files: ['modules/corgi/src', 'configs']
+  files: ['modules/corgi/src', 'configs', 'public/draco']
 }

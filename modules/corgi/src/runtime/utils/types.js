@@ -4,9 +4,8 @@ export const QUALITIES = {
 }
 
 export const RESOURCES_TYPES = {
-  gltf: 'gltf',
-  draco: 'draco',
-  image: 'image',
-  video: 'video',
-  exr: 'exr',
+  GLTF: 'GLTF',
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  EXR: 'EXR',
 }

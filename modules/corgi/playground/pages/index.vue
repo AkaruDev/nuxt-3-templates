@@ -37,24 +37,20 @@ onMounted(() => {
 
   resources.add(
     [
-      useResource('suzanne', '/suzanne.glb', RESOURCES_TYPES.gltf),
-      useResource('suzanne-draco', '/suzanne-draco.glb', RESOURCES_TYPES.draco),
+      useResource('suzanne', '/suzanne.glb', RESOURCES_TYPES.GLTF),
+      useResource('suzanne-draco', '/suzanne-draco.glb', RESOURCES_TYPES.GLTF),
     ]
   )
 
-  resources.get('suzanne', (resource) => {
+  resources.get('suzanne-draco').then((resource) => {
+    const suzanne = getChild(resource.asset.scene, "Suzanne")
+    suzanne.position.x = 2
+    corgi.scene.add(suzanne)
+  })
+  resources.get('suzanne').then((resource) => {
     const suzanne = getChild(resource.asset.scene, "Suzanne")
     corgi.scene.add(suzanne)
   })
-
-  /*
-  // With promised version
-  resources.get('suzanne').then((asset) => {
-    const suzanne = getChild(asset.scene, "Suzanne")
-
-    corgi.scene.add(suzanne)
-  })
-  */
 })
 
 onUnmounted(() => {

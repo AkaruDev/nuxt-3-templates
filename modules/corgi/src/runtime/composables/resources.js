@@ -1,9 +1,15 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
 import { RESOURCES_TYPES } from '../utils/types'
 
 export const useResources = (() => {
 
-  const modelLoader = new GLTFLoader()
+  // Set loaders
+  const gltfLoader = new GLTFLoader()
+  const dracoLoader = new DRACOLoader()
+  dracoLoader.setDecoderPath('/draco/')
+  dracoLoader.preload()
+  gltfLoader.setDRACOLoader(dracoLoader)
 
   /**
    * resources
@@ -26,31 +32,34 @@ export const useResources = (() => {
    * Get asset and available load promise.
    * @param {String} name - Name of the resource to be found
    * @param {Function} done - Not mandatory method to retrieve the resource with the file inside
-   * @returns {Promise} - Promise to be resolved with the file inside
+   * @returns {Promise} - Promise to be resolved with the resource
    */
-  const get = (name, done = null) => {
-    const item = resources.find(item => item?.name === name)
+  const get = async (name) => {
+    const resource = resources.find(item => item?.name === name)
 
-    // Get promise with avalaible loader
-    let promise = undefined
-    if (item.type === RESOURCES_TYPES.gltf) {
-      promise = modelLoader.loadAsync(item.path)
+    if (!resource) {
+      console.error("No resource found with this name:", name)
+      return
     }
 
-    if (done) {
-      // If resource is already loaded (file exist) returns it directly
-      if (item.asset) {
-        done(item)
-      } else {
-        promise.then((result) => {
-          item.asset = result
-          done?.(item)
-        })
-      }
+    // Get promise with avalaible loader
+    let loader = undefined
+    if (resource.type === RESOURCES_TYPES.GLTF) {
+      loader = gltfLoader.loadAsync(resource.path)
+    }
+
+    if (!loader) {
+      console.error("No loader found", resource)
+      return
     }
 
     // TODO Add progress ref if needed for loading ui
-    return promise
+    return new Promise((resolve) => {
+      loader.then((result) => {
+        resource.asset = result
+        resolve(resource)
+      })
+    })
   }
 
   // TODO method get resources, that load the resource with appropriate loader
