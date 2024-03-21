@@ -8,7 +8,7 @@
 [ ] - Mouse event normalisé
 [ ] - Scroll event
 [ ] - Post process
-[ ] - Planes
+[ ] - Planes that match HTML content position
 [ ] - Three points light preset
 [ ] - Shadow utils
 [ ] - Pixel to 3d size utils
