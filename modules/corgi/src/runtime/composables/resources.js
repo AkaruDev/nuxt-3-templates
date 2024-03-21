@@ -53,7 +53,6 @@ export const useResources = (() => {
       return
     }
 
-    // TODO Add progress ref if needed for loading ui
     return new Promise((resolve) => {
       loader.then((result) => {
         resource.asset = result
