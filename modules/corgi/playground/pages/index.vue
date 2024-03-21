@@ -16,7 +16,6 @@
 <script setup>
 import { RESOURCES_TYPES } from '../../src/runtime/utils/types'
 import { getChild } from '../../src/runtime/utils/gltf'
-import { Color, AmbientLight } from "three"
 
 // Data
 const canvas = ref()
@@ -33,24 +32,35 @@ onMounted(() => {
 
   corgi.camera.position.set(0, 0, 5)
 
-  corgi.scene.add(new AmbientLight(new Color("white"), 2))
-
   resources.add(
     [
+      useResource('envmap', '/envmap.exr', RESOURCES_TYPES.EXR),
       useResource('suzanne', '/suzanne.glb', RESOURCES_TYPES.GLTF),
       useResource('suzanne-draco', '/suzanne-draco.glb', RESOURCES_TYPES.GLTF),
     ]
   )
+
+  resources.get('envmap').then((resource) => {
+    console.info(resource.asset)
+    corgi.addEnvmap(resource.asset)
+  })
+
+  resources.get('suzanne').then((resource) => {
+    const suzanne = getChild(resource.asset.scene, "Suzanne")
+    corgi.scene.add(suzanne)
+  })
 
   resources.get('suzanne-draco').then((resource) => {
     const suzanne = getChild(resource.asset.scene, "Suzanne")
     suzanne.position.x = 2
     corgi.scene.add(suzanne)
   })
-  resources.get('suzanne').then((resource) => {
-    const suzanne = getChild(resource.asset.scene, "Suzanne")
-    corgi.scene.add(suzanne)
+
+
+  /* resources.getAll().then((resources) => {
+    console.info(resources)
   })
+ */
 })
 
 onUnmounted(() => {

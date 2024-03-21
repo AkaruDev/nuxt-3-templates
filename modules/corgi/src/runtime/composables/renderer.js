@@ -1,4 +1,4 @@
-import { WebGLRenderer } from "three"
+import { AgXToneMapping, WebGLRenderer } from "three"
 
 /**
  * @typedef {Object} UseRenderer
@@ -29,6 +29,8 @@ export const useRenderer = (options) => {
   const renderer = new WebGLRenderer(
     { ...defaultOptions, ...options }
   )
+
+  // renderer.toneMapping = AgXToneMapping
 
   /**
    * Call the render method for the THREE.WebGLRenderer

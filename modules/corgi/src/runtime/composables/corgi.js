@@ -5,6 +5,7 @@ import { ref } from "vue"
 import { QUALITIES } from "../utils/types"
 import { useResizeObserver } from '@vueuse/core'
 import { gsap } from "gsap"
+import { PMREMGenerator } from "three"
 
 /**
  * @typedef {Object} UseCorgi
@@ -37,7 +38,23 @@ export const useCorgi = (canvas, quality = 1) => {
   } = useCamera()
   const ellapsed = ref(0)
 
+  const pmremGenerator = new PMREMGenerator(renderer)
+  pmremGenerator.compileCubemapShader()
+
   // Methods
+  /**
+   * Add your environnement map helper
+   * @param {import('three').DataTexture} texture - EXR texture from EXRLoader
+   * @param {Boolean} showInBacground - Add texture to be visible in the scene
+   */
+  const addEnvmap = (texture, showInBacground = true) => {
+    const envMap = pmremGenerator.fromEquirectangular(texture).texture
+    if (showInBacground) scene.background = envMap
+    scene.environment = envMap
+
+    texture.dispose()
+    pmremGenerator.dispose()
+  }
 
   /**
    * @param {Number} time - Total time ellapsed in seconds
@@ -84,6 +101,7 @@ export const useCorgi = (canvas, quality = 1) => {
     scene,
     renderer,
     camera,
+    addEnvmap,
     unmount,
   }
 }
