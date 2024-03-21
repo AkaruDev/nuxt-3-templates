@@ -1,4 +1,4 @@
-import { AgXToneMapping, WebGLRenderer } from "three"
+import { WebGLRenderer } from "three"
 
 /**
  * @typedef {Object} UseRenderer
