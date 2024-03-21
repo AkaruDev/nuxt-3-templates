@@ -2,6 +2,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
 import { EXRLoader } from 'three/addons/loaders/EXRLoader.js'
 import { RESOURCES_TYPES } from '../utils/types'
+import { TextureLoader } from 'three'
 
 export const useResources = (() => {
 
@@ -12,6 +13,7 @@ export const useResources = (() => {
   dracoLoader.preload()
   gltfLoader.setDRACOLoader(dracoLoader)
   const exrLoader = new EXRLoader()
+  const textureLoader = new TextureLoader()
 
   /**
    * resources
@@ -51,6 +53,9 @@ export const useResources = (() => {
     }
     if (resource.type === RESOURCES_TYPES.EXR) {
       loader = exrLoader.loadAsync(resource.path)
+    }
+    if (resource.type === RESOURCES_TYPES.IMAGE) {
+      loader = textureLoader.loadAsync(resource.path)
     }
 
     if (!loader) {

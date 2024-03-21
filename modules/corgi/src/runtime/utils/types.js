@@ -6,6 +6,5 @@ export const QUALITIES = {
 export const RESOURCES_TYPES = {
   GLTF: 'GLTF',
   IMAGE: 'IMAGE',
-  VIDEO: 'VIDEO',
   EXR: 'EXR',
 }

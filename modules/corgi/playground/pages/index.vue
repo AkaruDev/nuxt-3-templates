@@ -16,6 +16,7 @@
 <script setup>
 import { RESOURCES_TYPES } from '../../src/runtime/utils/types'
 import { getChild } from '../../src/runtime/utils/gltf'
+import { Mesh, MeshStandardMaterial, PlaneGeometry } from 'three'
 
 // Data
 const canvas = ref()
@@ -36,7 +37,8 @@ onMounted(() => {
     [
       useResource('envmap', '/envmap.exr', RESOURCES_TYPES.EXR),
       useResource('suzanne', '/suzanne.glb', RESOURCES_TYPES.GLTF),
-      useResource('suzanne-draco', '/suzanne-draco.glb', RESOURCES_TYPES.GLTF),
+      useResource('akaru', '/akaru-texture.png', RESOURCES_TYPES.IMAGE),
+      // useResource('suzanne-draco', '/suzanne-draco.glb', RESOURCES_TYPES.GLTF),
     ]
   )
 
@@ -45,18 +47,33 @@ onMounted(() => {
   })
 
   resources.get('suzanne').then((resource) => {
+    if (!resource) return
     const suzanne = getChild(resource.asset.scene, "Suzanne")
     corgi.scene.add(suzanne)
   })
 
+  resources.get('akaru').then((resource) => {
+    const geometry = new PlaneGeometry(1, 1)
+    const material = new MeshStandardMaterial({
+      map: resource.asset,
+      metalness: 1,
+    })
+    const plane = new Mesh(geometry, material)
+    plane.position.x = 2
+    corgi.scene.add(plane)
+  })
+
+  /*
   resources.get('suzanne-draco').then((resource) => {
+    if (!resource) return
     const suzanne = getChild(resource.asset.scene, "Suzanne")
     suzanne.position.x = 2
     corgi.scene.add(suzanne)
   })
+  */
 
-
-  /* resources.getAll().then((resources) => {
+  /*
+  resources.getAll().then((resources) => {
     console.info(resources)
   })
  */
@@ -73,7 +90,11 @@ onUnmounted(() => {
   display: flex;
   flex-flow: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+
+  box-sizing: border-box;
+
+  padding-top: 1rem;
 
   z-index: 0;
 }

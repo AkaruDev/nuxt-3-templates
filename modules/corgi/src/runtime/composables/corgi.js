@@ -26,16 +26,19 @@ export const useCorgi = (canvas, quality = 1) => {
     scene,
     dispose: sceneDispose
   } = useScene()
+
   const {
     renderer,
     render: rendererRender,
     resize: rendererResize,
     dispose: rendererDispose,
   } = useRenderer({ canvas })
+
   const {
     camera,
     resize: cameraResize
   } = useCamera()
+
   const ellapsed = ref(0)
 
   const pmremGenerator = new PMREMGenerator(renderer)
