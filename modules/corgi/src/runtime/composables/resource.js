@@ -5,7 +5,7 @@ import { RESOURCES_TYPES } from '../utils/types'
  * @property {String} name - Asset name
  * @property {String} path - Path of the file to load
  * @property {String} type - Type of the file to find appropriate loader (exr, webp,webm,glb,gltf)
- * @property {*} file - File stored after loading
+ * @property {*} asset - File stored after loading
  */
 
 /**
@@ -21,6 +21,6 @@ export const useResource = (name, path, type) => {
   }
 
   return {
-    name, path, type, file: undefined
+    name, path, type, asset: undefined
   }
 }

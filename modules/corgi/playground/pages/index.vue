@@ -43,9 +43,18 @@ onMounted(() => {
   )
 
   resources.get('suzanne', (resource) => {
-    const suzanne = getChild(resource.file.scene, "Suzanne")
+    const suzanne = getChild(resource.asset.scene, "Suzanne")
     corgi.scene.add(suzanne)
   })
+
+  /*
+  // With promised version
+  resources.get('suzanne').then((asset) => {
+    const suzanne = getChild(asset.scene, "Suzanne")
+
+    corgi.scene.add(suzanne)
+  })
+  */
 })
 
 onUnmounted(() => {

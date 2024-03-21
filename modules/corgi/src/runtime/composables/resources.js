@@ -24,9 +24,9 @@ export const useResources = (() => {
 
   /**
    * Get asset and available load promise.
-   * @param {String} name
-   * @param {Function} done
-   * @returns {Promise}
+   * @param {String} name - Name of the resource to be found
+   * @param {Function} done - Not mandatory method to retrieve the resource with the file inside
+   * @returns {Promise} - Promise to be resolved with the file inside
    */
   const get = (name, done = null) => {
     const item = resources.find(item => item?.name === name)
@@ -39,15 +39,16 @@ export const useResources = (() => {
 
     if (done) {
       // If resource is already loaded (file exist) returns it directly
-      if (item.file) {
+      if (item.asset) {
         done(item)
       } else {
         promise.then((result) => {
-          item.file = result
+          item.asset = result
           done?.(item)
         })
       }
     }
+
     // TODO Add progress ref if needed for loading ui
     return promise
   }
