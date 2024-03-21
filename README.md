@@ -4,6 +4,7 @@
 [X] - HDRI
 [X] - Add pixel ratio based on quality (to determine with gpu tier for exemple)
 [X] - Camera resize
+[ ] - Orbit controls
 [ ] - Mouse event normalisé
 [ ] - Scroll event
 [ ] - Post process
