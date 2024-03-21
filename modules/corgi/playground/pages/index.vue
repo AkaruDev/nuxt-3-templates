@@ -94,7 +94,7 @@ onUnmounted(() => {
 
   box-sizing: border-box;
 
-  padding-top: 1rem;
+  padding-top: 2rem;
 
   z-index: 0;
 }
