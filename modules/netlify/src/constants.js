@@ -17,7 +17,6 @@ export const SECURITY_HEADERS = {
 }
 
 export const CACHING_HEADERS = {
-  '/_nuxt/*': ['Cache-Control: public, max-age=31536000, immutable'],
   '/sw.js': ['Cache-Control: no-cache']
 }
 
