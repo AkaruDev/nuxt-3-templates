@@ -40,8 +40,8 @@ onMounted(async () => {
 
   resources.add(
     [
-      useResource('custom-fragment', import('@/assets/custom-fragment.glsl'), RESOURCES_TYPES.GLSL),
-      useResource('custom-vertex', import('@/assets/custom-vertex.glsl'), RESOURCES_TYPES.GLSL),
+      useResource('custom-fragment', import('@/assets/custom-shaders/fragment.glsl'), RESOURCES_TYPES.GLSL),
+      useResource('custom-vertex', import('@/assets/custom-shaders/vertex.glsl'), RESOURCES_TYPES.GLSL),
     ]
   )
 

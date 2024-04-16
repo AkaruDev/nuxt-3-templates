@@ -1,4 +1,4 @@
-#include colors.glsl;
+#include ../colors.glsl;
 
 uniform float uTime;
 

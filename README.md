@@ -1,8 +1,7 @@
 ## TODO
-
 [ ] - Flowmap utils with offscreen canvas check OGL js implementation, threejs journey fbo tutorial
-[ ] - Uniforms utils that has already some basics like uTime
 [ ] - Planes that match HTML content position
+[ ] - Uniforms utils that has already some basics like uTime
 [ ] - Three points light preset
 [ ] - Shadow utils
 [ ] - Pixel to 3d size utils

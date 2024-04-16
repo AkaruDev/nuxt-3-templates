@@ -12,6 +12,7 @@ import { AdditiveBlending, AgXToneMapping, BufferGeometry, Color, Points, Shader
 import { RESOURCES_TYPES } from '../../../src/runtime/utils/types'
 import { getPositionFromMesh } from '../../../src/runtime/utils/gltf'
 import { gsap } from 'gsap'
+import { GPUComputationRenderer } from 'three/addons/misc/GPUComputationRenderer.js'
 
 // Data
 const canvas = ref()
@@ -38,8 +39,8 @@ onMounted(() => {
 
 
   resources.add([
-    useResource('fragment', import('@/assets/particles/points.frag'), RESOURCES_TYPES.GLSL),
-    useResource('vertex', import('@/assets/particles/points.vert'), RESOURCES_TYPES.GLSL),
+    useResource('fragment', import('@/assets/flowmap/points.frag'), RESOURCES_TYPES.GLSL),
+    useResource('vertex', import('@/assets/flowmap/points.vert'), RESOURCES_TYPES.GLSL),
     useResource('model', 'suzanne.glb', RESOURCES_TYPES.GLTF),
   ])
 
@@ -52,6 +53,15 @@ onMounted(() => {
 
     const geometry = new BufferGeometry()
     geometry.setAttribute('position', position)
+
+    // GPU computation
+
+    // Number of pixel needed to have enough rgb information for each vertex
+    const size = Math.ceil(Math.sqrt(geometry.attributes.position.count))
+    const gpgpu = new GPUComputationRenderer(size, size, corgi.renderer)
+
+    const baseParticlesTexture = gpgpu.createTexture()
+    console.log(baseParticlesTexture)
 
     material = new ShaderMaterial(
       {

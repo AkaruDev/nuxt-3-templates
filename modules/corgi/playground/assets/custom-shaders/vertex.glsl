@@ -1,6 +1,6 @@
 uniform float uTime;
 
-#include noises/noise2D.glsl;
+#include ../noises/noise2D.glsl;
 
 void main()	{
 
