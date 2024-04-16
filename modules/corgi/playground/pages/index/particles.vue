@@ -8,9 +8,10 @@
 </template>
 
 <script setup>
-import { AdditiveBlending, AgXToneMapping, BufferGeometry, Color, Points, ShaderMaterial } from 'three';
-import { RESOURCES_TYPES } from '../../../src/runtime/utils/types';
-import { getPositionFromMesh } from '../../../src/runtime/utils/gltf';
+import { AdditiveBlending, AgXToneMapping, BufferGeometry, Color, Points, ShaderMaterial } from 'three'
+import { RESOURCES_TYPES } from '../../../src/runtime/utils/types'
+import { getPositionFromMesh } from '../../../src/runtime/utils/gltf'
+import { gsap } from 'gsap'
 
 // Data
 const canvas = ref()
@@ -20,6 +21,10 @@ const resources = useResources()
  * @type {import('../../src/runtime/composables/corgi').UseCorgi}
  */
 let corgi = null
+/**
+ * @type {import('three').ShaderMaterial}
+ */
+let material = null
 
 // Lifecycle
 onMounted(() => {
@@ -31,11 +36,6 @@ onMounted(() => {
 
   corgi.renderer.toneMapping = AgXToneMapping
 
-  const particles = {
-    maxCount: 0,
-    points: null,
-    material: null,
-  }
 
   resources.add([
     useResource('fragment', import('@/assets/points.frag'), RESOURCES_TYPES.GLSL),
@@ -50,14 +50,10 @@ onMounted(() => {
 
     const position = getPositionFromMesh(suzanne)
 
-    const baseGeometry = {}
-    baseGeometry.instance = new BufferGeometry()
-    baseGeometry.instance.setAttribute('position', position)
-    baseGeometry.instance.setIndex(null)
-    baseGeometry.count = baseGeometry.instance.attributes.position.count
+    const geometry = new BufferGeometry()
+    geometry.setAttribute('position', position)
 
-
-    particles.material = new ShaderMaterial(
+    material = new ShaderMaterial(
       {
         fragmentShader: fragmentResource.asset,
         vertexShader: vertexResource.asset,
@@ -65,23 +61,33 @@ onMounted(() => {
         blending: AdditiveBlending,
         depthWrite: false,
         uniforms: {
+          uTime: { value: 0 },
           uSize: { value: 20 },
           uColor: { value: new Color("#798E7B") }
         }
       }
     )
 
-    particles.points = new Points(baseGeometry.instance, particles.material)
-    corgi.scene.add(particles.points)
+    const points = new Points(geometry, material)
+    // IF vertex move particles outside of models bounds you can make ask three to see them
+    // particles.points.frustumCulled = false
+    corgi.scene.add(points)
   })
 
 
-
+  gsap.ticker.add(update)
 })
 
 onUnmounted(() => {
+  gsap.ticker.remove(update)
   corgi?.unmount()
 })
+
+// Methods
+const update = (time) => {
+  if (!material) return
+  material.uniforms.uTime.value = time
+}
 
 </script>
 
