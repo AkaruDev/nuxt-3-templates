@@ -2,13 +2,13 @@ precision highp float;
 
 uniform float uTime;
 uniform float uSize;
+uniform sampler2D uParticles;
 
-varying vec3 vPosition;
+attribute vec2 aParticlesUv;
 
 void main()	{
-  vPosition = position;
-
-  vec3 p = position;
+  vec4 particle = texture2D(uParticles, aParticlesUv);
+  vec3 p = particle.xyz;
 
   gl_PointSize = uSize;
   gl_Position = projectionMatrix * modelViewMatrix * vec4( p, 1.0 );

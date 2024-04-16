@@ -19,6 +19,7 @@ let corgi = null
 // Lifecycle
 onMounted(() => {
   corgi = useCorgi(el.value)
+
 })
 
 onUnmounted(() => {

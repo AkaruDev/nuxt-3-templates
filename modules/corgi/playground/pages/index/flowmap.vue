@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { AdditiveBlending, AgXToneMapping, BufferGeometry, Color, Points, ShaderMaterial } from 'three'
+import { AdditiveBlending, AgXToneMapping, BufferAttribute, BufferGeometry, Color, Mesh, MeshBasicMaterial, PlaneGeometry, Points, ShaderMaterial, Uniform } from 'three'
 import { RESOURCES_TYPES } from '../../../src/runtime/utils/types'
 import { getPositionFromMesh } from '../../../src/runtime/utils/gltf'
 import { gsap } from 'gsap'
@@ -26,6 +26,12 @@ let corgi = null
  * @type {import('three').ShaderMaterial}
  */
 let material = null
+/**
+ * @type {GPUComputationRenderer}
+ */
+let gpgpu = null
+let gpgpuIsInit = false
+let particlesVariable = null
 
 // Lifecycle
 onMounted(() => {
@@ -41,11 +47,12 @@ onMounted(() => {
   resources.add([
     useResource('fragment', import('@/assets/flowmap/points.frag'), RESOURCES_TYPES.GLSL),
     useResource('vertex', import('@/assets/flowmap/points.vert'), RESOURCES_TYPES.GLSL),
+    useResource('particles', import('@/assets/flowmap/particles.frag'), RESOURCES_TYPES.GLSL),
     useResource('model', 'suzanne.glb', RESOURCES_TYPES.GLTF),
   ])
 
   resources.getAll().then(resources => {
-    const [fragmentResource, vertexResource, modelResource] = resources
+    const [fragmentResource, vertexResource, particlesFragmentResource, modelResource] = resources
 
     const suzanne = modelResource.asset.scene.getObjectByName("Suzanne")
 
@@ -54,26 +61,77 @@ onMounted(() => {
     const geometry = new BufferGeometry()
     geometry.setAttribute('position', position)
 
-    // GPU computation
+    /** GPU computation **/
 
     // Number of pixel needed to have enough rgb information for each vertex
-    const size = Math.ceil(Math.sqrt(geometry.attributes.position.count))
-    const gpgpu = new GPUComputationRenderer(size, size, corgi.renderer)
+    const count = geometry.attributes.position.count
+    const size = Math.ceil(Math.sqrt(count))
 
-    const baseParticlesTexture = gpgpu.createTexture()
-    console.log(baseParticlesTexture)
+    // Compute uv coordinates for each particle
+    const particlesUvArray = new Float32Array(count * 2)
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        const i = y * size + x
+        const i2 = i * 2
+        const uvX = (x + 0.5) / size
+        const uvY = (y + 0.5) / size
+        particlesUvArray[i2 + 0] = uvX;
+        particlesUvArray[i2 + 1] = uvY;
+      }
+    }
+    geometry.setAttribute('aParticlesUv', new BufferAttribute(particlesUvArray, 2))
+
+    gpgpu = new GPUComputationRenderer(size, size, corgi.renderer)
+
+    // Texture for the particles
+    const particlesTexture = gpgpu.createTexture()
+    for (let i = 0; i < geometry.attributes.position.count; i++) {
+      const i3 = i * 3
+      const i4 = i * 4
+
+      // rgba based on geometry position
+      particlesTexture.image.data[i4 + 0] = geometry.attributes.position.array[i3 + 0]
+      particlesTexture.image.data[i4 + 1] = geometry.attributes.position.array[i3 + 1]
+      particlesTexture.image.data[i4 + 2] = geometry.attributes.position.array[i3 + 2]
+      particlesTexture.image.data[i4 + 3] = Math.random() // Alpha use for resetting the position
+    }
+
+    // Set texture to be rewrited
+    particlesVariable = gpgpu.addVariable('uParticles', particlesFragmentResource.asset, particlesTexture)
+    particlesVariable.material.uniforms.uTime = new Uniform(0)
+    particlesVariable.material.uniforms.uDeltaTime = new Uniform(0)
+    particlesVariable.material.uniforms.uBase = new Uniform(particlesTexture)
+    gpgpu.setVariableDependencies(particlesVariable, [particlesVariable])
+
+    // Init
+    gpgpu.init()
+    gpgpuIsInit = true
+
+    // Debug gpgpu texture
+    const plane = new Mesh(
+      new PlaneGeometry(1, 1),
+      new MeshBasicMaterial(
+        {
+          map: gpgpu.getCurrentRenderTarget(particlesVariable).texture
+        }
+      )
+    )
+    plane.position.x -= 1.5
+    plane.position.y += 1
+    corgi.scene.add(plane)
 
     material = new ShaderMaterial(
       {
         fragmentShader: fragmentResource.asset,
         vertexShader: vertexResource.asset,
         transparent: true,
-        blending: AdditiveBlending,
+        // blending: AdditiveBlending,
         depthWrite: false,
         uniforms: {
           uTime: { value: 0 },
-          uSize: { value: 20 },
-          uColor: { value: new Color("#798E7B") }
+          uSize: { value: 10 },
+          uColor: { value: new Color("#798E7B") },
+          uParticles: new Uniform(),
         }
       }
     )
@@ -94,9 +152,15 @@ onUnmounted(() => {
 })
 
 // Methods
-const update = (time) => {
+const update = (time, deltaTime) => {
   if (!material) return
   material.uniforms.uTime.value = time
+
+  if (!gpgpu || !gpgpuIsInit) return
+  material.uniforms.uParticles.value = gpgpu.getCurrentRenderTarget(particlesVariable).texture
+  particlesVariable.material.uniforms.uTime.value = time
+  particlesVariable.material.uniforms.uDeltaTime.value = deltaTime * 0.001
+  gpgpu.compute()
 }
 
 </script>
