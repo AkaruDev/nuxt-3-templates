@@ -1,4 +1,3 @@
-import { del } from "#app/compat/capi"
 import { Vector2 } from "three"
 import { ref } from "vue"
 
@@ -35,7 +34,6 @@ export const useNormalizedMouse = (element) => {
 
     lastTime = time
     lastPosition.set(event.clientX, event.clientY)
-
   }
 
   const unmount = () => {
