@@ -71,7 +71,7 @@ onMounted(() => {
 
     // Debug gpgpu texture
     const plane = new Mesh(
-      new PlaneGeometry(1, 1),
+      new PlaneGeometry(2, 2),
       new MeshBasicMaterial(
         {
           map: gpgpu.getCurrentRenderTarget(particlesVariable).texture
@@ -93,6 +93,7 @@ onUnmounted(() => {
 const update = () => {
   if (!mouse || !particlesVariable) return;
   particlesVariable.material.uniforms.uMouse.value = mouse.normalized.value
+  particlesVariable.material.uniforms.uVelocity.value = mouse.velocity.value
   if (!gpgpu || !gpgpuIsInit) return
   gpgpu.compute()
 

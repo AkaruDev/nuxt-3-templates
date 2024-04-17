@@ -1,3 +1,4 @@
+import { del } from "#app/compat/capi"
 import { Vector2 } from "three"
 import { ref } from "vue"
 
@@ -7,8 +8,11 @@ import { ref } from "vue"
  * @returns
  */
 export const useNormalizedMouse = (element) => {
+  const lastPosition = new Vector2(0, 0)
   const position = ref(new Vector2(0, 0))
   const normalized = ref(new Vector2(0, 0))
+  const velocity = ref(new Vector2(0, 0))
+  let lastTime = 0
 
   /**
    * On mouse move
@@ -18,6 +22,20 @@ export const useNormalizedMouse = (element) => {
     position.value.x = event.clientX
     position.value.y = event.clientY
     normalized.value = normalizePosition(position.value, element)
+
+
+    const deltaX = event.clientX - lastPosition.x
+    const deltaY = event.clientY - lastPosition.y
+    let time = performance.now()
+
+    let delta = Math.max(14, time - lastTime)
+
+    velocity.value.x = deltaX / delta
+    velocity.value.y = deltaY / delta
+
+    lastTime = time
+    lastPosition.set(event.clientX, event.clientY)
+
   }
 
   const unmount = () => {
@@ -29,6 +47,7 @@ export const useNormalizedMouse = (element) => {
   return {
     position,
     normalized,
+    velocity,
     unmount,
   }
 }
