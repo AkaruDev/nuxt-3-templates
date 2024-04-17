@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { AdditiveBlending, AgXToneMapping, BufferAttribute, BufferGeometry, Color, Mesh, MeshBasicMaterial, PlaneGeometry, Points, ShaderMaterial, Uniform } from 'three'
+import { AgXToneMapping, BufferAttribute, BufferGeometry, Color, Mesh, MeshBasicMaterial, PlaneGeometry, Points, ShaderMaterial, Uniform } from 'three'
 import { RESOURCES_TYPES } from '../../../src/runtime/utils/types'
 import { getPositionFromMesh } from '../../../src/runtime/utils/gltf'
 import { gsap } from 'gsap'
@@ -45,9 +45,9 @@ onMounted(() => {
 
 
   resources.add([
-    useResource('fragment', import('@/assets/flowmap/points.frag'), RESOURCES_TYPES.GLSL),
-    useResource('vertex', import('@/assets/flowmap/points.vert'), RESOURCES_TYPES.GLSL),
-    useResource('particles', import('@/assets/flowmap/particles.frag'), RESOURCES_TYPES.GLSL),
+    useResource('fragment', import('@/assets/particles-flowfield/points.frag'), RESOURCES_TYPES.GLSL),
+    useResource('vertex', import('@/assets/particles-flowfield/points.vert'), RESOURCES_TYPES.GLSL),
+    useResource('particles', import('@/assets/particles-flowfield/particles.frag'), RESOURCES_TYPES.GLSL),
     useResource('model', 'suzanne.glb', RESOURCES_TYPES.GLTF),
   ])
 

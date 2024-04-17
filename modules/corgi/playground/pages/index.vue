@@ -27,7 +27,7 @@ const pages = [
   { label: 'Shaders', to: '/shaders' },
   { label: 'Custom shaders', to: '/custom-shaders' },
   { label: 'Particles', to: '/particles' },
-  { label: 'Flowmap', to: '/flowmap' },
+  { label: 'Particles flowfield', to: '/particles-flowfield' },
 ]
 
 </script>
@@ -38,17 +38,25 @@ const pages = [
   display: flex;
   flex-flow: row;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
 
-  z-index: 0;
+  gap: 0;
 
+  background-color: #798E7B;
+
+  z-index: 0;
 }
 
 .Home-side {
   max-width: 300px;
+  height: 100vh;
+  background-color: #161616;
 
   padding: 2rem 3rem;
+
+  overflow-x: hidden;
+  overflow-y: auto;
 
   ul {
     display: flex;
