@@ -28,6 +28,7 @@ const pages = [
   { label: 'Custom shaders', to: '/custom-shaders' },
   { label: 'Particles', to: '/particles' },
   { label: 'Particles flowfield', to: '/particles-flowfield' },
+  { label: 'Flowmap', to: '/flowmap' },
 ]
 
 </script>
