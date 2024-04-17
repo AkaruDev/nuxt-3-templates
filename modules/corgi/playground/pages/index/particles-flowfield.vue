@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { AgXToneMapping, BufferAttribute, BufferGeometry, Color, Mesh, MeshBasicMaterial, PlaneGeometry, Points, ShaderMaterial, Uniform } from 'three'
+import { AgXToneMapping, BufferAttribute, BufferGeometry, Color, Mesh, MeshBasicMaterial, PlaneGeometry, Points, ShaderMaterial, Uniform, Vector2 } from 'three'
 import { RESOURCES_TYPES } from '../../../src/runtime/utils/types'
 import { getPositionFromMesh } from '../../../src/runtime/utils/gltf'
 import { gsap } from 'gsap'
@@ -128,10 +128,11 @@ onMounted(() => {
         // blending: AdditiveBlending,
         depthWrite: false,
         uniforms: {
-          uTime: { value: 0 },
-          uSize: { value: 10 },
-          uColor: { value: new Color("#798E7B") },
+          uTime: new Uniform(0),
+          uSize: new Uniform(15),
+          uColor: new Uniform(new Color("#798E7B")),
           uParticles: new Uniform(),
+          uResolution: new Uniform(new Vector2(canvas.value.clientWidth, canvas.value.clientHeight)),
         }
       }
     )

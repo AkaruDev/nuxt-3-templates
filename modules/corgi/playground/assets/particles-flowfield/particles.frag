@@ -3,7 +3,6 @@ uniform float uDeltaTime;
 uniform sampler2D uBase;
 
 #include ../noises/noise4D.glsl;
-#include ../utils/circle.glsl;
 
 void main()
 {
@@ -16,20 +15,22 @@ void main()
     {
         particle.a = mod(particle.a,1.0);
         particle.xyz = base.xyz;
+    }else{
+
+      float strength = snoise(vec4(base.xyz * 0.5, uTime + 1.0));
+      strength = smoothstep(-1.0, 1.0, strength);
+
+      vec3 flowField = vec3(
+        snoise(vec4(particle.xyz, uTime)),
+        snoise(vec4(particle.xyz + 1.0, uTime)),
+        snoise(vec4(particle.xyz + 2.0, uTime))
+      );
+      flowField = normalize(flowField);
+
+      particle.xyz += flowField * uDeltaTime * strength * 0.2;
+      // Decay
+      particle.a += uDeltaTime * 0.03;
     }
-
-    vec3 flowField = vec3(
-      snoise(vec4(particle.xyz, uTime)),
-      snoise(vec4(particle.xyz + 1.0, uTime)),
-      snoise(vec4(particle.xyz + 2.0, uTime))
-    );
-    flowField = normalize(flowField);
-
-    float circle = gradientCircle(uv, vec2(0.5));
-
-    particle.xyz += flowField * uDeltaTime * 0.2;
-    // Decay
-    particle.a += uDeltaTime * 0.03;
 
     gl_FragColor = particle;
 }
