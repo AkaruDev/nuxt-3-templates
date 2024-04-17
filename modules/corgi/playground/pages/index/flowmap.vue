@@ -40,9 +40,6 @@ onMounted(() => {
   corgi.camera.position.set(0, 0, 3)
   corgi.addOrbitControls()
 
-  corgi.renderer.toneMapping = AgXToneMapping
-
-
   resources.add([
     useResource('fragment', import('@/assets/flowmap/flowmap.frag'), RESOURCES_TYPES.GLSL),
   ])
