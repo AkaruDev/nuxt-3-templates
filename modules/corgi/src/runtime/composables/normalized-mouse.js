@@ -1,9 +1,9 @@
 import { Vector2 } from "three"
-import { ref } from "vue"
+import { ref, onMounted, onUnmounted } from "vue"
 
 /**
  *
- * @param {HTMLElement} element - Element used to normalized position to
+ * @param {ref<HTMLElement>} element - Element used to normalized position to
  * @returns
  */
 export const useNormalizedMouse = (element) => {
@@ -18,9 +18,10 @@ export const useNormalizedMouse = (element) => {
    * @param {MouseEvent} event
    */
   const onMouseMove = (event) => {
+    if (!element?.value) return
     position.value.x = event.clientX
     position.value.y = event.clientY
-    normalized.value = normalizePosition(position.value, element)
+    normalized.value = normalizePosition(position.value, element.value)
 
 
     const deltaX = event.clientX - lastPosition.x
@@ -36,17 +37,18 @@ export const useNormalizedMouse = (element) => {
     lastPosition.set(event.clientX, event.clientY)
   }
 
-  const unmount = () => {
-    window.removeEventListener("mousemove", onMouseMove)
-  }
+  onMounted(() => {
+    window.addEventListener("mousemove", onMouseMove)
+  })
 
-  window.addEventListener("mousemove", onMouseMove)
+  onUnmounted(() => {
+    window.removeEventListener("mousemove", onMouseMove)
+  })
 
   return {
     position,
     normalized,
     velocity,
-    unmount,
   }
 }
 

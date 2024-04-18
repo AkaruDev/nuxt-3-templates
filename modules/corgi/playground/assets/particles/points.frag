@@ -8,7 +8,7 @@ varying vec3 vPosition;
 void main()	{
   vec2 uv = gl_PointCoord;
   float distanceToCenter = length(uv - 0.5);
-  float alpha = 0.05 / distanceToCenter - 0.1;
+  float alpha = 0.05 / distanceToCenter - 0.18;
 
   gl_FragColor = vec4(uColor, alpha);
   #include <tonemapping_fragment>

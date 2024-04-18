@@ -21,7 +21,7 @@ const resources = useResources()
 /**
  * @type {import('../../src/runtime/composables/corgi').UseCorgi}
  */
-let corgi = null
+const corgi = useCorgi(canvas)
 /**
  * @type {import('three').ShaderMaterial}
  */
@@ -36,13 +36,10 @@ let particlesVariable = null
 // Lifecycle
 onMounted(() => {
 
-  corgi = useCorgi(canvas.value)
-
   corgi.camera.position.set(0, 0, 3)
   corgi.addOrbitControls()
 
-  corgi.renderer.toneMapping = AgXToneMapping
-
+  corgi.renderer.value.toneMapping = AgXToneMapping
 
   resources.add([
     useResource('fragment', import('@/assets/particles-flowfield/points.frag'), RESOURCES_TYPES.GLSL),
@@ -81,7 +78,7 @@ onMounted(() => {
     }
     geometry.setAttribute('aParticlesUv', new BufferAttribute(particlesUvArray, 2))
 
-    gpgpu = new GPUComputationRenderer(size, size, corgi.renderer)
+    gpgpu = new GPUComputationRenderer(size, size, corgi.renderer.value)
 
     // Texture for the particles
     const particlesTexture = gpgpu.createTexture()
@@ -149,7 +146,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   gsap.ticker.remove(update)
-  corgi?.unmount()
 })
 
 // Methods

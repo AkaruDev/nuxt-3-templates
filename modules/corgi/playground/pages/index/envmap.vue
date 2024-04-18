@@ -17,18 +17,16 @@ const canvas = ref()
 /**
  * @type {import('../../src/runtime/composables/corgi').UseCorgi}
  */
-let corgi = null
+const corgi = useCorgi(canvas)
 const resources = useResources()
 
 // Lifecycle
 onMounted(() => {
 
-  corgi = useCorgi(canvas.value)
-
   corgi.camera.position.set(0, 0, 5)
   corgi.addOrbitControls()
 
-  corgi.renderer.toneMapping = AgXToneMapping
+  corgi.renderer.value.toneMapping = AgXToneMapping
 
   resources.add(
     [
@@ -42,9 +40,6 @@ onMounted(() => {
 
 })
 
-onUnmounted(() => {
-  corgi?.unmount()
-})
 </script>
 
 <style scoped>

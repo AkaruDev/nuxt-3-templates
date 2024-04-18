@@ -1,10 +1,10 @@
-import { useRenderer } from "./renderer"
 import { useScene } from "./scene"
 import { useCamera } from "./camera"
-import { ref } from "vue"
+import { ref, onMounted, onUnmounted } from "vue"
 import { QUALITIES } from "../utils/types"
 import { gsap } from "gsap"
-import { PMREMGenerator } from "three"
+import { PMREMGenerator, WebGLRenderer } from "three"
+import { } from "vue"
 
 /**
  * @typedef {Object} UseCorgi
@@ -16,7 +16,7 @@ import { PMREMGenerator } from "three"
 
 /**
  * Return a new Corgi instance
- * @param {HTMLCanvasElement | OffscreenCanvas | void} canvas
+ * @param {ref<HTMLCanvasElement | OffscreenCanvas | void>} canvas
  * @returns {UseCorgi}
  */
 export const useCorgi = (canvas, quality = 1) => {
@@ -26,12 +26,7 @@ export const useCorgi = (canvas, quality = 1) => {
     dispose: sceneDispose
   } = useScene()
 
-  const {
-    renderer,
-    render: rendererRender,
-    resize: rendererResize,
-    dispose: rendererDispose,
-  } = useRenderer({ canvas })
+  let renderer = ref(null)
 
   const {
     camera,
@@ -42,8 +37,7 @@ export const useCorgi = (canvas, quality = 1) => {
 
   const ellapsed = ref(0)
 
-  const pmremGenerator = new PMREMGenerator(renderer)
-  pmremGenerator.compileCubemapShader()
+  let pmremGenerator = null
 
   // Methods
   /**
@@ -52,12 +46,12 @@ export const useCorgi = (canvas, quality = 1) => {
    * @param {Boolean} showInBacground - Add texture to be visible in the scene
    */
   const addEnvmap = (texture, showInBacground = true) => {
-    const envMap = pmremGenerator.fromEquirectangular(texture).texture
+    const envMap = pmremGenerator?.fromEquirectangular(texture).texture
     if (showInBacground) scene.background = envMap
     scene.environment = envMap
 
     texture.dispose()
-    pmremGenerator.dispose()
+    pmremGenerator?.dispose()
   }
 
   /**
@@ -70,22 +64,22 @@ export const useCorgi = (canvas, quality = 1) => {
 
   const render = () => {
     orbitControls?.update?.()
-    rendererRender(scene, camera)
+    renderer.value?.render(scene, camera)
   }
 
   // Set the quality of the render, may be used for to change shadow quality for exemple
   const pixelRatio = quality === QUALITIES.HIGH ? 2 : 1
-  renderer?.setPixelRatio(pixelRatio)
+  renderer.value?.setPixelRatio(pixelRatio)
 
   /**
    * Resize to fit given size
    */
   const onResize = () => {
-    const width = canvas?.clientWidth || 0
-    const height = canvas?.clientHeight || 0
+    const width = canvas?.value?.clientWidth || 0
+    const height = canvas?.value?.clientHeight || 0
 
     cameraResize(width, height)
-    rendererResize(width, height)
+    renderer.value?.setSize(width, height)
   }
 
   /**
@@ -93,26 +87,32 @@ export const useCorgi = (canvas, quality = 1) => {
    */
   const addOrbitControls = () => {
     import('three/addons/controls/OrbitControls.js').then(rs => {
-      const controls = new rs.OrbitControls(camera, canvas)
+      const controls = new rs.OrbitControls(camera, canvas.value)
       controls.update()
     })
   }
 
+  onMounted(() => {
+    renderer.value = new WebGLRenderer({ canvas: canvas.value })
+
+    pmremGenerator = new PMREMGenerator(renderer.value)
+    pmremGenerator.compileCubemapShader()
+    // Observer
+    gsap.ticker.add(onTick)
+    window.addEventListener("resize", onResize)
+    onResize()
+  })
+
   /**
    * Remove all event listener, clear all that need to be cleaned (textures etc)
    */
-  const unmount = () => {
+  onUnmounted(() => {
     gsap?.ticker?.remove(onTick)
     window.removeEventListener("resize", onResize)
 
-    rendererDispose()
+    renderer.value?.dispose()
     sceneDispose()
-  }
-
-  // Observer
-  gsap.ticker.add(onTick)
-  window.addEventListener("resize", onResize)
-  onResize()
+  })
 
   return {
     scene,
@@ -120,6 +120,5 @@ export const useCorgi = (canvas, quality = 1) => {
     camera,
     addEnvmap,
     addOrbitControls,
-    unmount,
   }
 }

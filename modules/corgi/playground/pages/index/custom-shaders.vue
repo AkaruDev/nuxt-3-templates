@@ -20,10 +20,9 @@ const canvas = ref()
 /**
  * @type {import('../../src/runtime/composables/corgi').UseCorgi}
  */
-let corgi = null
+const corgi = useCorgi(canvas)
 let material = null
 const resources = useResources()
-
 
 // Lifecycle
 onMounted(async () => {
@@ -31,12 +30,10 @@ onMounted(async () => {
   // Did not find a better way to import in vanilla
   // const CustomShaderMaterial = (await import('three-custom-shader-material/vanilla')).default
 
-  corgi = useCorgi(canvas.value)
-
   corgi.camera.position.set(0, 0, 10)
   corgi.addOrbitControls()
 
-  corgi.renderer.toneMapping = AgXToneMapping
+  corgi.renderer.value.toneMapping = AgXToneMapping
 
   resources.add(
     [
@@ -70,8 +67,6 @@ onMounted(async () => {
 
 onUnmounted(() => {
   gsap.ticker.remove(update)
-  corgi?.unmount()
-
 })
 
 // Methods

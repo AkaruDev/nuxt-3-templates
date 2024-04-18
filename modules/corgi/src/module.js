@@ -1,4 +1,4 @@
-import { defineNuxtModule, addComponent, createResolver, addImports, addVitePlugin } from '@nuxt/kit'
+import { defineNuxtModule, addComponent, createResolver, addVitePlugin, addImportsDir } from '@nuxt/kit'
 import glsl from 'vite-plugin-glsl'
 
 export default defineNuxtModule({
@@ -8,54 +8,22 @@ export default defineNuxtModule({
   },
   // Default configuration options of the Nuxt module
   defaults: {},
-  setup () { // options, nuxt
-    const resolver = createResolver(import.meta.url)
+  setup (options, nuxt) {
+    const { resolve } = createResolver(import.meta.url)
 
+    console.info(nuxt.options)
     // Add vite plugins
     addVitePlugin(glsl())
 
     // Add composables
-    addImports({
-      name: 'useCorgi',
-      as: 'useCorgi',
-      from: resolver.resolve('runtime/composables/corgi')
-    })
-    addImports({
-      name: 'useScene',
-      as: 'useScene',
-      from: resolver.resolve('runtime/composables/scene')
-    })
-    addImports({
-      name: 'useRenderer',
-      as: 'useRenderer',
-      from: resolver.resolve('runtime/composables/renderer')
-    })
-    addImports({
-      name: 'useCamera',
-      as: 'useCamera',
-      from: resolver.resolve('runtime/composables/camera')
-    })
-    addImports({
-      name: 'useResources',
-      as: 'useResources',
-      from: resolver.resolve('runtime/composables/resources')
-    })
-    addImports({
-      name: 'useResource',
-      as: 'useResource',
-      from: resolver.resolve('runtime/composables/resource')
-    })
-    addImports({
-      name: 'useNormalizedMouse',
-      as: 'useNormalizedMouse',
-      from: resolver.resolve('runtime/composables/normalized-mouse')
-    })
+    addImportsDir(resolve('runtime/composables'))
 
     // Add components
     addComponent({
       name: 'CorgiCanvas', // name of the component to be used in vue templates
-      filePath: resolver.resolve('runtime/components/CorgiCanvas.vue')
+      filePath: resolve('runtime/components/CorgiCanvas.vue')
     })
+
 
   }
 })

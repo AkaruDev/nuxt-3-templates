@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { AgXToneMapping, Mesh, MeshBasicMaterial, PlaneGeometry, Uniform, Vector2, } from 'three'
+import { Mesh, MeshBasicMaterial, PlaneGeometry, Uniform, Vector2, } from 'three'
 import { RESOURCES_TYPES } from '../../../src/runtime/utils/types'
 import { gsap } from 'gsap'
 import { GPUComputationRenderer } from 'three/addons/misc/GPUComputationRenderer.js'
@@ -20,7 +20,9 @@ const resources = useResources()
 /**
  * @type {import('../../src/runtime/composables/corgi').UseCorgi}
  */
-let corgi = null
+const corgi = useCorgi(canvas)
+// TODO make the composable usable with is own onMounted method please
+const flowmap = useFlowmap(canvas)
 
 /**
  * @type {GPUComputationRenderer}
@@ -29,13 +31,10 @@ let gpgpu = null
 let gpgpuIsInit = false
 let particlesVariable = null
 
-let mouse = null
+const mouse = useNormalizedMouse(canvas)
 
 // Lifecycle
 onMounted(() => {
-  mouse = useNormalizedMouse(canvas.value)
-
-  corgi = useCorgi(canvas.value)
 
   corgi.camera.position.set(0, 0, 3)
   corgi.addOrbitControls()
@@ -49,13 +48,13 @@ onMounted(() => {
 
     const size = 128
 
-    gpgpu = new GPUComputationRenderer(size, size, corgi.renderer)
+    gpgpu = new GPUComputationRenderer(size, size, corgi.renderer.value)
     // Set texture to be rewrited
     const particlesTexture = gpgpu.createTexture()
     particlesVariable = gpgpu.addVariable('uMap', fragmentResource.asset, particlesTexture)
     particlesVariable.material.uniforms = {
       ...particlesVariable.material.uniforms,
-      uFalloff: new Uniform(0.2),// size of the stamp, percentage of the size
+      uFalloff: new Uniform(0.15),// size of the stamp, percentage of the size
       uAlpha: new Uniform(1),// opacity of the stamp
       uDissipation: new Uniform(0.98),// affects the speed that the stamp fades. Closer to 1 is slower
       uAspect: new Uniform(1),
@@ -68,7 +67,7 @@ onMounted(() => {
 
     // Debug gpgpu texture
     const plane = new Mesh(
-      new PlaneGeometry(2, 2),
+      new PlaneGeometry(1, 1),
       new MeshBasicMaterial(
         {
           map: gpgpu.getCurrentRenderTarget(particlesVariable).texture
@@ -83,7 +82,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   gsap.ticker.remove(update)
-  corgi?.unmount()
 })
 
 // Methods

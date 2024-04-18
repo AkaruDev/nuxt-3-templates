@@ -20,7 +20,7 @@ const resources = useResources()
 /**
  * @type {import('../../src/runtime/composables/corgi').UseCorgi}
  */
-let corgi = null
+const corgi = useCorgi(canvas)
 /**
  * @type {import('three').ShaderMaterial}
  */
@@ -29,12 +29,10 @@ let material = null
 // Lifecycle
 onMounted(() => {
 
-  corgi = useCorgi(canvas.value)
-
   corgi.camera.position.set(0, 0, 3)
   corgi.addOrbitControls()
 
-  corgi.renderer.toneMapping = AgXToneMapping
+  corgi.renderer.value.toneMapping = AgXToneMapping
 
 
   resources.add([
@@ -80,7 +78,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   gsap.ticker.remove(update)
-  corgi?.unmount()
 })
 
 // Methods
