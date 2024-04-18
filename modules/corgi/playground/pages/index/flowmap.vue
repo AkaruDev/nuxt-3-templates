@@ -21,7 +21,6 @@ const resources = useResources()
  * @type {import('../../src/runtime/composables/corgi').UseCorgi}
  */
 const corgi = useCorgi(canvas)
-// TODO make the composable usable with is own onMounted method please
 const flowmap = useFlowmap(canvas)
 
 /**
