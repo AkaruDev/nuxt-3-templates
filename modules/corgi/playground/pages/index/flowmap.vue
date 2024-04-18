@@ -8,91 +8,44 @@
 </template>
 
 <script setup>
-import { Mesh, MeshBasicMaterial, PlaneGeometry, Uniform, Vector2, } from 'three'
-import { RESOURCES_TYPES } from '../../../src/runtime/utils/types'
-import { gsap } from 'gsap'
-import { GPUComputationRenderer } from 'three/addons/misc/GPUComputationRenderer.js'
+import { Mesh, PlaneGeometry, ShaderMaterial, Uniform } from 'three';
+
+import fragment from "@/assets/flowmap/fragment.glsl"
+import vertex from "@/assets/flowmap/vertex.glsl"
 
 // Data
 const canvas = ref()
-const resources = useResources()
 
 /**
  * @type {import('../../src/runtime/composables/corgi').UseCorgi}
  */
 const corgi = useCorgi(canvas)
-const flowmap = useFlowmap(canvas)
+const flowmap = useFlowmap(canvas, corgi, { debug: false })
 
-/**
- * @type {GPUComputationRenderer}
- */
-let gpgpu = null
-let gpgpuIsInit = false
-let particlesVariable = null
-
-const mouse = useNormalizedMouse(canvas)
 
 // Lifecycle
 onMounted(() => {
-
   corgi.camera.position.set(0, 0, 3)
   corgi.addOrbitControls()
 
-  resources.add([
-    useResource('fragment', import('@/assets/flowmap/flowmap.frag'), RESOURCES_TYPES.GLSL),
-  ])
-
-  resources.getAll().then(resources => {
-    const [fragmentResource] = resources
-
-    const size = 128
-
-    gpgpu = new GPUComputationRenderer(size, size, corgi.renderer.value)
-    // Set texture to be rewrited
-    const particlesTexture = gpgpu.createTexture()
-    particlesVariable = gpgpu.addVariable('uMap', fragmentResource.asset, particlesTexture)
-    particlesVariable.material.uniforms = {
-      ...particlesVariable.material.uniforms,
-      uFalloff: new Uniform(0.15),// size of the stamp, percentage of the size
-      uAlpha: new Uniform(1),// opacity of the stamp
-      uDissipation: new Uniform(0.98),// affects the speed that the stamp fades. Closer to 1 is slower
-      uAspect: new Uniform(1),
-      uMouse: new Uniform(new Vector2(0.5, 0.5)),
-      uVelocity: new Uniform(new Vector2(0.5, 0.5)),
-    }
-    gpgpu.setVariableDependencies(particlesVariable, [particlesVariable])
-    gpgpu.init()
-    gpgpuIsInit = true
-
-    // Debug gpgpu texture
-    const plane = new Mesh(
-      new PlaneGeometry(1, 1),
-      new MeshBasicMaterial(
-        {
-          map: gpgpu.getCurrentRenderTarget(particlesVariable).texture
-        }
-      )
+  // console.info(flowmap.texture.value)
+  const plane = new Mesh(
+    new PlaneGeometry(2, 2, 16, 16),
+    new ShaderMaterial(
+      {
+        uniforms: {
+          uFlowmap: new Uniform(flowmap.texture.value),
+        },
+        fragmentShader: fragment,
+        vertexShader: vertex,
+      }
     )
-    corgi.scene.add(plane)
-  })
+  )
 
-  gsap.ticker.add(update)
+  corgi.scene.add(plane)
 })
 
-onUnmounted(() => {
-  gsap.ticker.remove(update)
-})
 
-// Methods
-const update = () => {
-  if (!mouse || !particlesVariable) return;
-  particlesVariable.material.uniforms.uMouse.value = mouse.normalized.value
-  particlesVariable.material.uniforms.uVelocity.value = mouse.velocity.value
-  if (!gpgpu || !gpgpuIsInit) return
-  gpgpu.compute()
-
-
-}
 
 </script>
 
