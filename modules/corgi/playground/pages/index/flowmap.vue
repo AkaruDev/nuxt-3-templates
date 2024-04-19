@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { Mesh, SphereGeometry, ShaderMaterial, Uniform } from 'three';
+import { Mesh, PlaneGeometry, ShaderMaterial, Uniform } from 'three';
 
 import fragment from "@/assets/flowmap/fragment.glsl"
 import vertex from "@/assets/flowmap/vertex.glsl"
@@ -30,7 +30,7 @@ onMounted(() => {
 
   // console.info(flowmap.texture.value)
   const plane = new Mesh(
-    new SphereGeometry(0.8, 32, 32),
+    new PlaneGeometry(2, 2, 64, 64),
     new ShaderMaterial(
       {
         uniforms: {
