@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { Mesh, PlaneGeometry, ShaderMaterial, Uniform } from 'three';
+import { Mesh, SphereGeometry, ShaderMaterial, Uniform } from 'three';
 
 import fragment from "@/assets/flowmap/fragment.glsl"
 import vertex from "@/assets/flowmap/vertex.glsl"
@@ -20,7 +20,7 @@ const canvas = ref()
  * @type {import('../../src/runtime/composables/corgi').UseCorgi}
  */
 const corgi = useCorgi(canvas)
-const flowmap = useFlowmap(canvas, corgi, { debug: false })
+const flowmap = useFlowmap(canvas, corgi, { debug: false, size: 128, radius: 0.2 })
 
 
 // Lifecycle
@@ -30,7 +30,7 @@ onMounted(() => {
 
   // console.info(flowmap.texture.value)
   const plane = new Mesh(
-    new PlaneGeometry(2, 2, 16, 16),
+    new SphereGeometry(0.8, 32, 32),
     new ShaderMaterial(
       {
         uniforms: {

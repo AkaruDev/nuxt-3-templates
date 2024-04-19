@@ -10,6 +10,9 @@ uniform vec2 uVelocity;
 
 
 void main() {
+  // R and G values are velocity in the x and y direction
+  // B value is the velocity length
+
   vec2 uv = gl_FragCoord.xy / resolution.xy;
   vec4 color = texture2D(uMap, uv) * uDissipation;
 

@@ -5,6 +5,11 @@ import { GPUComputationRenderer } from 'three/addons/misc/GPUComputationRenderer
 import { Mesh, MeshBasicMaterial, PlaneGeometry, Uniform, Vector2 } from 'three'
 import { gsap } from 'gsap'
 
+
+// TODO apply camera rotation to the plane ?
+// TODO Add with, height for size and auto calculate aspect ratio
+// TODO add a resize method
+
 /**
  *
  * @param {import('./corgi').UseCorgi} corgi
@@ -17,7 +22,7 @@ export const useFlowmap = (canvas, corgi, options) => {
   const defaultOptions = {
     debug: false,
     size: 128,// size of the texture
-    fallof: 0.15,// size of the stamp, percentage of the size
+    radius: 0.15,// size of the stamp, percentage of the size
     alpha: 1.0,// opacity of the stamp
     dissipation: 0.98,// affects the speed that the stamp fades. Closer to 1 is slower
     ...options
@@ -31,7 +36,7 @@ export const useFlowmap = (canvas, corgi, options) => {
     particlesVariable = gpgpu.addVariable('uMap', fragment, particlesTexture)
     particlesVariable.material.uniforms = {
       ...particlesVariable.material.uniforms,
-      uFalloff: new Uniform(defaultOptions.fallof),// size of the stamp, percentage of the size
+      uFalloff: new Uniform(defaultOptions.radius),// size of the stamp, percentage of the size
       uAlpha: new Uniform(defaultOptions.alpha),// opacity of the stamp
       uDissipation: new Uniform(defaultOptions.dissipation),// affects the speed that the stamp fades. Closer to 1 is slower
       uAspect: new Uniform(1),
