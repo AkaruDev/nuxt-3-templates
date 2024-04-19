@@ -45,8 +45,6 @@ onMounted(() => {
   corgi.scene.add(plane)
 })
 
-
-
 </script>
 
 <style scoped>

@@ -8,10 +8,9 @@ export default defineNuxtModule({
   },
   // Default configuration options of the Nuxt module
   defaults: {},
-  setup (options, nuxt) {
+  setup () {//options, nuxt
     const { resolve } = createResolver(import.meta.url)
 
-    console.info(nuxt.options)
     // Add vite plugins
     addVitePlugin(glsl())
 
@@ -23,7 +22,5 @@ export default defineNuxtModule({
       name: 'CorgiCanvas', // name of the component to be used in vue templates
       filePath: resolve('runtime/components/CorgiCanvas.vue')
     })
-
-
   }
 })
