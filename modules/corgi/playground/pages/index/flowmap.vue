@@ -20,7 +20,7 @@ const canvas = ref()
  * @type {import('../../src/runtime/composables/corgi').UseCorgi}
  */
 const corgi = useCorgi(canvas)
-const flowmap = useFlowmap(canvas, corgi, { debug: false, size: 128, radius: 0.2 })
+const flowmap = useFlowmap(canvas, corgi, { debug: false, size: 128, radius: 0.1 })
 
 
 // Lifecycle

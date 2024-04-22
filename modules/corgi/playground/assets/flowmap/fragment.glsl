@@ -2,6 +2,9 @@ precision highp float;
 
 uniform sampler2D uFlowmap;
 
+// R and G values are velocity in the x and y direction
+// B value is the velocity length
+
 varying vec2 vUv;
 
 void main()	{
@@ -13,5 +16,5 @@ void main()	{
   color = mix(color,vec3(0.1,0.8,0.5),smoothstep(0.0,1.0,tFlowmap.g));
   color = mix(color,vec3(0.1,0.3,0.5),smoothstep(0.0,1.0,tFlowmap.b));
 
-  gl_FragColor = vec4(color,1.0);
+  gl_FragColor = tFlowmap;
 }
