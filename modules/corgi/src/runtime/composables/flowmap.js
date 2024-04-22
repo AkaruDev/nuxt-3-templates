@@ -14,20 +14,23 @@ import { gsap } from 'gsap'
  *
  * @param {import('./corgi').UseCorgi} corgi
  */
-export const useFlowmap = (canvas, corgi, options) => {
+export const useFlowmap = (corgi, options) => {
   let isInit = false
   let gpgpu = null
   let particlesVariable = null
 
+  let debugPlane = null
+
   const defaultOptions = {
     debug: false,
-    size: 128,// size of the texture
-    radius: 0.15,// size of the stamp, percentage of the size
-    alpha: 1.0,// opacity of the stamp
-    dissipation: 0.98,// affects the speed that the stamp fades. Closer to 1 is slower
+    aspect: 1,// Aspect ratio
+    size: 128,// Size of the texture
+    radius: 0.15,// Size of the stamp, percentage of the size
+    alpha: 1.0,// Opacity of the stamp
+    dissipation: 0.98,// Affects the speed that the stamp fades. Closer to 1 is slower
     ...options
   }
-  const mouse = useNormalizedMouse(canvas)
+  const mouse = useNormalizedMouse(corgi.canvas)
 
   onMounted(() => {
     gpgpu = new GPUComputationRenderer(defaultOptions.size, defaultOptions.size, corgi.renderer.value)
@@ -39,7 +42,7 @@ export const useFlowmap = (canvas, corgi, options) => {
       uFalloff: new Uniform(defaultOptions.radius),// size of the stamp, percentage of the size
       uAlpha: new Uniform(defaultOptions.alpha),// opacity of the stamp
       uDissipation: new Uniform(defaultOptions.dissipation),// affects the speed that the stamp fades. Closer to 1 is slower
-      uAspect: new Uniform(1),
+      uAspect: new Uniform(defaultOptions.aspect),
       uMouse: new Uniform(new Vector2(mouse.normalized.value.x, mouse.normalized.value.y)),
       uVelocity: new Uniform(new Vector2(0.5, 0.5)),
     }
@@ -49,23 +52,22 @@ export const useFlowmap = (canvas, corgi, options) => {
 
     // Debug gpgpu texture
     if (defaultOptions.debug) {
-      const plane = new Mesh(
-        new PlaneGeometry(1, 1),
+      debugPlane = new Mesh(
+        new PlaneGeometry(0.25, 0.25),
         new MeshBasicMaterial(
           {
             map: gpgpu.getCurrentRenderTarget(particlesVariable).texture
           }
         )
       )
-      corgi.scene.add(plane)
+      debugPlane.position.z = corgi.camera.position.z - 1
+
+      // debugPlane.position.x = corgi.camera.position.z - 1
+      corgi.camera.add(debugPlane)
+      corgi.scene.add(corgi.camera)
     }
     isInit = true
     gsap.ticker.add(update)
-  })
-
-  onUnmounted(() => {
-    gsap.ticker.remove(update)
-    gpgpu?.dispose()
   })
 
   const update = () => {
@@ -79,7 +81,19 @@ export const useFlowmap = (canvas, corgi, options) => {
     return gpgpu.getCurrentRenderTarget(particlesVariable).texture
   })
 
+  const setAspect = (value) => {
+    if (!isInit) return
+    particlesVariable.material.uniforms.uAspect.value = value
+  }
+
+  onUnmounted(() => {
+    gsap.ticker.remove(update)
+    gpgpu?.dispose()
+  })
+
   return {
+    setAspect,
+    debugPlane,
     texture
   }
 }

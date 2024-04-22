@@ -11,7 +11,7 @@ void main()	{
   vec4 tFlowmap = texture2D(uFlowmap,vUv);
 
   vec3 p = position;
-  p.z += (tFlowmap.b)* 0.1;
+  p.z += (tFlowmap.b) ;
 
   gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0 );
 }

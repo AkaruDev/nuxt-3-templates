@@ -3,7 +3,7 @@ import { useCamera } from "./camera"
 import { ref, onMounted, onUnmounted } from "vue"
 import { QUALITIES } from "../utils/types"
 import { gsap } from "gsap"
-import { PMREMGenerator, WebGLRenderer } from "three"
+import { PMREMGenerator, Vector2, WebGLRenderer } from "three"
 import { } from "vue"
 
 /**
@@ -20,6 +20,8 @@ import { } from "vue"
  * @returns {UseCorgi}
  */
 export const useCorgi = (canvas, quality = 1) => {
+
+  const size = ref(new Vector2())
 
   const {
     scene,
@@ -80,6 +82,8 @@ export const useCorgi = (canvas, quality = 1) => {
 
     cameraResize(width, height)
     renderer.value?.setSize(width, height)
+
+    getSize()
   }
 
   /**
@@ -92,6 +96,12 @@ export const useCorgi = (canvas, quality = 1) => {
     })
   }
 
+  const getSize = () => {
+    camera.getViewSize(camera.position.z, size.value)
+    return size.value
+  }
+
+  // Lifecycle
   onMounted(() => {
     renderer.value = new WebGLRenderer({ canvas: canvas.value })
 
@@ -116,8 +126,10 @@ export const useCorgi = (canvas, quality = 1) => {
 
   return {
     scene,
+    canvas,
     renderer,
     camera,
+    getSize,
     addEnvmap,
     addOrbitControls,
   }
