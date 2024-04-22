@@ -8,19 +8,21 @@
 </template>
 
 <script setup>
-import { Mesh, PlaneGeometry, ShaderMaterial, Uniform, Vector2 } from 'three';
+import { Mesh, PlaneGeometry, ShaderMaterial, Uniform } from 'three';
 
 import fragment from "@/assets/flowmap/fragment.glsl"
 import vertex from "@/assets/flowmap/vertex.glsl"
+import { useWindowResize } from '../../../src/runtime/composables/window-resize';
 
 // Data
 const canvas = ref()
+let plane = null
 
 /**
  * @type {import('../../src/runtime/composables/corgi').UseCorgi}
  */
 const corgi = useCorgi(canvas)
-const flowmap = useFlowmap(corgi, { aspect: 1, debug: true, size: 128 * 2, radius: 0.2 })
+const flowmap = useFlowmap(corgi, { aspect: 1, debug: false, size: 128 * 2, radius: 0.2, dissipation: 0.98 })
 
 // Lifecycle
 onMounted(() => {
@@ -30,8 +32,8 @@ onMounted(() => {
   const size = corgi.getSize()
   flowmap.setAspect(size.width / size.height)
 
-  const plane = new Mesh(
-    new PlaneGeometry(size.width, size.height, 64, 64),
+  plane = new Mesh(
+    new PlaneGeometry(size.width, size.height, 128, 128),
     new ShaderMaterial(
       {
         uniforms: {
@@ -45,6 +47,16 @@ onMounted(() => {
 
   corgi.scene.add(plane)
 })
+
+const onResize = () => {
+  if (plane) {
+    const size = corgi.getSize()
+    plane.geometry.dispose()
+    plane.geometry = new PlaneGeometry(size.width, size.height, 128, 128)
+    flowmap.setAspect(size.width / size.height)
+  }
+}
+useWindowResize(onResize)
 
 </script>
 

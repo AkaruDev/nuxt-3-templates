@@ -1,10 +1,10 @@
 import { useScene } from "./scene"
 import { useCamera } from "./camera"
+import { useWindowResize } from "./window-resize"
 import { ref, onMounted, onUnmounted } from "vue"
 import { QUALITIES } from "../utils/types"
 import { gsap } from "gsap"
 import { PMREMGenerator, Vector2, WebGLRenderer } from "three"
-import { } from "vue"
 
 /**
  * @typedef {Object} UseCorgi
@@ -85,6 +85,7 @@ export const useCorgi = (canvas, quality = 1) => {
 
     getSize()
   }
+  useWindowResize(onResize)
 
   /**
    * Add orbit controls
@@ -109,8 +110,6 @@ export const useCorgi = (canvas, quality = 1) => {
     pmremGenerator.compileCubemapShader()
     // Observer
     gsap.ticker.add(onTick)
-    window.addEventListener("resize", onResize)
-    onResize()
   })
 
   /**
@@ -118,7 +117,6 @@ export const useCorgi = (canvas, quality = 1) => {
    */
   onUnmounted(() => {
     gsap?.ticker?.remove(onTick)
-    window.removeEventListener("resize", onResize)
 
     renderer.value?.dispose()
     sceneDispose()
