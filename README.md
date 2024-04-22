@@ -1,5 +1,4 @@
 ## TODO
-[ ] - Flowmap utils with offscreen canvas check OGL js implementation, threejs journey fbo tutorial
 [ ] - Planes that match HTML content position
 [ ] - Uniforms utils that has already some basics like uTime
 [ ] - Three points light preset
@@ -13,6 +12,7 @@
 [ ] - Optimise Threejs import like React Three Fiber https://gracious-keller-98ef35.netlify.app/docs/recipes/reducing-bundle-size/
 
 ## DONE
+[x] - Flowmap utils with offscreen canvas check OGL js implementation, threejs journey fbo tutorial
 [X] - Resources factory
 [X] - HDRI
 [X] - Add pixel ratio based on quality (to determine with gpu tier for exemple)
