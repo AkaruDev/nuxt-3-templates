@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { Mesh, PlaneGeometry, ShaderMaterial, Uniform } from 'three';
+import { DoubleSide, Mesh, PlaneGeometry, ShaderMaterial, Uniform } from 'three';
 
 import fragment from "@/assets/flowmap/fragment.glsl"
 import vertex from "@/assets/flowmap/vertex.glsl"
@@ -36,6 +36,7 @@ onMounted(() => {
     new PlaneGeometry(size.width, size.height, 16, 16),
     new ShaderMaterial(
       {
+        side: DoubleSide,
         uniforms: {
           uFlowmap: new Uniform(flowmap.texture.value),
         },
