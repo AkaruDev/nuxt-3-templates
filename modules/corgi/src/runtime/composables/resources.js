@@ -4,7 +4,7 @@ import { EXRLoader } from 'three/addons/loaders/EXRLoader.js'
 import { RESOURCES_TYPES } from '../utils/types'
 import { TextureLoader } from 'three'
 
-export const useResources = (() => {
+export const useResources = () => {
 
   // Set loaders
   const gltfLoader = new GLTFLoader()
@@ -24,11 +24,17 @@ export const useResources = (() => {
    * Add
    * @param {import("./resource").UseResource | Array<import("./resource").UseResource>} value
    */
-  const add = (value) => {
-    if (!Array.isArray(value)) {
-      value = [value]
+  const add = (values) => {
+    if (!Array.isArray(values)) {
+      values = [values]
     }
-    resources = [...resources, ...value]
+
+    values.forEach(value => {
+      if (!resources.find(resource => resource.name === value.name)) {
+        resources.push(value)
+      }
+    })
+
   }
 
   const setResource = (name) => {
@@ -98,11 +104,9 @@ export const useResources = (() => {
     return Promise.all(resources.map(resource => setResource(resource.name)))
   }
 
-  const instance = {
+  return {
     add,
     get,
     getAll,
   }
-
-  return () => instance
-})()
+}
