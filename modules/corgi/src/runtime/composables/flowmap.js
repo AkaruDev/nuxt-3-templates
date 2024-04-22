@@ -61,8 +61,6 @@ export const useFlowmap = (corgi, options) => {
         )
       )
       debugPlane.position.z = corgi.camera.position.z - 1
-
-      // debugPlane.position.x = corgi.camera.position.z - 1
       corgi.camera.add(debugPlane)
       corgi.scene.add(corgi.camera)
     }
