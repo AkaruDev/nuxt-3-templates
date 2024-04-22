@@ -26,6 +26,7 @@ const pages = [
   { label: 'Texture', to: '/texture' },
   { label: 'Shaders', to: '/shaders' },
   { label: 'Custom shaders', to: '/custom-shaders' },
+  { label: 'Components', to: '/components' },
   { label: 'Particles', to: '/particles' },
   { label: 'Particles flowfield', to: '/particles-flowfield' },
   { label: 'Flowmap', to: '/flowmap' },

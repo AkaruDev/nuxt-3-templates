@@ -28,7 +28,7 @@ export const useResources = (() => {
     if (!Array.isArray(value)) {
       value = [value]
     }
-    resources = [...value]
+    resources = [...resources, ...value]
   }
 
   const setResource = (name) => {

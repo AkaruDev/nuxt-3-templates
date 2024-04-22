@@ -17,9 +17,11 @@ import { PMREMGenerator, Vector2, WebGLRenderer } from "three"
 /**
  * Return a new Corgi instance
  * @param {ref<HTMLCanvasElement | OffscreenCanvas | void>} canvas
+ * @param {import('three').Color | void} color
+ * @param {ref<HTMLCanvasElement | OffscreenCanvas | void>} canvas
  * @returns {UseCorgi}
  */
-export const useCorgi = (canvas, quality = 1) => {
+export const useCorgi = (canvas, color, quality = 1) => {
 
   const size = ref(new Vector2())
 
@@ -27,6 +29,7 @@ export const useCorgi = (canvas, quality = 1) => {
     scene,
     dispose: sceneDispose
   } = useScene()
+  if (color) scene.background = color
 
   let renderer = ref(null)
 
@@ -36,8 +39,6 @@ export const useCorgi = (canvas, quality = 1) => {
   } = useCamera()
 
   const orbitControls = null
-
-  const ellapsed = ref(0)
 
   let pmremGenerator = null
 
@@ -56,11 +57,7 @@ export const useCorgi = (canvas, quality = 1) => {
     pmremGenerator?.dispose()
   }
 
-  /**
-   * @param {Number} time - Total time ellapsed in seconds
-   */
-  const onTick = (time) => {
-    ellapsed.value = time // TODO maybe call an update method with ellapsed time or store it un a time manager
+  const onTick = () => {
     render()
   }
 
@@ -68,10 +65,6 @@ export const useCorgi = (canvas, quality = 1) => {
     orbitControls?.update?.()
     renderer.value?.render(scene, camera)
   }
-
-  // Set the quality of the render, may be used for to change shadow quality for exemple
-  const pixelRatio = quality === QUALITIES.HIGH ? 2 : 1
-  renderer.value?.setPixelRatio(pixelRatio)
 
   /**
    * Resize to fit given size
@@ -90,9 +83,11 @@ export const useCorgi = (canvas, quality = 1) => {
   /**
    * Add orbit controls
    */
-  const addOrbitControls = () => {
+  const addOrbitControls = (enableZoom = true, enablePan = true) => {
     import('three/addons/controls/OrbitControls.js').then(rs => {
       const controls = new rs.OrbitControls(camera, canvas.value)
+      controls.enableZoom = enableZoom
+      controls.enablePan = enablePan
       controls.update()
     })
   }
@@ -104,12 +99,17 @@ export const useCorgi = (canvas, quality = 1) => {
 
   // Lifecycle
   onMounted(() => {
-    renderer.value = new WebGLRenderer({ canvas: canvas.value })
+    renderer.value = new WebGLRenderer({ canvas: canvas.value, alpha: color === undefined })
+
+    // Set the quality of the render, may be used for to change shadow quality for exemple
+    const pixelRatio = quality === QUALITIES.HIGH ? 2 : 1.5
+    renderer.value?.setPixelRatio(pixelRatio)
 
     pmremGenerator = new PMREMGenerator(renderer.value)
     pmremGenerator.compileCubemapShader()
     // Observer
     gsap.ticker.add(onTick)
+    onResize()
   })
 
   /**

@@ -1,9 +1,9 @@
-import { Color, Scene } from "three"
+import { Scene } from "three"
 
-export const useScene = (color = "#1a1a1b") => {
+export const useScene = () => {// color = "#1a1a1b"
 
   const scene = new Scene()
-  scene.background = new Color(color)
+  // scene.background = new Color(color)
 
   /**
    * Frees the GPU-related resources allocated by this instance, mesh, textures etcs.

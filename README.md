@@ -1,4 +1,6 @@
 ## TODO
+[ ] - CorgiCanvas.vue that has props for loading and using different resources in props ? resources, transform, scene background color or transparent
+[ ] - Add composable for tick useTick()
 [ ] - Planes that match HTML content position
 [ ] - Pixel to 3d size utils
 [ ] - Uniforms utils that has already some basics like uTime
@@ -7,7 +9,6 @@
 [ ] - Debug utils
 [ ] - Add callback for when useCorgi is ready aka has draw at least one frame (?)
 [ ] - Post process, check three js, antialiasing to check with Hocus because it's not working like it should
-[ ] - CorgiCanvas.vue that has props for loading and using different resources in props ? resources, transform, scene background color or transparent
 [ ] - Write a comprehensive Readme about what is this, how you can use it (bonus add cute corgi picture) - Try generated doc from jsdoc
 [ ] - Optimise Threejs import like React Three Fiber https://gracious-keller-98ef35.netlify.app/docs/recipes/reducing-bundle-size/
 
