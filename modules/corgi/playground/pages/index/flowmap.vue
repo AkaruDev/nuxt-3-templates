@@ -33,7 +33,7 @@ onMounted(() => {
   flowmap.setAspect(size.width / size.height)
 
   plane = new Mesh(
-    new PlaneGeometry(size.width, size.height, 128, 128),
+    new PlaneGeometry(size.width, size.height, 16, 16),
     new ShaderMaterial(
       {
         uniforms: {

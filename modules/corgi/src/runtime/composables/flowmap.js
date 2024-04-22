@@ -5,14 +5,28 @@ import { GPUComputationRenderer } from 'three/addons/misc/GPUComputationRenderer
 import { Mesh, MeshBasicMaterial, PlaneGeometry, Uniform, Vector2 } from 'three'
 import { gsap } from 'gsap'
 
-
-// TODO apply camera rotation to the plane ?
-// TODO Add with, height for size and auto calculate aspect ratio
-// TODO add a resize method
+/**
+ * @typedef {Object} FlowmapOptions
+ * @property {boolean} debug - Show debug plane in front of camera
+ * @property {number} aspect - Aspect ratio to correct the stamp roundness
+ * @property {number} size - Size of the texture
+ * @property {number} radius - Size of the stamp in percentage of the texture
+ * @property {number} alpha - Opacity of the stamp
+ * @property {number} dissipation - Affects the speed that the stamp fades. Closer to 1 is slower
+ */
 
 /**
- *
+ * @typedef {Object} UseFlowmap
+ * @property {function} setAspect - Method for correcting the aspect ratio of the stamp
+ * @property {import('three').Mesh | void} debugPlane - If debug true then return the mesh that is used for debugging visually the flowmap
+ * @property {import('three').Texture} texture - Texture of the flow
+ */
+
+/**
+ * Use GPU computation to create a flow texture following the mouse move.
  * @param {import('./corgi').UseCorgi} corgi
+ * @param {FlowmapOptions} options
+ * @returns {UseFlowmap}
  */
 export const useFlowmap = (corgi, options) => {
   let isInit = false
@@ -21,13 +35,16 @@ export const useFlowmap = (corgi, options) => {
 
   let debugPlane = null
 
+  /**
+   * @type {FlowmapOptions}
+   */
   const defaultOptions = {
     debug: false,
-    aspect: 1,// Aspect ratio
-    size: 128,// Size of the texture
-    radius: 0.15,// Size of the stamp, percentage of the size
-    alpha: 1.0,// Opacity of the stamp
-    dissipation: 0.98,// Affects the speed that the stamp fades. Closer to 1 is slower
+    aspect: 1,
+    size: 128,
+    radius: 0.15,
+    alpha: 1.0,
+    dissipation: 0.98,
     ...options
   }
   const mouse = useNormalizedMouse(corgi.canvas)
