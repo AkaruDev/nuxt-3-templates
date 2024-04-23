@@ -1,5 +1,4 @@
 ## TODO
-[ ] - Add observer to not render if canvas element is not visible
 [ ] - Planes that match HTML content position
 [ ] - Pixel to 3d size utils
 [ ] - Uniforms utils that has already some basics like uTime
@@ -10,6 +9,7 @@
 [ ] - Write a comprehensive Readme about what is this, how you can use it (bonus add cute corgi picture) - Try generated doc from jsdoc
 
 ## DONE
+[x] - Add observer to not render if canvas element is not visible
 [x] - Add composable for tick useTick()
 [x] - CorgiCanvas.vue that has props for loading and using different resources in props ? resources, transform, scene background color or transparent
 [x] - Flowmap utils with offscreen canvas check OGL js implementation, threejs journey fbo tutorial
