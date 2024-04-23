@@ -10,9 +10,8 @@
 <script setup>
 import { RESOURCES_TYPES } from '../../src/runtime/utils/types'
 import { AgXToneMapping, Color, DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
-import { gsap } from 'gsap'
-
 import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
+import { useTicker } from '../../../src/runtime/composables/ticker';
 
 // Data
 const canvas = ref()
@@ -23,6 +22,7 @@ const canvas = ref()
 const corgi = useCorgi(canvas)
 let material = null
 const resources = useResources()
+
 
 // Lifecycle
 onMounted(async () => {
@@ -62,11 +62,6 @@ onMounted(async () => {
 
   })
 
-  gsap.ticker.add(update)
-})
-
-onUnmounted(() => {
-  gsap.ticker.remove(update)
 })
 
 // Methods
@@ -74,6 +69,7 @@ const update = (time) => {
   if (!material) return
   material.uniforms.uTime.value = time
 }
+useTicker(update)
 </script>
 
 <style scoped>

@@ -11,7 +11,7 @@
 import { AdditiveBlending, AgXToneMapping, BufferGeometry, Color, Points, ShaderMaterial } from 'three'
 import { RESOURCES_TYPES } from '../../../src/runtime/utils/types'
 import { getPositionFromMesh } from '../../../src/runtime/utils/gltf'
-import { gsap } from 'gsap'
+import { useTicker } from '../../../src/runtime/composables/ticker';
 
 // Data
 const canvas = ref()
@@ -71,20 +71,15 @@ onMounted(() => {
     // particles.points.frustumCulled = false
     corgi.scene.add(points)
   })
-
-
-  gsap.ticker.add(update)
 })
 
-onUnmounted(() => {
-  gsap.ticker.remove(update)
-})
 
 // Methods
 const update = (time) => {
   if (!material) return
   material.uniforms.uTime.value = time
 }
+useTicker(update)
 
 </script>
 

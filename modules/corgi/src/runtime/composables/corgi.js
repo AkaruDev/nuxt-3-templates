@@ -1,8 +1,8 @@
 import { useScene } from "./scene"
 import { useCamera } from "./camera"
 import { useWindowResize } from "./window-resize"
+import { useTicker } from "./ticker"
 import { ref, onMounted, onUnmounted } from "vue"
-import { gsap } from "gsap"
 import { PMREMGenerator, Vector2, Vector3, WebGLRenderer } from "three"
 
 /**
@@ -103,6 +103,8 @@ export const useCorgi = (canvas, options) => {
   }
   useWindowResize(onResize)
 
+  useTicker(onTick)
+
   /**
    * Add orbit controls
    */
@@ -132,7 +134,6 @@ export const useCorgi = (canvas, options) => {
     pmremGenerator = new PMREMGenerator(renderer.value)
     pmremGenerator.compileCubemapShader()
     // Observer
-    gsap.ticker.add(onTick)
     onResize()
   })
 
@@ -140,8 +141,6 @@ export const useCorgi = (canvas, options) => {
    * Remove all event listener, clear all that need to be cleaned (textures etc)
    */
   onUnmounted(() => {
-    gsap?.ticker?.remove(onTick)
-
     renderer.value?.dispose()
     sceneDispose()
   })

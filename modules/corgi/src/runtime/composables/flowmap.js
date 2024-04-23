@@ -3,7 +3,7 @@ import { onMounted, onUnmounted, computed } from 'vue'
 import { useNormalizedMouse } from './normalized-mouse'
 import { GPUComputationRenderer } from 'three/addons/misc/GPUComputationRenderer.js'
 import { Mesh, MeshBasicMaterial, PlaneGeometry, Uniform, Vector2 } from 'three'
-import { gsap } from 'gsap'
+import { useTicker } from './ticker'
 
 /**
  * @typedef {Object} FlowmapOptions
@@ -82,7 +82,6 @@ export const useFlowmap = (corgi, options) => {
       corgi.scene.add(corgi.camera)
     }
     isInit = true
-    gsap.ticker.add(update)
   })
 
   const update = () => {
@@ -91,6 +90,7 @@ export const useFlowmap = (corgi, options) => {
     particlesVariable.material.uniforms.uVelocity.value = mouse.velocity.value
     gpgpu?.compute()
   }
+  useTicker(update)
 
   const texture = computed(() => {
     return gpgpu.getCurrentRenderTarget(particlesVariable).texture
@@ -102,7 +102,6 @@ export const useFlowmap = (corgi, options) => {
   }
 
   onUnmounted(() => {
-    gsap.ticker.remove(update)
     gpgpu?.dispose()
   })
 

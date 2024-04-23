@@ -10,7 +10,7 @@
 <script setup>
 import { RESOURCES_TYPES } from '../../src/runtime/utils/types'
 import { AgXToneMapping, DoubleSide, Mesh, PlaneGeometry, RawShaderMaterial } from 'three'
-import { gsap } from 'gsap'
+import { useTicker } from '../../../src/runtime/composables/ticker';
 
 // Data
 const canvas = ref()
@@ -52,11 +52,6 @@ onMounted(() => {
     corgi.scene.add(plane)
   })
 
-  gsap.ticker.add(update)
-})
-
-onUnmounted(() => {
-  gsap.ticker.remove(update)
 })
 
 // Methods
@@ -64,6 +59,7 @@ const update = (time) => {
   if (!material) return
   material.uniforms.uTime.value = time
 }
+useTicker(update)
 </script>
 
 <style scoped>

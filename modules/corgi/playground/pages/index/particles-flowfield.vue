@@ -11,8 +11,8 @@
 import { AgXToneMapping, BufferAttribute, BufferGeometry, Color, Mesh, MeshBasicMaterial, PlaneGeometry, Points, ShaderMaterial, Uniform, Vector2 } from 'three'
 import { RESOURCES_TYPES } from '../../../src/runtime/utils/types'
 import { getPositionFromMesh } from '../../../src/runtime/utils/gltf'
-import { gsap } from 'gsap'
 import { GPUComputationRenderer } from 'three/addons/misc/GPUComputationRenderer.js'
+import { useTicker } from '../../../src/runtime/composables/ticker'
 
 // Data
 const canvas = ref()
@@ -141,12 +141,8 @@ onMounted(() => {
   })
 
 
-  gsap.ticker.add(update)
 })
 
-onUnmounted(() => {
-  gsap.ticker.remove(update)
-})
 
 // Methods
 const update = (time, deltaTime) => {
@@ -159,6 +155,7 @@ const update = (time, deltaTime) => {
   particlesVariable.material.uniforms.uDeltaTime.value = deltaTime * 0.001
   gpgpu.compute()
 }
+useTicker(update)
 
 </script>
 
