@@ -26,7 +26,7 @@ const pages = [
   { label: 'Texture', to: '/texture' },
   { label: 'Shaders', to: '/shaders' },
   { label: 'Custom shaders', to: '/custom-shaders' },
-  { label: 'Components', to: '/components' },
+  { label: 'Component', to: '/component' },
   { label: 'Particles', to: '/particles' },
   { label: 'Particles flowfield', to: '/particles-flowfield' },
   { label: 'Flowmap', to: '/flowmap' },
@@ -98,6 +98,8 @@ const pages = [
 
   a {
     height: 20px;
+    font-size: 20px;
+    font-family: sans-serif;
     text-decoration: none;
 
     &:hover {
