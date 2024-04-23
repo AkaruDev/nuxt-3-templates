@@ -12,6 +12,7 @@
       :show-envmap="false"
     />
     <!-- :background-color="new Color('pink')" -->
+    <div :style="{ height: '100vh' }" />
   </div>
 </template>
 
@@ -33,18 +34,18 @@ onMounted(() => {
 
 <style  scoped>
 .Page {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
   background-color: #1a1a1a;
 }
 
 .Page-canvas {
-  position: absolute;
+  position: relative;
   width: 50vw;
   height: 50vh;
-
-  top: 50%;
-  left: 50%;
-
-  transform: translate3d(-50%, -50%, 0);
 
   z-index: 0;
 }

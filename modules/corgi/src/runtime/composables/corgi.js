@@ -2,6 +2,7 @@ import { useScene } from "./scene"
 import { useCamera } from "./camera"
 import { useWindowResize } from "./window-resize"
 import { useTicker } from "./ticker"
+import { useIntersectionObserver } from "./intersection-observer"
 import { ref, onMounted, onUnmounted } from "vue"
 import { PMREMGenerator, Vector2, Vector3, WebGLRenderer } from "three"
 
@@ -79,15 +80,25 @@ export const useCorgi = (canvas, options) => {
     texture.dispose()
     pmremGenerator?.dispose()
   }
-
-  const onTick = () => {
-    render()
-  }
-
   const render = () => {
     orbitControls.value?.update?.()
     renderer.value?.render(scene, camera)
   }
+
+  // Tick
+  let canRender = true
+  const onTick = () => {
+    if (!canRender) return
+    render()
+  }
+  useTicker(onTick)
+
+  // Intersection observer
+  useIntersectionObserver(canvas, () => {
+    canRender = true
+  }, () => {
+    canRender = false
+  })
 
   /**
    * Resize to fit given size
@@ -102,8 +113,6 @@ export const useCorgi = (canvas, options) => {
     getSize()
   }
   useWindowResize(onResize)
-
-  useTicker(onTick)
 
   /**
    * Add orbit controls
@@ -133,7 +142,7 @@ export const useCorgi = (canvas, options) => {
 
     pmremGenerator = new PMREMGenerator(renderer.value)
     pmremGenerator.compileCubemapShader()
-    // Observer
+
     onResize()
   })
 
@@ -144,7 +153,6 @@ export const useCorgi = (canvas, options) => {
     renderer.value?.dispose()
     sceneDispose()
   })
-
 
   return {
     scene,
