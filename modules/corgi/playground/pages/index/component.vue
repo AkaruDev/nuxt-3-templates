@@ -12,7 +12,6 @@
       :show-envmap="false"
     />
     <!-- :background-color="new Color('pink')" -->
-    <div :style="{ height: '100vh' }" />
   </div>
 </template>
 
