@@ -7,7 +7,6 @@
 [ ] - Three points light preset
 [ ] - Shadow utils
 [ ] - Debug utils
-[ ] - Add callback for when useCorgi is ready aka has draw at least one frame (?)
 [ ] - Post process, check three js, antialiasing to check with Hocus because it's not working like it should
 [ ] - Write a comprehensive Readme about what is this, how you can use it (bonus add cute corgi picture) - Try generated doc from jsdoc
 
