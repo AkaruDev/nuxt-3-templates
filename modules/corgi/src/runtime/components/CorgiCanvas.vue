@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { Vector3, Color } from "three";
+import { Vector3, Color } from "three"
 import { RESOURCES_TYPES } from '../utils/types'
 
 const props = defineProps({
@@ -15,14 +15,18 @@ const props = defineProps({
     default: undefined,
     // TODO add validator for string with '.exr'
   },
-  gltf: {
+  model: {
     type: String,
     default: undefined,
     // TODO add validator for string with '.glb','gltf'
   },
   cameraPosition: {
     type: Vector3,
-    default: () => new Vector3(0, 0, 3)
+    default: () => new Vector3(0, 0, 0)
+  },
+  cameraRotation: {
+    type: Vector3,
+    default: () => new Vector3(0, 0, 0)
   },
   orbitControls: {
     type: Boolean,
@@ -51,17 +55,14 @@ const el = ref()
 /**
  * @type {import('../composables/corgi').UseCorgi}
 */
-const corgi = useCorgi(el, props.backgroundColor)
+const corgi = useCorgi(el, props)
 const resources = useResources()
+
 
 // Lifecycle
 onMounted(() => {
-  corgi.camera.position.set(props.cameraPosition.x, props.cameraPosition.y, props.cameraPosition.z)
-  if (props.orbitControls) corgi.addOrbitControls(props.enableZoom, props.enablePan)
-
   if (props.envmap) resources.add(useResource('envmap', props.envmap, RESOURCES_TYPES.EXR))
-  if (props.gltf) resources.add(useResource('model', props.gltf, RESOURCES_TYPES.GLTF))
-
+  if (props.model) resources.add(useResource('model', props.model, RESOURCES_TYPES.GLTF))
   resources.getAll().then(items => {
     items.forEach(item => {
       if (item.type === RESOURCES_TYPES.EXR) {
@@ -73,10 +74,26 @@ onMounted(() => {
     })
   })
 })
-// TODO watch props to change dynamicly the render params
-// TODO maybe expose method to animate models
+
+watch(() => [props.cameraPosition.x, props.cameraPosition.y, props.cameraPosition.z], ([x, y, z]) => {
+  corgi?.camera?.position?.set(x, y, z)
+  corgi?.camera?.updateProjectionMatrix()
+})
+
+watch(() => [props.cameraRotation.x, props.cameraRotation.y, props.cameraRotation.z], ([x, y, z]) => {
+  if (corgi?.orbitControls?.value) {
+    console.warn("Cannot move camera rotation if orbitControls exist")
+    return
+  }
+  corgi?.camera?.rotation?.set(x, y, z)
+  corgi?.camera?.updateProjectionMatrix()
+})
+
 </script>
 
-<style scoped>
-.CorgiCanvas {}
+<style lang="css" scoped>
+.CorgiCanvas {
+  position: relative;
+  width: 100%;
+}
 </style>

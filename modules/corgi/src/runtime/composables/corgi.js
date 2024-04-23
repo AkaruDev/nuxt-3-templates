@@ -2,9 +2,8 @@ import { useScene } from "./scene"
 import { useCamera } from "./camera"
 import { useWindowResize } from "./window-resize"
 import { ref, onMounted, onUnmounted } from "vue"
-import { QUALITIES } from "../utils/types"
 import { gsap } from "gsap"
-import { PMREMGenerator, Vector2, WebGLRenderer } from "three"
+import { PMREMGenerator, Vector2, Vector3, WebGLRenderer } from "three"
 
 /**
  * @typedef {Object} UseCorgi
@@ -15,13 +14,36 @@ import { PMREMGenerator, Vector2, WebGLRenderer } from "three"
  */
 
 /**
+ * @typedef {Object} CorgiOptions
+ * @property {import('three').Color} backgroundColor - THREE.Color
+ * @property {import('three').Vector3} cameraPosition - Position of the camera
+ * @property {import('three').Vector3} cameraRotation - Rotation of the camera
+ * @property {boolean} orbitControls - Add orbit controls
+ * @property {boolean} enableZoom - Enable zoom for the orbit controls
+ * @property {boolean} enablePan - Enable pan for the orbit controls
+ * @property {boolean} showEnvmap - If envmap show it in the background
+ * @property {number} pixelRatio - Pixel ratio for the renderer
+ */
+
+/**
  * Return a new Corgi instance
  * @param {ref<HTMLCanvasElement | OffscreenCanvas | void>} canvas
- * @param {import('three').Color | void} color
- * @param {ref<HTMLCanvasElement | OffscreenCanvas | void>} canvas
+ * @param {CorgiOptions} options
  * @returns {UseCorgi}
  */
-export const useCorgi = (canvas, color, quality = 1) => {
+export const useCorgi = (canvas, options) => {
+
+  options = {
+    backgroundColor: undefined,
+    cameraPosition: new Vector3(0, 0, 0),
+    cameraRotation: new Vector3(0, 0, 0),
+    orbitControls: false,
+    enableZoom: true,
+    enablePan: false,
+    showEnvmap: false,
+    pixelRatio: 1.5,
+    ...options
+  }
 
   const size = ref(new Vector2())
 
@@ -29,7 +51,7 @@ export const useCorgi = (canvas, color, quality = 1) => {
     scene,
     dispose: sceneDispose
   } = useScene()
-  if (color) scene.background = color
+  if (options.backgroundColor) scene.background = options.backgroundColor
 
   let renderer = ref(null)
 
@@ -37,9 +59,10 @@ export const useCorgi = (canvas, color, quality = 1) => {
     camera,
     resize: cameraResize
   } = useCamera()
+  camera.position.set(options.cameraPosition.x, options.cameraPosition.y, options.cameraPosition.z)
+  camera.rotation.setFromVector3(options.cameraRotation)
 
-  const orbitControls = null
-
+  const orbitControls = ref(null)
   let pmremGenerator = null
 
   // Methods
@@ -50,7 +73,7 @@ export const useCorgi = (canvas, color, quality = 1) => {
    */
   const addEnvmap = (texture, showInBacground = true) => {
     const envMap = pmremGenerator?.fromEquirectangular(texture).texture
-    if (showInBacground) scene.background = envMap
+    if (options.showEnvmap || showInBacground) scene.background = envMap
     scene.environment = envMap
 
     texture.dispose()
@@ -62,7 +85,7 @@ export const useCorgi = (canvas, color, quality = 1) => {
   }
 
   const render = () => {
-    orbitControls?.update?.()
+    orbitControls.value?.update?.()
     renderer.value?.render(scene, camera)
   }
 
@@ -83,12 +106,12 @@ export const useCorgi = (canvas, color, quality = 1) => {
   /**
    * Add orbit controls
    */
-  const addOrbitControls = (enableZoom = true, enablePan = true) => {
+  const addOrbitControls = (enableZoom = true, enablePan = false) => {
     import('three/addons/controls/OrbitControls.js').then(rs => {
-      const controls = new rs.OrbitControls(camera, canvas.value)
-      controls.enableZoom = enableZoom
-      controls.enablePan = enablePan
-      controls.update()
+      orbitControls.value = new rs.OrbitControls(camera, canvas.value)
+      orbitControls.value.enableZoom = enableZoom
+      orbitControls.value.enablePan = enablePan
+      orbitControls.value.update()
     })
   }
 
@@ -99,11 +122,12 @@ export const useCorgi = (canvas, color, quality = 1) => {
 
   // Lifecycle
   onMounted(() => {
-    renderer.value = new WebGLRenderer({ canvas: canvas.value, alpha: color === undefined })
+    renderer.value = new WebGLRenderer({ canvas: canvas.value, alpha: options.backgroundColor === undefined })
 
     // Set the quality of the render, may be used for to change shadow quality for exemple
-    const pixelRatio = quality === QUALITIES.HIGH ? 2 : 1.5
-    renderer.value?.setPixelRatio(pixelRatio)
+    renderer.value?.setPixelRatio(options.pixelRatio)
+
+    if (options.orbitControls) addOrbitControls(options.enableZoom, options.enablePan)
 
     pmremGenerator = new PMREMGenerator(renderer.value)
     pmremGenerator.compileCubemapShader()
@@ -122,6 +146,7 @@ export const useCorgi = (canvas, color, quality = 1) => {
     sceneDispose()
   })
 
+
   return {
     scene,
     canvas,
@@ -130,5 +155,6 @@ export const useCorgi = (canvas, color, quality = 1) => {
     getSize,
     addEnvmap,
     addOrbitControls,
+    orbitControls,
   }
 }

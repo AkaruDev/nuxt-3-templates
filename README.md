@@ -10,7 +10,6 @@
 [ ] - Add callback for when useCorgi is ready aka has draw at least one frame (?)
 [ ] - Post process, check three js, antialiasing to check with Hocus because it's not working like it should
 [ ] - Write a comprehensive Readme about what is this, how you can use it (bonus add cute corgi picture) - Try generated doc from jsdoc
-[ ] - Optimise Threejs import like React Three Fiber https://gracious-keller-98ef35.netlify.app/docs/recipes/reducing-bundle-size/
 
 ## DONE
 [x] - Flowmap utils with offscreen canvas check OGL js implementation, threejs journey fbo tutorial
@@ -26,3 +25,4 @@
 [x] - Custom shaders import library
 [x] - Maybe add utils for glsl like noise, transform and others i can't think of
 [x] - Particles
+[x] - Not need cause threejs is treeshakeable -> Optimise Threejs import like React Three Fiber https://gracious-keller-98ef35.netlify.app/docs/recipes/reducing-bundle-size/
