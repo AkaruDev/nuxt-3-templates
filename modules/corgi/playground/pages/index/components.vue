@@ -4,29 +4,29 @@
       class="Page-canvas"
       envmap="/envmap.exr"
       model="/suzanne.glb"
-      :camera-position="position"
-      :camera-rotation="rotation"
+      :camera-position="cameraPosition"
+      :model-rotation="modelRotation"
       :orbit-controls="true"
       :enable-zoom="true"
       :enable-pan="false"
       :show-envmap="false"
-      :background-color="new Color('pink')"
     />
+    <!-- :background-color="new Color('pink')" -->
   </div>
 </template>
 
 <script setup>
 import { gsap } from 'gsap'
-import { Color, Vector3 } from 'three'
+import { Vector3 } from 'three'
+import { degToRad } from 'three/src/math/MathUtils.js';
 
 
-const position = ref(new Vector3(0, 0, 3))
-const rotation = ref(new Vector3(0, 0, 0))
+const cameraPosition = ref(new Vector3(0, 0, 6))
+const modelRotation = ref(new Vector3(0, 0, 0))
 
 onMounted(() => {
-  gsap.to(position.value, { x: 0.1, y: -0.1, z: 6, duration: 2, ease: "power3.out" })
-  gsap.to(rotation.value, { x: 0.1, y: 0.1, z: 10.5, duration: 2, ease: "power3.out" })
-  // position.value.y = 1.5
+  gsap.to(cameraPosition.value, { x: 0, y: 0, z: 4, duration: 0.8, ease: "power3.out" })
+  gsap.to(modelRotation.value, { y: degToRad(360), duration: 5, ease: "none", repeat: -1 })
 })
 
 </script>
@@ -38,8 +38,8 @@ onMounted(() => {
 
 .Page-canvas {
   position: absolute;
-  width: 35vw;
-  height: 25vw;
+  width: 50vw;
+  height: 50vh;
 
   top: 50%;
   left: 50%;

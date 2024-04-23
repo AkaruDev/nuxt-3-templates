@@ -6,25 +6,33 @@
 </template>
 
 <script setup>
-import { Vector3, Color } from "three"
+import { Vector3, Color, Object3D } from "three"
 import { RESOURCES_TYPES } from '../utils/types'
 
 const props = defineProps({
   envmap: {
     type: String,
     default: undefined,
-    // TODO add validator for string with '.exr'
+    validator: (value) => value.includes('.exr')
   },
   model: {
     type: String,
-    default: undefined,
-    // TODO add validator for string with '.glb','gltf'
+    required: true,
+    validator: (value) => value.includes('.gltf') || value.includes('.glb')
   },
   cameraPosition: {
     type: Vector3,
     default: () => new Vector3(0, 0, 0)
   },
   cameraRotation: {
+    type: Vector3,
+    default: () => new Vector3(0, 0, 0)
+  },
+  modelPosition: {
+    type: Vector3,
+    default: () => new Vector3(0, 0, 0)
+  },
+  modelRotation: {
     type: Vector3,
     default: () => new Vector3(0, 0, 0)
   },
@@ -57,7 +65,7 @@ const el = ref()
 */
 const corgi = useCorgi(el, props)
 const resources = useResources()
-
+const scene = ref(new Object3D())
 
 // Lifecycle
 onMounted(() => {
@@ -68,7 +76,8 @@ onMounted(() => {
       if (item.type === RESOURCES_TYPES.EXR) {
         corgi.addEnvmap(item.asset, props.showEnvmap)
       }
-      if (item.type === RESOURCES_TYPES.GLTF) {
+      if (item.type === RESOURCES_TYPES.GLTF && item?.asset?.scene) {
+        scene.value = item.asset.scene
         corgi.scene.add(item.asset.scene)
       }
     })
@@ -87,6 +96,14 @@ watch(() => [props.cameraRotation.x, props.cameraRotation.y, props.cameraRotatio
   }
   corgi?.camera?.rotation?.set(x, y, z)
   corgi?.camera?.updateProjectionMatrix()
+})
+
+watch(() => [props.modelPosition.x, props.modelPosition.y, props.modelPosition.z], ([x, y, z]) => {
+  scene.value.position.set(x, y, z)
+})
+
+watch(() => [props.modelRotation.x, props.modelRotation.y, props.modelRotation.z], ([x, y, z]) => {
+  scene.value.rotation.set(x, y, z)
 })
 
 </script>

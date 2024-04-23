@@ -1,5 +1,5 @@
 ## TODO
-[ ] - CorgiCanvas.vue that has props for loading and using different resources in props ? resources, transform, scene background color or transparent
+[ ] - Add observer to not render if canvas element is not visible
 [ ] - Add composable for tick useTick()
 [ ] - Planes that match HTML content position
 [ ] - Pixel to 3d size utils
@@ -12,6 +12,7 @@
 [ ] - Write a comprehensive Readme about what is this, how you can use it (bonus add cute corgi picture) - Try generated doc from jsdoc
 
 ## DONE
+[x] - CorgiCanvas.vue that has props for loading and using different resources in props ? resources, transform, scene background color or transparent
 [x] - Flowmap utils with offscreen canvas check OGL js implementation, threejs journey fbo tutorial
 [X] - Resources factory
 [X] - HDRI
