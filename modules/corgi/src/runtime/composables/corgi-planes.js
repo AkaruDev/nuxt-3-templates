@@ -3,50 +3,38 @@ import { useWindowResize } from "./window-resize"
 import { useTicker } from "./ticker"
 import { useIntersectionObserver } from "./intersection-observer"
 import { ref, onMounted, onUnmounted } from "vue"
-import { PMREMGenerator, PerspectiveCamera, Vector2, Vector3, WebGLRenderer } from "three"
+import { OrthographicCamera, PMREMGenerator, Vector2, Vector3, WebGLRenderer } from "three"
 
 /**
- * @typedef {Object} UseCorgi
+ * @typedef {Object} UseCorgiPlanes
  * @property {import('three').Scene} scene - THREE.Scene
  * @property {import('three').WebGLRenderer} renderer - THREE.WebGLRenderer
- * @property {import('three').PerspectiveCamera} camera - THREE.PerspectiveCamera
+ * @property {import('three').OrthographicCamera} camera - THREE.PerspectiveCamera
  * @property {function} getSize - Return camera width & height
  * @property {function} addEnvmap - add environement map
- * @property {function} addOrbitControls - add orbit controls
- * @property {ref<import('three/addons/controls/OrbitControls.js').OrbitControls>} orbitControls - If orbit controls is added return a ref to it
  */
 
 /**
- * @typedef {Object} CorgiOptions
+ * @typedef {Object} CorgiPlanesOptions
  * @property {import('three').Color} backgroundColor - THREE.Color
  * @property {import('three').Vector3} cameraPosition - Position of the camera
- * @property {import('three').Vector3} cameraRotation - Rotation of the camera
- * @property {boolean} orbitControls - Add orbit controls
- * @property {boolean} enableZoom - Enable zoom for the orbit controls
- * @property {boolean} enablePan - Enable pan for the orbit controls
  * @property {boolean} showEnvmap - If envmap show it in the background
  * @property {number} pixelRatio - Pixel ratio for the renderer
- * @property {number} fov - Fov for camera
  */
 
 /**
- * Return a new Corgi instance
+ * Return the Corgi Planes instance
  * @param {ref<HTMLCanvasElement | OffscreenCanvas | void>} canvas
- * @param {CorgiOptions} options
- * @returns {UseCorgi}
+ * @param {CorgiPlanesOptions} options
+ * @returns {UseCorgiPlanes}
  */
-export const useCorgi = (canvas, options) => {
+export const useCorgiPlanes = ((canvas, options) => {
 
   options = {
     backgroundColor: undefined,
     cameraPosition: new Vector3(0, 0, 0),
-    cameraRotation: new Vector3(0, 0, 0),
-    orbitControls: false,
-    enableZoom: true,
-    enablePan: false,
     showEnvmap: false,
     pixelRatio: 1.5,
-    fov: 50,
     ...options
   }
 
@@ -60,12 +48,9 @@ export const useCorgi = (canvas, options) => {
 
   let renderer = ref(null)
 
-
-  const camera = new PerspectiveCamera(options.fov, 1, 0.1, 100)
+  const camera = new OrthographicCamera()
   camera.position.set(options.cameraPosition.x, options.cameraPosition.y, options.cameraPosition.z)
-  camera.rotation.setFromVector3(options.cameraRotation)
 
-  const orbitControls = ref(null)
   let pmremGenerator = null
 
   // Methods
@@ -83,7 +68,6 @@ export const useCorgi = (canvas, options) => {
     pmremGenerator?.dispose()
   }
   const render = () => {
-    orbitControls.value?.update?.()
     renderer.value?.render(scene, camera)
   }
 
@@ -111,24 +95,12 @@ export const useCorgi = (canvas, options) => {
 
     camera.aspect = width / height
     camera.updateProjectionMatrix()
-
     renderer.value?.setSize(width, height)
 
     getSize()
   }
   useWindowResize(onResize)
 
-  /**
-   * Add orbit controls
-   */
-  const addOrbitControls = (enableZoom = true, enablePan = false) => {
-    import('three/addons/controls/OrbitControls.js').then(rs => {
-      orbitControls.value = new rs.OrbitControls(camera, canvas.value)
-      orbitControls.value.enableZoom = enableZoom
-      orbitControls.value.enablePan = enablePan
-      orbitControls.value.update()
-    })
-  }
 
   const getSize = () => {
     camera.getViewSize(camera.position.z, size.value)
@@ -141,8 +113,6 @@ export const useCorgi = (canvas, options) => {
 
     // Set the quality of the render, may be used for to change shadow quality for exemple
     renderer.value?.setPixelRatio(options.pixelRatio)
-
-    if (options.orbitControls) addOrbitControls(options.enableZoom, options.enablePan)
 
     pmremGenerator = new PMREMGenerator(renderer.value)
     pmremGenerator.compileCubemapShader()
@@ -158,6 +128,10 @@ export const useCorgi = (canvas, options) => {
     sceneDispose()
   })
 
+  // TODO method for adding plane with html element
+  // TODO add method to apply scroll translation
+  // TODO improve resize to resize correctly all the planes
+
   return {
     scene,
     canvas,
@@ -165,7 +139,5 @@ export const useCorgi = (canvas, options) => {
     camera,
     getSize,
     addEnvmap,
-    addOrbitControls,
-    orbitControls,
   }
-}
+})()
