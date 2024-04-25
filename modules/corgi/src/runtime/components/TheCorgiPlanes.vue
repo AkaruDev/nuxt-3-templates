@@ -6,7 +6,6 @@
 </template>
 
 <script setup>
-import { Color } from "three"
 import { RESOURCES_TYPES } from '../utils/types'
 
 const props = defineProps({
@@ -15,14 +14,10 @@ const props = defineProps({
     default: undefined,
     validator: (value) => value.includes('.exr')
   },
-  showEnvmap: {
-    type: Boolean,
-    default: false,
+  pixelRatio: {
+    type: Number,
+    default: 1.5,
   },
-  backgroundColor: {
-    type: Color,
-    default: new Color("pink"),
-  }
 })
 
 // Data
@@ -32,6 +27,8 @@ const el = ref()
 */
 const planes = useCorgiPlanes()
 const resources = useResources()
+
+// TODO check route change to remove planes of current route
 
 // Lifecycle
 onMounted(() => {
@@ -62,6 +59,6 @@ onUnmounted(() => {
 
   pointer-events: none;
 
-  z-index: 0;
+  z-index: 99;
 }
 </style>

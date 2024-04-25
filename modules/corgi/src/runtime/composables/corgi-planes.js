@@ -29,8 +29,6 @@ export const useCorgiPlanes = (() => {
 
   const canvas = ref(null)
   let options = {
-    backgroundColor: undefined,
-    showEnvmap: false,
     pixelRatio: 1.5,
   }
 
@@ -40,7 +38,6 @@ export const useCorgiPlanes = (() => {
     scene,
     dispose: sceneDispose
   } = useScene()
-  if (options.backgroundColor) scene.background = options.backgroundColor
 
   let renderer = ref(null)
 
@@ -122,10 +119,9 @@ export const useCorgiPlanes = (() => {
   const mount = (_canvas, _options) => {
     if (canvas.value) return console.warn("Canvas already exist. Mount should be called only once.")
     canvas.value = _canvas.value
-    options = { ...options, _options }
+    options = { ...options, ..._options }
 
-    renderer.value = new WebGLRenderer({ canvas: canvas.value, alpha: options.backgroundColor === undefined })
-
+    renderer.value = new WebGLRenderer({ canvas: canvas.value, alpha: true })
     // Set the quality of the render, may be used for to change shadow quality for exemple
     renderer.value?.setPixelRatio(options.pixelRatio)
 
