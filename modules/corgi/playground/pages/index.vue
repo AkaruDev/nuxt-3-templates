@@ -46,7 +46,7 @@ const pages = [
 
   gap: 0;
 
-  background-color: #798E7B;
+  background-color: #161616;
 
   z-index: 0;
 }

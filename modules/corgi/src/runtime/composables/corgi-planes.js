@@ -31,6 +31,7 @@ export const useCorgiPlanes = (() => {
   let options = {
     pixelRatio: 1.5,
   }
+  const perspective = 800
 
   let width = 0
   let height = 0
@@ -68,9 +69,9 @@ export const useCorgiPlanes = (() => {
   let canRender = true
   const onTick = () => {
     if (!canRender) return
+    updateCamera()
     render()
   }
-
 
   /**
    * Resize to fit given size
@@ -84,7 +85,6 @@ export const useCorgiPlanes = (() => {
     renderer.value?.setSize(width, height)
 
     // Set camera position to have unit equivalent in pixel
-    const perspective = 800
     const fov = (180 * (2 * Math.atan(width / 2 / perspective))) / Math.PI
     camera.fov = fov
     camera.position.setZ(perspective)
@@ -142,6 +142,11 @@ export const useCorgiPlanes = (() => {
     // TODO if needed do dispose call here
     // TODO remove planes from scene
     planes = []
+  }
+
+  const updateCamera = () => {
+    const y = (-window.scrollY * camera.aspect)
+    camera.position.set(0, y, perspective)
   }
 
   // Lifecycle
