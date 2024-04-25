@@ -1,5 +1,6 @@
 <template>
   <div>
+    <TheCorgiPlanes />
     <NuxtPage class="Page" />
   </div>
 </template>

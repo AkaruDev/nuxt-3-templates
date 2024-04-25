@@ -19,8 +19,12 @@ export default defineNuxtModule({
 
     // Add components
     addComponent({
-      name: 'CorgiCanvas', // name of the component to be used in vue templates
+      name: 'CorgiCanvas',
       filePath: resolve('runtime/components/CorgiCanvas.vue')
+    })
+    addComponent({
+      name: 'TheCorgiPlanes',
+      filePath: resolve('runtime/components/TheCorgiPlanes.vue')
     })
   }
 })

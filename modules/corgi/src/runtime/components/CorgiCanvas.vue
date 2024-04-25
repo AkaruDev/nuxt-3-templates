@@ -108,9 +108,9 @@ watch(() => [props.modelRotation.x, props.modelRotation.y, props.modelRotation.z
 
 </script>
 
-<style lang="css" scoped>
+<style scoped>
 .CorgiCanvas {
-  position: relative;
   width: 100%;
+  height: 100%;
 }
 </style>

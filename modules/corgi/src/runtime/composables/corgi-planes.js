@@ -1,15 +1,13 @@
 import { useScene } from "./scene"
-import { useWindowResize } from "./window-resize"
-import { useTicker } from "./ticker"
-import { useIntersectionObserver } from "./intersection-observer"
-import { ref, onMounted, onUnmounted } from "vue"
-import { OrthographicCamera, PMREMGenerator, Vector2, Vector3, WebGLRenderer } from "three"
+import { ref } from "vue"
+import { PMREMGenerator, PerspectiveCamera, Vector2, WebGLRenderer } from "three"
+import gsap from "gsap"
 
 /**
  * @typedef {Object} UseCorgiPlanes
  * @property {import('three').Scene} scene - THREE.Scene
  * @property {import('three').WebGLRenderer} renderer - THREE.WebGLRenderer
- * @property {import('three').OrthographicCamera} camera - THREE.PerspectiveCamera
+ * @property {import('three').PerspectiveCamera} camera - THREE.PerspectiveCamera
  * @property {function} getSize - Return camera width & height
  * @property {function} addEnvmap - add environement map
  */
@@ -17,7 +15,6 @@ import { OrthographicCamera, PMREMGenerator, Vector2, Vector3, WebGLRenderer } f
 /**
  * @typedef {Object} CorgiPlanesOptions
  * @property {import('three').Color} backgroundColor - THREE.Color
- * @property {import('three').Vector3} cameraPosition - Position of the camera
  * @property {boolean} showEnvmap - If envmap show it in the background
  * @property {number} pixelRatio - Pixel ratio for the renderer
  */
@@ -28,14 +25,13 @@ import { OrthographicCamera, PMREMGenerator, Vector2, Vector3, WebGLRenderer } f
  * @param {CorgiPlanesOptions} options
  * @returns {UseCorgiPlanes}
  */
-export const useCorgiPlanes = ((canvas, options) => {
+export const useCorgiPlanes = (() => {
 
-  options = {
+  const canvas = ref(null)
+  let options = {
     backgroundColor: undefined,
-    cameraPosition: new Vector3(0, 0, 0),
     showEnvmap: false,
     pixelRatio: 1.5,
-    ...options
   }
 
   const size = ref(new Vector2())
@@ -48,8 +44,7 @@ export const useCorgiPlanes = ((canvas, options) => {
 
   let renderer = ref(null)
 
-  const camera = new OrthographicCamera()
-  camera.position.set(options.cameraPosition.x, options.cameraPosition.y, options.cameraPosition.z)
+  const camera = new PerspectiveCamera()
 
   let pmremGenerator = null
 
@@ -77,14 +72,6 @@ export const useCorgiPlanes = ((canvas, options) => {
     if (!canRender) return
     render()
   }
-  useTicker(onTick)
-
-  // Intersection observer
-  useIntersectionObserver(canvas, () => {
-    canRender = true
-  }, () => {
-    canRender = false
-  })
 
   /**
    * Resize to fit given size
@@ -93,22 +80,50 @@ export const useCorgiPlanes = ((canvas, options) => {
     const width = canvas?.value?.clientWidth || 0
     const height = canvas?.value?.clientHeight || 0
 
+    // Set camera position to have unit equivalent in pixel
+    const perspective = 800
+    const fov = (180 * (2 * Math.atan(width * 0.5 / perspective))) / Math.PI
     camera.aspect = width / height
+    camera.fov = fov
+    camera.position.setZ(perspective)
     camera.updateProjectionMatrix()
+
+    // Render resize
     renderer.value?.setSize(width, height)
 
     getSize()
   }
-  useWindowResize(onResize)
 
 
   const getSize = () => {
     camera.getViewSize(camera.position.z, size.value)
+    // TODO maybe parse all planes to recalculate boundings and position of planes
     return size.value
   }
 
+  let planes = []
+  const addPlane = (element, material) => {
+    if (planes.find(plane => plane.element === element)) return
+    // TODO build threejs mesh plane
+    planes.add({ element, material })
+  }
+
+  const removePlane = (element) => {
+    planes = planes.filter(plane => plane.element !== element)
+  }
+
+  const removeAllPlanes = () => {
+    // TODO if needed do dispose call here
+    // TODO remove planes from scene
+    planes = []
+  }
+
   // Lifecycle
-  onMounted(() => {
+  const mount = (_canvas, _options) => {
+    if (canvas.value) return console.warn("Canvas already exist. Mount should be called only once.")
+    canvas.value = _canvas.value
+    options = { ...options, _options }
+
     renderer.value = new WebGLRenderer({ canvas: canvas.value, alpha: options.backgroundColor === undefined })
 
     // Set the quality of the render, may be used for to change shadow quality for exemple
@@ -117,27 +132,40 @@ export const useCorgiPlanes = ((canvas, options) => {
     pmremGenerator = new PMREMGenerator(renderer.value)
     pmremGenerator.compileCubemapShader()
 
+    window.addEventListener("resize", onResize)
+    gsap.ticker.add(onTick)
     onResize()
-  })
+  }
 
   /**
    * Remove all event listener, clear all that need to be cleaned (textures etc)
    */
-  onUnmounted(() => {
+  const unmount = () => {
+    window.removeEventListener("resize", onResize)
+    gsap.ticker.remove(onTick)
+    removeAllPlanes()
     renderer.value?.dispose()
     sceneDispose()
-  })
+  }
 
   // TODO method for adding plane with html element
   // TODO add method to apply scroll translation
   // TODO improve resize to resize correctly all the planes
 
-  return {
-    scene,
-    canvas,
-    renderer,
-    camera,
-    getSize,
-    addEnvmap,
+  return () => {
+
+    return {
+      scene,
+      canvas,
+      renderer,
+      camera,
+      getSize,
+      addEnvmap,
+      addPlane,
+      removePlane,
+      canRender,
+      mount,
+      unmount,
+    }
   }
 })()
