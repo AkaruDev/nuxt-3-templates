@@ -1,6 +1,6 @@
 <template>
   <canvas
-    ref="el"
+    ref="canvas"
     class="CorgiPlanes"
   />
 </template>
@@ -21,7 +21,7 @@ const props = defineProps({
 })
 
 // Data
-const el = ref()
+const canvas = ref()
 /**
  * @type {import('../composables/corgi-planes').UseCorgiPlanes}
 */
@@ -32,8 +32,7 @@ const resources = useResources()
 
 // Lifecycle
 onMounted(() => {
-  planes.mount(el, props)
-
+  planes.mount(canvas, props)
   if (props.envmap) {
     resources.add(useResource('envmap', props.envmap, RESOURCES_TYPES.EXR))
     resources.get('envmap').then(envmap => {
@@ -52,8 +51,8 @@ onUnmounted(() => {
 <style scoped>
 .CorgiPlanes {
   position: fixed;
-  width: 100vw !important;
-  height: 100vh !important;
+  width: 100vw;
+  height: 100vh;
 
   top: 0;
   left: 0;

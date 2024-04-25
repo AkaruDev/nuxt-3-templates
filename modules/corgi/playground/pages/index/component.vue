@@ -18,8 +18,7 @@
 <script setup>
 import { gsap } from 'gsap'
 import { Vector3 } from 'three'
-import { degToRad } from 'three/src/math/MathUtils.js';
-
+import { degToRad } from 'three/src/math/MathUtils.js'
 
 const cameraPosition = ref(new Vector3(0, 0, 6))
 const modelRotation = ref(new Vector3(0, 0, 0))

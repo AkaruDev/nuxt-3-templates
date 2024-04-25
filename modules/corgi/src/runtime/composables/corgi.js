@@ -82,6 +82,7 @@ export const useCorgi = (canvas, options) => {
     texture.dispose()
     pmremGenerator?.dispose()
   }
+
   const render = () => {
     orbitControls.value?.update?.()
     renderer.value?.render(scene, camera)

@@ -1,7 +1,7 @@
 import { useScene } from "./scene"
 import { ref } from "vue"
 import { Mesh, PMREMGenerator, PerspectiveCamera, PlaneGeometry, Vector2, Vector4, WebGLRenderer } from "three"
-import gsap from "gsap"
+import { gsap } from "gsap"
 
 /**
  * @typedef {Object} UseCorgiPlanes
@@ -67,9 +67,10 @@ export const useCorgiPlanes = (() => {
 
   // Tick
   let canRender = true
+  let scrollY = 0
   const onTick = () => {
     if (!canRender) return
-    updateCamera()
+    if (scene.position.y !== scrollY) scene.position.y = scrollY
     render()
   }
 
@@ -77,9 +78,8 @@ export const useCorgiPlanes = (() => {
    * Resize to fit given size
    */
   const onResize = () => {
-    width = canvas?.value?.clientWidth || 0
-    height = canvas?.value?.clientHeight || 0
-
+    width = window.innerWidth || 0
+    height = window.innerHeight || 0
 
     // Render resize
     renderer.value?.setSize(width, height)
@@ -113,20 +113,18 @@ export const useCorgiPlanes = (() => {
    */
   const addPlane = (element, material) => {
     if (planes.find(plane => plane.element === element)) return
-    // TODO build threejs mesh plane
 
     const plane = { element, mesh: new Mesh(new PlaneGeometry(1, 1, 1, 1), material), bounds: new Vector4(), material }
-
+    setPlaneBounds(plane)
     // TODO maybe add resize observer and observe element to set plane bounds on change
     planes.push(plane)
-    setPlaneBounds(plane)
     scene.add(plane.mesh)
   }
 
   const setPlaneBounds = (plane) => {
     const elementBounds = plane.element.getBoundingClientRect()
     plane.bounds.left = (elementBounds.left - width * 0.5 + elementBounds.width * 0.5) * camera.aspect
-    plane.bounds.top = (-elementBounds.top + height * 0.5 - elementBounds.height * 0.5) * camera.aspect
+    plane.bounds.top = (-(elementBounds.top + window.scrollY) + height * 0.5 - elementBounds.height * 0.5) * camera.aspect
     plane.bounds.width = elementBounds.width * camera.aspect
     plane.bounds.height = elementBounds.height * camera.aspect
 
@@ -144,14 +142,15 @@ export const useCorgiPlanes = (() => {
     planes = []
   }
 
-  const updateCamera = () => {
-    const y = (-window.scrollY * camera.aspect)
-    camera.position.set(0, y, perspective)
+  const onScroll = () => {
+    scrollY = (window.scrollY * camera.aspect)
+    scene.updateMatrix()
   }
 
   // Lifecycle
   const mount = (_canvas, _options) => {
     if (canvas.value) return console.warn("Canvas already exist. Mount should be called only once.")
+
     canvas.value = _canvas.value
     options = { ...options, ..._options }
 
@@ -162,11 +161,11 @@ export const useCorgiPlanes = (() => {
     pmremGenerator = new PMREMGenerator(renderer.value)
     pmremGenerator.compileCubemapShader()
 
-    window.addEventListener("resize", onResize)
-    gsap.ticker.add(onTick)
+    window.addEventListener("resize", onResize, { passive: true })
     onResize()
-
-    // TODO listen to scroll changes
+    window.addEventListener("scroll", onScroll, { passive: true })
+    onScroll()
+    gsap.ticker.add(onTick)
   }
 
   /**
@@ -174,6 +173,7 @@ export const useCorgiPlanes = (() => {
    */
   const unmount = () => {
     window.removeEventListener("resize", onResize)
+    window.removeEventListener("scroll", onScroll)
     gsap.ticker.remove(onTick)
     removeAllPlanes()
     renderer.value?.dispose()
@@ -196,6 +196,7 @@ export const useCorgiPlanes = (() => {
       addPlane,
       removePlane,
       canRender,
+      onResize,
       mount,
       unmount,
     }

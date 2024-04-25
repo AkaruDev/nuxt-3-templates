@@ -4,6 +4,14 @@
       ref="plane"
       class="Plane"
     />
+    <div
+      ref="plane2"
+      class="Plane"
+    />
+    <div
+      ref="plane3"
+      class="Plane"
+    />
   </div>
 </template>
 
@@ -12,16 +20,21 @@
 import { Color, MeshBasicMaterial } from 'three';
 
 const plane = ref()
+const plane2 = ref()
+const plane3 = ref()
 const planes = useCorgiPlanes()
 
 onMounted(() => {
   planes.addPlane(plane.value, new MeshBasicMaterial({ color: new Color("pink") }))
+  planes.addPlane(plane2.value, new MeshBasicMaterial({ color: new Color("pink") }))
+  planes.addPlane(plane3.value, new MeshBasicMaterial({ color: new Color("pink") }))
 })
 
 </script>
 
 <style scoped>
 .Page {
+  position: relative;
   display: flex;
   flex-flow: column;
   align-items: center;
@@ -35,10 +48,16 @@ onMounted(() => {
   flex: none;
   position: relative;
   width: 30%;
-  height: 600px;
+  aspect-ratio: 16/9;
 
   margin-top: 20px;
 
   background-color: yellow;
+
+  backface-visibility: hidden;
+
+  transform: translateZ(0);
+
+  z-index: 0;
 }
 </style>

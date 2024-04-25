@@ -99,7 +99,7 @@ const pages = [
 
   a {
     height: 20px;
-    font-size: 20px;
+    font-size: 16px;
     font-family: sans-serif;
     text-decoration: none;
 

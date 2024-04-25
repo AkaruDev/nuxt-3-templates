@@ -14,9 +14,6 @@ import { AgXToneMapping } from 'three'
 // Data
 const canvas = ref()
 
-/**
- * @type {import('../../src/runtime/composables/corgi').UseCorgi}
- */
 const corgi = useCorgi(canvas)
 const resources = useResources()
 
@@ -43,6 +40,7 @@ onMounted(() => {
     const suzanne = modelResource.asset.scene.getObjectByName("Suzanne")
     corgi.scene.add(suzanne)
   })
+
 })
 
 </script>
