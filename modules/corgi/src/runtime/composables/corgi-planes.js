@@ -144,7 +144,6 @@ export const useCorgiPlanes = (() => {
 
   const onScroll = () => {
     scrollY = (window.scrollY * camera.aspect)
-    scene.updateMatrix()
   }
 
   // Lifecycle
