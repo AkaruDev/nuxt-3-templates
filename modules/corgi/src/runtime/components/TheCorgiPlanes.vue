@@ -40,6 +40,7 @@ onMounted(() => {
       planes.addEnvmap(envmap.asset, props.showEnvmap)
     })
   }
+
 })
 
 onUnmounted(() => {

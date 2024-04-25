@@ -1,6 +1,6 @@
 import { useScene } from "./scene"
 import { ref } from "vue"
-import { PMREMGenerator, PerspectiveCamera, Vector2, WebGLRenderer } from "three"
+import { Mesh, PMREMGenerator, PerspectiveCamera, PlaneGeometry, Vector2, Vector4, WebGLRenderer } from "three"
 import gsap from "gsap"
 
 /**
@@ -41,7 +41,7 @@ export const useCorgiPlanes = (() => {
 
   let renderer = ref(null)
 
-  const camera = new PerspectiveCamera()
+  const camera = new PerspectiveCamera(50, 1, 1, 800)
 
   let pmremGenerator = null
 
@@ -70,23 +70,28 @@ export const useCorgiPlanes = (() => {
     render()
   }
 
+
+  let width = 0
+  let height = 0
   /**
    * Resize to fit given size
    */
   const onResize = () => {
-    const width = canvas?.value?.clientWidth || 0
-    const height = canvas?.value?.clientHeight || 0
+    width = canvas?.value?.clientWidth || 0
+    height = canvas?.value?.clientHeight || 0
 
-    // Set camera position to have unit equivalent in pixel
-    const perspective = 800
-    const fov = (180 * (2 * Math.atan(width * 0.5 / perspective))) / Math.PI
-    camera.aspect = width / height
-    camera.fov = fov
-    camera.position.setZ(perspective)
-    camera.updateProjectionMatrix()
 
     // Render resize
     renderer.value?.setSize(width, height)
+
+    // Set camera position to have unit equivalent in pixel
+    const perspective = 800
+    const fov = (180 * (2 * Math.atan(width / 2 / perspective))) / Math.PI
+    camera.fov = fov
+    camera.position.setZ(perspective)
+    camera.aspect = width / height
+    camera.updateProjectionMatrix()
+
 
     getSize()
   }
@@ -99,10 +104,31 @@ export const useCorgiPlanes = (() => {
   }
 
   let planes = []
+  /**
+   *
+   * @param {HTMLElement} element
+   * @param {import('three').Material} material
+   * @returns
+   */
   const addPlane = (element, material) => {
     if (planes.find(plane => plane.element === element)) return
     // TODO build threejs mesh plane
-    planes.add({ element, material })
+
+    const elementBounds = element.getBoundingClientRect()
+    const plane = new Mesh(new PlaneGeometry(1, 1, 1, 1), material)
+
+    const bounds = new Vector4()
+    bounds.left = (elementBounds.left - width * 0.5 + elementBounds.width * 0.5) * camera.aspect
+    bounds.top = (-elementBounds.top + height * 0.5 - elementBounds.height * 0.5) * camera.aspect
+    bounds.width = elementBounds.width * camera.aspect
+    bounds.height = elementBounds.height * camera.aspect
+
+    plane.position.set(bounds.left, bounds.top, 0)
+    plane.scale.set(bounds.width, bounds.height, 1)
+    planes.push({ element, bounds, material })
+
+    scene.add(plane)
+
   }
 
   const removePlane = (element) => {
@@ -131,6 +157,8 @@ export const useCorgiPlanes = (() => {
     window.addEventListener("resize", onResize)
     gsap.ticker.add(onTick)
     onResize()
+
+    // TODO listen to scroll changes
   }
 
   /**
