@@ -32,18 +32,19 @@ export const useCorgiPlanes = (() => {
     pixelRatio: 1.5,
   }
 
+  let width = 0
+  let height = 0
+  let planes = []
   const size = ref(new Vector2())
+  let pmremGenerator = null
+  let renderer = ref(null)
 
   const {
     scene,
     dispose: sceneDispose
   } = useScene()
 
-  let renderer = ref(null)
-
   const camera = new PerspectiveCamera(50, 1, 1, 800)
-
-  let pmremGenerator = null
 
   // Methods
   /**
@@ -71,8 +72,6 @@ export const useCorgiPlanes = (() => {
   }
 
 
-  let width = 0
-  let height = 0
   /**
    * Resize to fit given size
    */
@@ -92,8 +91,11 @@ export const useCorgiPlanes = (() => {
     camera.aspect = width / height
     camera.updateProjectionMatrix()
 
-
     getSize()
+
+    planes.forEach(plane => {
+      setPlaneBounds(plane)
+    })
   }
 
 
@@ -103,7 +105,6 @@ export const useCorgiPlanes = (() => {
     return size.value
   }
 
-  let planes = []
   /**
    *
    * @param {HTMLElement} element
@@ -114,21 +115,23 @@ export const useCorgiPlanes = (() => {
     if (planes.find(plane => plane.element === element)) return
     // TODO build threejs mesh plane
 
-    const elementBounds = element.getBoundingClientRect()
-    const plane = new Mesh(new PlaneGeometry(1, 1, 1, 1), material)
+    const plane = { element, mesh: new Mesh(new PlaneGeometry(1, 1, 1, 1), material), bounds: new Vector4(), material }
 
-    const bounds = new Vector4()
-    bounds.left = (elementBounds.left - width * 0.5 + elementBounds.width * 0.5) * camera.aspect
-    bounds.top = (-elementBounds.top + height * 0.5 - elementBounds.height * 0.5) * camera.aspect
-    bounds.width = elementBounds.width * camera.aspect
-    bounds.height = elementBounds.height * camera.aspect
+    // TODO maybe add resize observer and observe element to set plane bounds on change
+    planes.push(plane)
+    setPlaneBounds(plane)
+    scene.add(plane.mesh)
+  }
 
-    plane.position.set(bounds.left, bounds.top, 0)
-    plane.scale.set(bounds.width, bounds.height, 1)
-    planes.push({ element, bounds, material })
+  const setPlaneBounds = (plane) => {
+    const elementBounds = plane.element.getBoundingClientRect()
+    plane.bounds.left = (elementBounds.left - width * 0.5 + elementBounds.width * 0.5) * camera.aspect
+    plane.bounds.top = (-elementBounds.top + height * 0.5 - elementBounds.height * 0.5) * camera.aspect
+    plane.bounds.width = elementBounds.width * camera.aspect
+    plane.bounds.height = elementBounds.height * camera.aspect
 
-    scene.add(plane)
-
+    plane.mesh.position.set(plane.bounds.left, plane.bounds.top, 0)
+    plane.mesh.scale.set(plane.bounds.width, plane.bounds.height, 1)
   }
 
   const removePlane = (element) => {

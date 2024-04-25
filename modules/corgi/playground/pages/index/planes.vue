@@ -34,7 +34,7 @@ onMounted(() => {
 .Plane {
   flex: none;
   position: relative;
-  width: 400px;
+  width: 30%;
   height: 600px;
 
   margin-top: 20px;
