@@ -31,7 +31,7 @@ export const useCorgiPlanes = (() => {
   let options = {
     pixelRatio: 1.5,
   }
-  const perspective = 800
+  const perspective = 10
 
   let width = 0
   let height = 0
@@ -45,7 +45,7 @@ export const useCorgiPlanes = (() => {
     dispose: sceneDispose
   } = useScene()
 
-  const camera = new PerspectiveCamera(50, 1, 1, 800)
+  const camera = new PerspectiveCamera(50, 1, 1, perspective)
 
   // Methods
   /**
@@ -61,16 +61,17 @@ export const useCorgiPlanes = (() => {
     texture.dispose()
     pmremGenerator?.dispose()
   }
-  const render = () => {
-    renderer.value?.render(scene, camera)
+
+  let canRender = true
+  const render = (force = false) => {
+    if (canRender || force) {
+      renderer.value?.render(scene, camera)
+    }
   }
 
   // Tick
-  let canRender = true
   let scrollY = 0
   const onTick = () => {
-    if (!canRender) return
-    if (scene.position.y !== scrollY) scene.position.y = scrollY
     render()
   }
 
@@ -93,15 +94,16 @@ export const useCorgiPlanes = (() => {
 
     getSize()
 
+    // Set scroll position
+    onScroll()
+    // On resize reset boundings/positions of planes
     planes.forEach(plane => {
-      setPlaneBounds(plane)
+      setPlane(plane)
     })
   }
 
-
   const getSize = () => {
     camera.getViewSize(camera.position.z, size.value)
-    // TODO maybe parse all planes to recalculate boundings and position of planes
     return size.value
   }
 
@@ -115,13 +117,15 @@ export const useCorgiPlanes = (() => {
     if (planes.find(plane => plane.element === element)) return
 
     const plane = { element, mesh: new Mesh(new PlaneGeometry(1, 1, 1, 1), material), bounds: new Vector4(), material }
-    setPlaneBounds(plane)
+    setPlane(plane)
     // TODO maybe add resize observer and observe element to set plane bounds on change
     planes.push(plane)
     scene.add(plane.mesh)
+
+    render(true)
   }
 
-  const setPlaneBounds = (plane) => {
+  const setPlane = (plane) => {
     const elementBounds = plane.element.getBoundingClientRect()
     plane.bounds.left = (elementBounds.left - width * 0.5 + elementBounds.width * 0.5) * camera.aspect
     plane.bounds.top = (-(elementBounds.top + window.scrollY) + height * 0.5 - elementBounds.height * 0.5) * camera.aspect
@@ -143,8 +147,13 @@ export const useCorgiPlanes = (() => {
   }
 
   const onScroll = () => {
-    scrollY = (window.scrollY * camera.aspect)
+    const currentY = window.scrollY * camera.aspect
+    if (scrollY !== currentY) {
+      scrollY = currentY
+      scene.position.y = scrollY
+    }
   }
+
 
   // Lifecycle
   const mount = (_canvas, _options) => {
@@ -165,12 +174,14 @@ export const useCorgiPlanes = (() => {
     window.addEventListener("scroll", onScroll, { passive: true })
     onScroll()
     gsap.ticker.add(onTick)
+
   }
 
   /**
    * Remove all event listener, clear all that need to be cleaned (textures etc)
    */
   const unmount = () => {
+    canRender = false
     window.removeEventListener("resize", onResize)
     window.removeEventListener("scroll", onScroll)
     gsap.ticker.remove(onTick)
