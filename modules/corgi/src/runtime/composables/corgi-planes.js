@@ -5,11 +5,22 @@ import { gsap } from "gsap"
 
 /**
  * @typedef {Object} UseCorgiPlanes
- * @property {import('three').Scene} scene - THREE.Scene
- * @property {import('three').WebGLRenderer} renderer - THREE.WebGLRenderer
- * @property {import('three').PerspectiveCamera} camera - THREE.PerspectiveCamera
- * @property {function} getSize - Return camera width & height
  * @property {function} addEnvmap - add environement map
+ * @property {function} addPlane - add plane
+ * @property {boolean} canRender - Can the render be done ?
+ * @property {function} getSize - Return camera width & height
+ * @property {function} mount - Init the canvas and the listeners
+ * @property {import('three').WebGLRenderer} renderer - Remove a plane from the scene
+ * @property {function} removePlane - Remove a plane from the scene
+ * @property {function} removePlaneByElement - Find a plane by its element and remove it from the scene
+ * @property {function} unmount - Dispose and remove canvas rendering
+ */
+
+/**
+ * @typedef {Object} UseCorgiPlane
+ * @property {HTMLElement} element - HTMLElement
+ * @property {import('three').Mesh} mesh - THREE.Mesh
+ * @property {import('three').Vector4} bounds - THREE.Vector4
  */
 
 /**
@@ -20,13 +31,14 @@ import { gsap } from "gsap"
  */
 
 /**
- * Return the Corgi Planes instance
- * @param {ref<HTMLCanvasElement | OffscreenCanvas | void>} canvas
- * @param {CorgiPlanesOptions} options
+ * Return the Corgi Planes instance.
  * @returns {UseCorgiPlanes}
  */
 export const useCorgiPlanes = (() => {
 
+  /**
+   * @type {ref<HTMLCanvasElement | OffscreenCanvas | void>}
+   */
   const canvas = ref(null)
   let options = {
     pixelRatio: 1.5,
@@ -46,6 +58,9 @@ export const useCorgiPlanes = (() => {
     dispose: sceneDispose
   } = useScene()
 
+  /**
+   * @type {import('three').PerspectiveCamera}
+   */
   const camera = new PerspectiveCamera(50, 1, 1, perspective * 1.2)
 
   // Methods
@@ -114,9 +129,8 @@ export const useCorgiPlanes = (() => {
    *
    * @param {HTMLElement} element
    * @param {import('three').Material} material
-   * @returns
+   * @returns {UseCorgiPlane}
    */
-
   const addPlane = (element, material, widthSegments = 1, heightSegments = 1) => {
     if (!element || planes.find(plane => plane.element === element)) return
     const planeGeometry = new PlaneGeometry(1, 1, widthSegments, heightSegments)
@@ -132,6 +146,10 @@ export const useCorgiPlanes = (() => {
     return plane
   }
 
+  /**
+   *
+   * @param {UseCorgiPlane} plane
+   */
   const setPlane = (plane) => {
     const elementBounds = plane.element.getBoundingClientRect()
     plane.bounds.left = (elementBounds.left - width * 0.5 + elementBounds.width * 0.5) * camera.aspect
@@ -143,23 +161,40 @@ export const useCorgiPlanes = (() => {
     plane.mesh.scale.set(plane.bounds.width, plane.bounds.height, 1)
   }
 
-  const removePlane = (element) => {
-    const plane = planes.find(plane => plane.element === element)
-    if (!element || !plane) return
+  /**
+   * Remove one plane and dispose of it
+   * @param {UseCorgiPlane} plane
+   * @returns
+   */
+  const removePlane = (plane) => {
     scene.remove(plane.mesh)
     plane.mesh.geometry.dispose()
     cleanMaterial(plane.mesh.material)
-    planes = planes.filter(plane => plane.element !== element)
+    planes = planes.filter(item => item !== plane)
   }
 
+  const removePlaneByElement = (element) => {
+    const plane = getPlane(element)
+    if (!plane) return
+    scene.remove(plane.mesh)
+    plane.mesh.geometry.dispose()
+    cleanMaterial(plane.mesh.material)
+    planes = planes.filter(item => item !== plane)
+  }
+
+  /**
+   * Remove and dispose of all planes
+   */
   const removeAllPlanes = () => {
     planes.forEach(plane => {
-      scene.remove(plane.mesh)
+      removePlane(plane)
     })
     planes = []
   }
 
-  // TODO make method to get plane by element
+  const getPlane = (element) => {
+    return planes.find(plane => plane.element === element)
+  }
 
   const onScroll = () => {
     const currentY = container.scrollTop * camera.aspect
@@ -171,7 +206,15 @@ export const useCorgiPlanes = (() => {
 
 
   // Lifecycle
+  /**
+   * @type {HTMLElement | void}
+   */
   let container = null
+  /**
+   *
+   * @param {ref<HTMLCanvasElement | OffscreenCanvas | void>} _canvas
+   * @param {CorgiPlanesOptions} _options
+   */
   const mount = (_canvas, _options) => {
     if (canvas.value) return console.warn("Canvas already exist. Mount should be called only once.")
 
@@ -186,13 +229,11 @@ export const useCorgiPlanes = (() => {
     pmremGenerator = new PMREMGenerator(renderer.value)
     pmremGenerator.compileCubemapShader()
 
-
     window.addEventListener("resize", onResize, { passive: true })
     onResize()
     container.addEventListener("scroll", onScroll, { passive: true })
     onScroll()
     gsap.ticker.add(onTick)
-
   }
 
   /**
@@ -208,24 +249,18 @@ export const useCorgiPlanes = (() => {
     sceneDispose()
   }
 
-  // TODO method for adding plane with html element
-  // TODO add method to apply scroll translation
-  // TODO improve resize to resize correctly all the planes
-
   return () => {
 
     return {
-      scene,
-      canvas,
-      renderer,
-      camera,
-      getSize,
       addEnvmap,
       addPlane,
-      removePlane,
       canRender,
-      onResize,
+      getSize,
+      getPlane,
       mount,
+      removePlane,
+      removePlaneByElement,
+      renderer,
       unmount,
     }
   }

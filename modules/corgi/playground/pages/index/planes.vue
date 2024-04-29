@@ -61,20 +61,19 @@ onMounted(() => {
       side: DoubleSide,
     })
 
-
-    const p = planes.addPlane(plane.value, new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.6, side: DoubleSide }))
-    planes.addPlane(plane2.value, new MeshStandardMaterial({ color: new Color("blue"), metalness: 0.9, roughness: 0.6, side: DoubleSide }))
     planes.addPlane(plane3.value, material, 128, 128)
-    gsap.to(p.mesh.rotation, { y: degToRad(360), duration: 5, ease: "none", repeat: -1 })
-
   })
 
+  const p = planes.addPlane(plane.value, new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.6, side: DoubleSide }))
+  gsap.to(p.mesh.rotation, { y: degToRad(360), duration: 5, ease: "none", repeat: -1 })
+
+  planes.addPlane(plane2.value, new MeshStandardMaterial({ color: new Color("blue"), metalness: 0.9, roughness: 0.6, side: DoubleSide }))
 })
 
 onBeforeUnmount(() => {
-  planes.removePlane(plane.value)
-  planes.removePlane(plane2.value)
-  planes.removePlane(plane3.value)
+  planes.removePlaneByElement(plane.value)
+  planes.removePlaneByElement(plane2.value)
+  planes.removePlaneByElement(plane3.value)
 })
 
 // Methods
