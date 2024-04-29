@@ -26,8 +26,14 @@ const planes = useCorgiPlanes()
 
 onMounted(() => {
   planes.addPlane(plane.value, new MeshBasicMaterial({ color: new Color("pink") }))
-  planes.addPlane(plane2.value, new MeshBasicMaterial({ color: new Color("pink") }))
-  planes.addPlane(plane3.value, new MeshBasicMaterial({ color: new Color("pink") }))
+  planes.addPlane(plane2.value, new MeshBasicMaterial({ color: new Color("blue") }))
+  planes.addPlane(plane3.value, new MeshBasicMaterial({ color: new Color("red") }))
+})
+
+onBeforeUnmount(() => {
+  planes.removePlane(plane.value)
+  planes.removePlane(plane2.value)
+  planes.removePlane(plane3.value)
 })
 
 </script>

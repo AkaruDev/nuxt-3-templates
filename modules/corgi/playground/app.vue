@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="corgi-scroll-container">
     <TheCorgiPlanes />
     <NuxtPage class="Page" />
   </div>
@@ -38,6 +38,10 @@ a {
 
 h1 {
   font-size: 36px;
+}
 
+.corgi-scroll-container {
+  height: 100vh;
+  overflow-y: scroll;
 }
 </style>

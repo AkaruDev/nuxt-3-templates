@@ -34,5 +34,5 @@ export const useScene = () => {// color = "#1a1a1b"
     }
   }
 
-  return { scene, dispose }
+  return { scene, cleanMaterial, dispose }
 }

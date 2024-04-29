@@ -42,6 +42,7 @@ export const useCorgiPlanes = (() => {
 
   const {
     scene,
+    cleanMaterial,
     dispose: sceneDispose
   } = useScene()
 
@@ -72,6 +73,8 @@ export const useCorgiPlanes = (() => {
   // Tick
   let scrollY = 0
   const onTick = () => {
+    const currentY = Math.round(window.scrollY * camera.aspect)
+    if (scrollY === currentY) canRender = true
     render()
   }
 
@@ -113,14 +116,16 @@ export const useCorgiPlanes = (() => {
    * @param {import('three').Material} material
    * @returns
    */
+  const planeGeometry = new PlaneGeometry(1, 1, 2, 2)
   const addPlane = (element, material) => {
-    if (planes.find(plane => plane.element === element)) return
+    if (!element || planes.find(plane => plane.element === element)) return
 
-    const plane = { element, mesh: new Mesh(new PlaneGeometry(1, 1, 1, 1), material), bounds: new Vector4(), material }
-    setPlane(plane)
+    const plane = { element, mesh: new Mesh(planeGeometry, material), bounds: new Vector4(), material }
     // TODO maybe add resize observer and observe element to set plane bounds on change
     planes.push(plane)
     scene.add(plane.mesh)
+
+    setPlane(plane)
 
     render(true)
   }
@@ -128,50 +133,61 @@ export const useCorgiPlanes = (() => {
   const setPlane = (plane) => {
     const elementBounds = plane.element.getBoundingClientRect()
     plane.bounds.left = (elementBounds.left - width * 0.5 + elementBounds.width * 0.5) * camera.aspect
-    plane.bounds.top = (-(elementBounds.top + window.scrollY) + height * 0.5 - elementBounds.height * 0.5) * camera.aspect
-    plane.bounds.width = elementBounds.width * camera.aspect
-    plane.bounds.height = elementBounds.height * camera.aspect
+    plane.bounds.top = (-(elementBounds.top + container.scrollTop) + height * 0.5 - elementBounds.height * 0.5) * camera.aspect
+    plane.bounds.width = (elementBounds.width * camera.aspect)
+    plane.bounds.height = (elementBounds.height * camera.aspect)
 
     plane.mesh.position.set(plane.bounds.left, plane.bounds.top, 0)
     plane.mesh.scale.set(plane.bounds.width, plane.bounds.height, 1)
   }
 
   const removePlane = (element) => {
+    const plane = planes.find(plane => plane.element === element)
+    if (!element || !plane) return
+    scene.remove(plane.mesh)
+    plane.mesh.geometry.dispose()
+    cleanMaterial(plane.mesh.material)
     planes = planes.filter(plane => plane.element !== element)
   }
 
   const removeAllPlanes = () => {
-    // TODO if needed do dispose call here
-    // TODO remove planes from scene
+    planes.forEach(plane => {
+      scene.remove(plane.mesh)
+    })
     planes = []
   }
 
   const onScroll = () => {
-    const currentY = Math.round(window.scrollY * camera.aspect)
+    const currentY = container.scrollTop * camera.aspect
     if (scrollY !== currentY) {
+      canRender = false
       scrollY = currentY
       scene.position.y = scrollY
+      render(true)
     }
   }
 
 
   // Lifecycle
+  let container = null
   const mount = (_canvas, _options) => {
     if (canvas.value) return console.warn("Canvas already exist. Mount should be called only once.")
 
+    container = document.querySelector(".corgi-scroll-container")
     canvas.value = _canvas.value
     options = { ...options, ..._options }
 
-    renderer.value = new WebGLRenderer({ canvas: canvas.value, alpha: true })
+    renderer.value = new WebGLRenderer({ canvas: canvas.value, alpha: true, powerPreference: "high-performance" })
     // Set the quality of the render, may be used for to change shadow quality for exemple
     renderer.value?.setPixelRatio(options.pixelRatio)
 
     pmremGenerator = new PMREMGenerator(renderer.value)
     pmremGenerator.compileCubemapShader()
 
+
     window.addEventListener("resize", onResize, { passive: true })
     onResize()
-    window.addEventListener("scroll", onScroll, { passive: true })
+    container.addEventListener("scroll", onScroll, { passive: true })
     onScroll()
     gsap.ticker.add(onTick)
 
@@ -183,7 +199,7 @@ export const useCorgiPlanes = (() => {
   const unmount = () => {
     canRender = false
     window.removeEventListener("resize", onResize)
-    window.removeEventListener("scroll", onScroll)
+    container.removeEventListener("scroll", onScroll)
     gsap.ticker.remove(onTick)
     removeAllPlanes()
     renderer.value?.dispose()
