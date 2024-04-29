@@ -35,7 +35,7 @@ onMounted(() => {
   )
 
   resources.get('envmap').then((resource) => {
-    corgi.addEnvmap(resource.asset)
+    corgi.addEnvmap(resource.asset, true)
   })
 
 })

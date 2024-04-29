@@ -21,7 +21,7 @@ import { AgXToneMapping, Color, DoubleSide, MeshStandardMaterial, Uniform } from
 import { RESOURCES_TYPES } from '../../../src/runtime/utils/types'
 import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
 import { gsap } from 'gsap'
-import { degToRad } from 'three/src/math/MathUtils.js';
+import { degToRad } from 'three/src/math/MathUtils.js'
 
 const plane = ref()
 const plane2 = ref()
@@ -35,7 +35,6 @@ let material = null
 onMounted(() => {
 
   // TODO make component plane with rotation, position watch
-
   planes.renderer.value.toneMapping = AgXToneMapping
 
   resources.add([
@@ -46,6 +45,8 @@ onMounted(() => {
 
   resources.getAll().then(([envmap, vertexShader, texture]) => {
     planes.addEnvmap(envmap.asset)
+
+    console.info(vertexShader.asset)
 
     material = new CustomShaderMaterial({
       baseMaterial: new MeshStandardMaterial({
@@ -62,6 +63,7 @@ onMounted(() => {
     })
 
     planes.addPlane(plane3.value, material, 128, 128)
+
   })
 
   const p = planes.addPlane(plane.value, new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.6, side: DoubleSide }))
