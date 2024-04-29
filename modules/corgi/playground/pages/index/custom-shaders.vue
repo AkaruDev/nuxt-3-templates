@@ -10,7 +10,7 @@
 <script setup>
 import { RESOURCES_TYPES } from '../../src/runtime/utils/types'
 import { AgXToneMapping, Color, DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry, Uniform } from 'three'
-import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
+// import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
 import { useTicker } from '../../../src/runtime/composables/ticker'
 
 // Data
@@ -26,6 +26,8 @@ const resources = useResources()
 
 // Lifecycle
 onMounted(async () => {
+
+  const CustomShaderMaterial = (await import('three-custom-shader-material/vanilla')).default
 
   corgi.camera.position.set(0, 0, 10)
   corgi.addOrbitControls()

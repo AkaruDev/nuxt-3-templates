@@ -19,7 +19,7 @@
 <script setup>
 import { AgXToneMapping, Color, DoubleSide, MeshStandardMaterial, Uniform } from 'three'
 import { RESOURCES_TYPES } from '../../../src/runtime/utils/types'
-import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
+// import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
 import { gsap } from 'gsap'
 import { degToRad } from 'three/src/math/MathUtils.js'
 
@@ -32,10 +32,17 @@ const resources = useResources()
 
 let material = null
 
-onMounted(() => {
+onMounted(async () => {
+
+  const CustomShaderMaterial = (await import('three-custom-shader-material/vanilla')).default
 
   // TODO make component plane with rotation, position watch
   planes.renderer.value.toneMapping = AgXToneMapping
+
+  const p = planes.addPlane(plane.value, new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.6, side: DoubleSide }))
+  gsap.to(p.mesh.rotation, { y: degToRad(360), duration: 5, ease: "none", repeat: -1 })
+
+  planes.addPlane(plane2.value, new MeshStandardMaterial({ color: new Color("blue"), metalness: 0.9, roughness: 0.6, side: DoubleSide }))
 
   resources.add([
     useResource('envmap', '/envmap.exr', RESOURCES_TYPES.EXR),
@@ -61,12 +68,10 @@ onMounted(() => {
     })
 
     planes.addPlane(plane3.value, material, 128, 128)
+
   })
 
-  const p = planes.addPlane(plane.value, new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.6, side: DoubleSide }))
-  gsap.to(p.mesh.rotation, { y: degToRad(360), duration: 5, ease: "none", repeat: -1 })
 
-  planes.addPlane(plane2.value, new MeshStandardMaterial({ color: new Color("blue"), metalness: 0.9, roughness: 0.6, side: DoubleSide }))
 })
 
 onBeforeUnmount(() => {
