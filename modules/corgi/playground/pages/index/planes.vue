@@ -32,7 +32,18 @@ onMounted(() => {
 
 </script>
 
+<style>
+body,
+:root {
+  overscroll-behavior: none;
+}
+</style>
+
 <style scoped>
+:root {
+  overscroll-behavior: none;
+}
+
 .Page {
   position: relative;
   display: flex;

@@ -147,7 +147,7 @@ export const useCorgiPlanes = (() => {
   }
 
   const onScroll = () => {
-    const currentY = window.scrollY * camera.aspect
+    const currentY = Math.round(window.scrollY * camera.aspect)
     if (scrollY !== currentY) {
       scrollY = currentY
       scene.position.y = scrollY
