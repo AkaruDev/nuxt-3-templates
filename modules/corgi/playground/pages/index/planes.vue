@@ -38,9 +38,9 @@ onMounted(() => {
     // gsap.to(planes.scene.environmentRotation, { x: degToRad(360), duration: 10, ease: "none", repeat: -1 })
   })
 
-  planes.addPlane(plane.value, new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.2 }))
-  planes.addPlane(plane2.value, new MeshStandardMaterial({ color: new Color("blue"), metalness: 0.9, roughness: 0.2 }))
-  planes.addPlane(plane3.value, new MeshStandardMaterial({ color: new Color("red"), metalness: 0.9, roughness: 0.2 }))
+  planes.addPlane(plane.value, new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.6 }))
+  planes.addPlane(plane2.value, new MeshStandardMaterial({ color: new Color("blue"), metalness: 0.9, roughness: 0.6 }))
+  planes.addPlane(plane3.value, new MeshStandardMaterial({ color: new Color("red"), metalness: 0.9, roughness: 0.6 }))
 })
 
 onBeforeUnmount(() => {
