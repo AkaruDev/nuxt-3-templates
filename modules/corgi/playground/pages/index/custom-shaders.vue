@@ -10,7 +10,7 @@
 <script setup>
 import { RESOURCES_TYPES } from '../../src/runtime/utils/types'
 import { AgXToneMapping, Color, DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry, Uniform } from 'three'
-// import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
+// import CustomShaderMaterial from 'three-custom-shader-material/vanilla' // Not working with reload, fixed by importing it in mounted O//
 import { useTicker } from '../../../src/runtime/composables/ticker'
 
 // Data

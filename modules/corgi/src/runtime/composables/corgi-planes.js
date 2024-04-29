@@ -136,10 +136,10 @@ export const useCorgiPlanes = (() => {
     const planeGeometry = new PlaneGeometry(1, 1, widthSegments, heightSegments)
     const plane = { element, mesh: new Mesh(planeGeometry, material), bounds: new Vector4(), material }
     // TODO maybe add resize observer and observe element to set plane bounds on change
-    planes.push(plane)
-    scene.add(plane.mesh)
 
     setPlane(plane)
+    planes.push(plane)
+    scene.add(plane.mesh)
 
     render(true)
 

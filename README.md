@@ -1,5 +1,5 @@
 ## TODO
-[ ] - Planes that match HTML content position
+[ ] - Plane component
 [ ] - Pixel to 3d size utils
 [ ] - Uniforms utils that has already some basics like uTime
 [ ] - Three points light preset
@@ -9,6 +9,7 @@
 [ ] - Write a comprehensive Readme about what is this, how you can use it (bonus add cute corgi picture) - Try generated doc from jsdoc
 
 ## DONE
+[x] - Planes that match HTML content position
 [x] - Add observer to not render if canvas element is not visible
 [x] - Add composable for tick useTick()
 [x] - CorgiCanvas.vue that has props for loading and using different resources in props ? resources, transform, scene background color or transparent
