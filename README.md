@@ -1,6 +1,5 @@
 ## TODO
-[ ] - Plane component
-[ ] - Pixel to 3d size utils
+[ ] - Add mouse movement on plane to see if it's easy to use
 [ ] - Uniforms utils that has already some basics like uTime
 [ ] - Three points light preset
 [ ] - Shadow utils
@@ -9,6 +8,8 @@
 [ ] - Write a comprehensive Readme about what is this, how you can use it (bonus add cute corgi picture) - Try generated doc from jsdoc
 
 ## DONE
+[X] - Plane component
+[X] - Pixel to 3d size utils
 [x] - Planes that match HTML content position
 [x] - Add observer to not render if canvas element is not visible
 [x] - Add composable for tick useTick()
