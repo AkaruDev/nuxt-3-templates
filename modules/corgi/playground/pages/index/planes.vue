@@ -4,13 +4,12 @@
       ref="plane"
       class="Plane"
     />
-    <div
-      ref="plane2"
+    <CorgiPlane
+      v-if="material"
       class="Plane"
-    />
-    <div
-      ref="plane3"
-      class="Plane"
+      :material="material"
+      :width-segments="10"
+      :height-segments="10"
     />
   </div>
 </template>
@@ -24,19 +23,16 @@ import { gsap } from 'gsap'
 import { degToRad } from 'three/src/math/MathUtils.js'
 
 const plane = ref()
-const plane2 = ref()
-const plane3 = ref()
 const planes = useCorgiPlanes()
 
 const resources = useResources()
 
-let material = null
+const material = ref()
 
 onMounted(async () => {
 
   const CustomShaderMaterial = (await import('three-custom-shader-material/vanilla')).default
 
-  // TODO make component plane with rotation, position watch
   planes.renderer.value.toneMapping = AgXToneMapping
 
   resources.add([
@@ -48,7 +44,7 @@ onMounted(async () => {
   resources.getAll().then(([envmap, vertexShader, texture]) => {
     planes.addEnvmap(envmap.asset)
 
-    material = new CustomShaderMaterial({
+    material.value = new CustomShaderMaterial({
       baseMaterial: new MeshStandardMaterial({
         metalness: 0.9,
         roughness: 0.8,
@@ -65,25 +61,18 @@ onMounted(async () => {
     const p = planes.addPlane(plane.value, new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.6, side: DoubleSide }))
     gsap.to(p.mesh.rotation, { y: degToRad(360), duration: 5, ease: "none", repeat: -1 })
 
-    planes.addPlane(plane2.value, new MeshStandardMaterial({ color: new Color("blue"), metalness: 0.9, roughness: 0.6, side: DoubleSide }))
-
-    planes.addPlane(plane3.value, material, 128, 128)
-
   })
-
 
 })
 
 onBeforeUnmount(() => {
   planes.removePlaneByElement(plane.value)
-  planes.removePlaneByElement(plane2.value)
-  planes.removePlaneByElement(plane3.value)
 })
 
 // Methods
 const update = (time) => {
-  if (!material) return
-  material.uniforms.uTime.value = time
+  if (!material.value) return
+  material.value.uniforms.uTime.value = time
 }
 useTicker(update)
 
@@ -109,7 +98,8 @@ body,
   justify-content: flex-start;
 
   width: 100%;
-  min-height: 200vh;
+
+  padding-bottom: 10vh;
 }
 
 .Plane {

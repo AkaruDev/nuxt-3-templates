@@ -23,7 +23,7 @@ const props = defineProps({
 // Data
 const canvas = ref()
 /**
- * @type {import('../composables/corgi-planes').UseCorgiPlanes}
+ * @type {import('../composables/corgi-planes').CorgiPlanes}
 */
 const planes = useCorgiPlanes()
 const resources = useResources()

@@ -2,9 +2,10 @@ import { useScene } from "./scene"
 import { ref } from "vue"
 import { Mesh, PMREMGenerator, PerspectiveCamera, PlaneGeometry, Vector2, Vector4, WebGLRenderer } from "three"
 import { gsap } from "gsap"
+import { isProxy, toRaw } from 'vue'
 
 /**
- * @typedef {Object} UseCorgiPlanes
+ * @typedef {Object} CorgiPlanes
  * @property {function} addEnvmap - add environement map
  * @property {function} addPlane - add plane
  * @property {boolean} canRender - Can the render be done ?
@@ -17,7 +18,7 @@ import { gsap } from "gsap"
  */
 
 /**
- * @typedef {Object} UseCorgiPlane
+ * @typedef {Object} CorgiPlane
  * @property {HTMLElement} element - HTMLElement
  * @property {import('three').Mesh} mesh - THREE.Mesh
  * @property {import('three').Vector4} bounds - THREE.Vector4
@@ -32,7 +33,7 @@ import { gsap } from "gsap"
 
 /**
  * Return the Corgi Planes instance.
- * @returns {UseCorgiPlanes}
+ * @returns {CorgiPlanes}
  */
 export const useCorgiPlanes = (() => {
 
@@ -47,6 +48,9 @@ export const useCorgiPlanes = (() => {
 
   let width = 0
   let height = 0
+  /**
+   * @type {CorgiPlane[]}
+   */
   let planes = []
   const size = ref(new Vector2())
   let pmremGenerator = null
@@ -129,7 +133,7 @@ export const useCorgiPlanes = (() => {
    *
    * @param {HTMLElement} element
    * @param {import('three').Material} material
-   * @returns {UseCorgiPlane}
+   * @returns {CorgiPlane}
    */
   const addPlane = (element, material, widthSegments = 1, heightSegments = 1) => {
     if (!element || planes.find(plane => plane.element === element)) return
@@ -148,7 +152,7 @@ export const useCorgiPlanes = (() => {
 
   /**
    *
-   * @param {UseCorgiPlane} plane
+   * @param {CorgiPlane} plane
    */
   const setPlane = (plane) => {
     const elementBounds = plane.element.getBoundingClientRect()
@@ -163,14 +167,15 @@ export const useCorgiPlanes = (() => {
 
   /**
    * Remove one plane and dispose of it
-   * @param {UseCorgiPlane} plane
+   * @param {CorgiPlane} plane
    * @returns
    */
   const removePlane = (plane) => {
+    if (isProxy(plane)) plane = toRaw(plane)
     scene.remove(plane.mesh)
     plane.mesh.geometry.dispose()
     cleanMaterial(plane.mesh.material)
-    planes = planes.filter(item => item !== plane)
+    planes = planes.filter(item => item.element !== plane.element)
   }
 
   const removePlaneByElement = (element) => {
