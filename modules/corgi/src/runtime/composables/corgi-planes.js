@@ -52,11 +52,11 @@ export const useCorgiPlanes = (() => {
   /**
    * Add your environnement map helper
    * @param {import('three').DataTexture} texture - EXR texture from EXRLoader
-   * @param {Boolean} showInBacground - Add texture to be visible in the scene
+   * @param {Boolean} showInBackground - Add texture to be visible in the scene
    */
-  const addEnvmap = (texture, showInBacground = true) => {
+  const addEnvmap = (texture, showInBackground = false) => {
     const envMap = pmremGenerator?.fromEquirectangular(texture).texture
-    if (options.showEnvmap || showInBacground) scene.background = envMap
+    if (options.showEnvmap || showInBackground) scene.background = envMap
     scene.environment = envMap
 
     texture.dispose()
