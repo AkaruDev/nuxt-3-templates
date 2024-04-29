@@ -17,10 +17,11 @@
 
 
 <script setup>
-import { Color, MeshStandardMaterial } from 'three';
-import { RESOURCES_TYPES } from '../../../src/runtime/utils/types';
-import { degToRad } from 'three/src/math/MathUtils.js';
+import { AgXToneMapping, Color, DoubleSide, MeshStandardMaterial, Uniform } from 'three'
+import { RESOURCES_TYPES } from '../../../src/runtime/utils/types'
+import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
 import { gsap } from 'gsap'
+import { degToRad } from 'three/src/math/MathUtils.js';
 
 const plane = ref()
 const plane2 = ref()
@@ -29,18 +30,45 @@ const planes = useCorgiPlanes()
 
 const resources = useResources()
 
+let material = null
+
 onMounted(() => {
 
-  resources.add([useResource('envmap', '/envmap.exr', RESOURCES_TYPES.EXR),])
+  // TODO make component plane with rotation, position watch
 
-  resources.get(['envmap']).then(([envmap]) => {
+  planes.renderer.value.toneMapping = AgXToneMapping
+
+  resources.add([
+    useResource('envmap', '/envmap.exr', RESOURCES_TYPES.EXR),
+    useResource('custom-vertex', import('@/assets/custom-shaders/vertex.glsl'), RESOURCES_TYPES.GLSL),
+    useResource('texture', 'https://source.unsplash.com/random', RESOURCES_TYPES.IMAGE),
+  ])
+
+  resources.getAll().then(([envmap, vertexShader, texture]) => {
     planes.addEnvmap(envmap.asset)
-    // gsap.to(planes.scene.environmentRotation, { x: degToRad(360), duration: 10, ease: "none", repeat: -1 })
+
+    material = new CustomShaderMaterial({
+      baseMaterial: new MeshStandardMaterial({
+        metalness: 0.9,
+        roughness: 0.8,
+        map: texture.asset,
+      }),
+      uniforms: {
+        uTime: new Uniform(),
+        uDepth: new Uniform(100),
+      },
+      vertexShader: vertexShader.asset,
+      side: DoubleSide,
+    })
+
+
+    const p = planes.addPlane(plane.value, new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.6, side: DoubleSide }))
+    planes.addPlane(plane2.value, new MeshStandardMaterial({ color: new Color("blue"), metalness: 0.9, roughness: 0.6, side: DoubleSide }))
+    planes.addPlane(plane3.value, material, 128, 128)
+    gsap.to(p.mesh.rotation, { y: degToRad(360), duration: 5, ease: "none", repeat: -1 })
+
   })
 
-  planes.addPlane(plane.value, new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.6 }))
-  planes.addPlane(plane2.value, new MeshStandardMaterial({ color: new Color("blue"), metalness: 0.9, roughness: 0.6 }))
-  planes.addPlane(plane3.value, new MeshStandardMaterial({ color: new Color("red"), metalness: 0.9, roughness: 0.6 }))
 })
 
 onBeforeUnmount(() => {
@@ -48,6 +76,13 @@ onBeforeUnmount(() => {
   planes.removePlane(plane2.value)
   planes.removePlane(plane3.value)
 })
+
+// Methods
+const update = (time) => {
+  if (!material) return
+  material.uniforms.uTime.value = time
+}
+useTicker(update)
 
 </script>
 
@@ -82,7 +117,7 @@ body,
 
   margin-top: 20px;
 
-  background-color: yellow;
+  /*background-color: yellow;*/
 
   backface-visibility: hidden;
 

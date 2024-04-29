@@ -9,9 +9,9 @@
 
 <script setup>
 import { RESOURCES_TYPES } from '../../src/runtime/utils/types'
-import { AgXToneMapping, Color, DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
+import { AgXToneMapping, Color, DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry, Uniform } from 'three'
 import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
-import { useTicker } from '../../../src/runtime/composables/ticker';
+import { useTicker } from '../../../src/runtime/composables/ticker'
 
 // Data
 const canvas = ref()
@@ -26,9 +26,6 @@ const resources = useResources()
 
 // Lifecycle
 onMounted(async () => {
-
-  // Did not find a better way to import in vanilla
-  // const CustomShaderMaterial = (await import('three-custom-shader-material/vanilla')).default
 
   corgi.camera.position.set(0, 0, 10)
   corgi.addOrbitControls()
@@ -50,7 +47,8 @@ onMounted(async () => {
         color: new Color("green"),
       }),
       uniforms: {
-        uTime: { value: 0 }
+        uTime: new Uniform(),
+        uDepth: new Uniform(0.5),
       },
       fragmentShader: fragmentShader.asset,
       vertexShader: vertexShader.asset,

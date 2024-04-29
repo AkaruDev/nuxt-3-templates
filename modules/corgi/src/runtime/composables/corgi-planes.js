@@ -31,7 +31,7 @@ export const useCorgiPlanes = (() => {
   let options = {
     pixelRatio: 1.5,
   }
-  const perspective = 10
+  const perspective = 1000
 
   let width = 0
   let height = 0
@@ -46,7 +46,7 @@ export const useCorgiPlanes = (() => {
     dispose: sceneDispose
   } = useScene()
 
-  const camera = new PerspectiveCamera(50, 1, 1, perspective)
+  const camera = new PerspectiveCamera(50, 1, 1, perspective * 1.2)
 
   // Methods
   /**
@@ -73,7 +73,7 @@ export const useCorgiPlanes = (() => {
   // Tick
   let scrollY = 0
   const onTick = () => {
-    const currentY = Math.round(window.scrollY * camera.aspect)
+    const currentY = window.scrollY * camera.aspect
     if (scrollY === currentY) canRender = true
     render()
   }
@@ -116,10 +116,10 @@ export const useCorgiPlanes = (() => {
    * @param {import('three').Material} material
    * @returns
    */
-  const planeGeometry = new PlaneGeometry(1, 1, 2, 2)
-  const addPlane = (element, material) => {
-    if (!element || planes.find(plane => plane.element === element)) return
 
+  const addPlane = (element, material, widthSegments = 1, heightSegments = 1) => {
+    if (!element || planes.find(plane => plane.element === element)) return
+    const planeGeometry = new PlaneGeometry(1, 1, widthSegments, heightSegments)
     const plane = { element, mesh: new Mesh(planeGeometry, material), bounds: new Vector4(), material }
     // TODO maybe add resize observer and observe element to set plane bounds on change
     planes.push(plane)
@@ -128,6 +128,8 @@ export const useCorgiPlanes = (() => {
     setPlane(plane)
 
     render(true)
+
+    return plane
   }
 
   const setPlane = (plane) => {
@@ -157,13 +159,13 @@ export const useCorgiPlanes = (() => {
     planes = []
   }
 
+  // TODO make method to get plane by element
+
   const onScroll = () => {
     const currentY = container.scrollTop * camera.aspect
     if (scrollY !== currentY) {
-      canRender = false
       scrollY = currentY
       scene.position.y = scrollY
-      render(true)
     }
   }
 
@@ -177,7 +179,7 @@ export const useCorgiPlanes = (() => {
     canvas.value = _canvas.value
     options = { ...options, ..._options }
 
-    renderer.value = new WebGLRenderer({ canvas: canvas.value, alpha: true, powerPreference: "high-performance" })
+    renderer.value = new WebGLRenderer({ canvas: canvas.value, antialias: true, alpha: true, powerPreference: "high-performance" })
     // Set the quality of the render, may be used for to change shadow quality for exemple
     renderer.value?.setPixelRatio(options.pixelRatio)
 
