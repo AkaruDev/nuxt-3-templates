@@ -46,8 +46,6 @@ onMounted(() => {
   resources.getAll().then(([envmap, vertexShader, texture]) => {
     planes.addEnvmap(envmap.asset)
 
-    console.info(vertexShader.asset)
-
     material = new CustomShaderMaterial({
       baseMaterial: new MeshStandardMaterial({
         metalness: 0.9,
@@ -63,7 +61,6 @@ onMounted(() => {
     })
 
     planes.addPlane(plane3.value, material, 128, 128)
-
   })
 
   const p = planes.addPlane(plane.value, new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.6, side: DoubleSide }))
