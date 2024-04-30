@@ -2,7 +2,6 @@
   <div
     ref="el"
     class="CorgiComponent"
-    :style="{ aspectRatio }"
   />
 </template>
 
@@ -12,7 +11,7 @@ import { Mesh } from 'three'
 const props = defineProps({
   mesh: {
     type: Mesh,
-    required: true
+    default: undefined
   },
 })
 
@@ -27,16 +26,16 @@ const components = useCorgiComponents()
  */
 const component = ref()
 
-const aspectRatio = ref()
-
-onMounted(async () => {
-  component.value = components.add(el.value, props.mesh)
-  aspectRatio.value = component.value.aspectRatio
-})
-
 onBeforeUnmount(() => {
   if (!component.value) return
   components.remove(component.value)
+})
+
+watch(() => props.mesh, () => {
+  if (props.mesh && !component.value && el.value) {
+    component.value = components.add(el.value, props.mesh)
+    el.value.style.aspectRatio = component.value.aspectRatio
+  }
 })
 
 </script>

@@ -5,15 +5,18 @@
       class="Component"
     />
     <CorgiComponent
-      v-if="plane"
       class="Component"
       :mesh="plane"
     />
-    <CorgiComponent
-      v-if="suzanne"
-      class="Component"
-      :mesh="suzanne"
-    />
+
+    <div class="Paragraph">
+      <span>Loren ispum</span>
+      <CorgiComponent
+        class="Icon"
+        :mesh="suzanne"
+      />
+      <span>dolores is sec unt des.</span>
+    </div>
   </div>
 </template>
 
@@ -37,7 +40,7 @@ onMounted(async () => {
 
   const CustomShaderMaterial = (await import('three-custom-shader-material/vanilla')).default
 
-  components.renderer.value.toneMapping = AgXToneMapping
+  // components.renderer.value.toneMapping = AgXToneMapping
 
   // TODO add gltf to components
   resources.add([
@@ -54,7 +57,7 @@ onMounted(async () => {
     const material = new CustomShaderMaterial({
       baseMaterial: new MeshStandardMaterial({
         metalness: 0.9,
-        roughness: 0.8,
+        roughness: 0.1,
         map: texture.asset,
       }),
       uniforms: {
@@ -66,7 +69,7 @@ onMounted(async () => {
     })
     plane.value = new Mesh(geometry, material)
 
-    const material2 = new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.6, side: DoubleSide })
+    const material2 = new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.1, side: DoubleSide })
     const c = components.add(component.value, new Mesh(geometry, material2))
     gsap.to(c.mesh.rotation, { y: degToRad(360), duration: 5, ease: "none", repeat: -1 })
 
@@ -106,6 +109,7 @@ body,
   position: relative;
   display: flex;
   flex-flow: column;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
 
@@ -130,5 +134,20 @@ body,
   transform: translateZ(0);
 
   z-index: 0;
+}
+
+.Paragraph {
+  width: 100%;
+  max-width: 600px;
+  font-size: 28px;
+}
+
+.Icon {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  width: 120px;
+
+  margin: 0 10px;
 }
 </style>
