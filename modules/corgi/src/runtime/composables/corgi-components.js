@@ -6,8 +6,9 @@ import { isProxy, toRaw } from 'vue'
 
 /**
  * @typedef {Object} CorgiComponents
- * @property {function} addEnvmap - add environement map
  * @property {function} add - add components
+ * @property {function} addEnvmap - add environement map
+ * @property {function} addOrbitControls - add orbit controls
  * @property {boolean} canRender - Can the render be done ?
  * @property {function} getSize - Return camera width & height
  * @property {function} mount - Init the canvas and the listeners
@@ -19,17 +20,17 @@ import { isProxy, toRaw } from 'vue'
 
 /**
  * @typedef {Object} CorgiComponent
+ * @property {Number} aspectRatio - Aspect ratio of the component
+ * @property {import('three').Vector4} bounds - THREE.Vector4
  * @property {HTMLElement} element - HTMLElement
  * @property {import('three').Mesh} mesh - THREE.Mesh
- * @property {import('three').Vector4} bounds - THREE.Vector4
- * @property {Number} aspectRatio - Aspect ratio of the component
  */
 
 /**
  * @typedef {Object} CorgiComponentsOptions
  * @property {import('three').Color} backgroundColor - THREE.Color
- * @property {boolean} showEnvmap - If envmap show it in the background
  * @property {number} pixelRatio - Pixel ratio for the renderer
+ * @property {boolean} showEnvmap - If envmap show it in the background
  */
 
 /**
@@ -251,25 +252,26 @@ export const useCorgiComponents = (() => {
    */
   const mount = (_canvas, _options) => {
     if (canvas.value) return console.warn("Canvas already exist. Mount should be called only once.")
-
     container = document.querySelector(".corgi-scroll-container")
     canvas.value = _canvas.value
     options = { ...options, ..._options }
 
+    // Renderer
     renderer.value = new WebGLRenderer({ canvas: canvas.value, antialias: false, alpha: true, powerPreference: "high-performance" })
-    // Set the quality of the render, may be used for to change shadow quality for exemple
     renderer.value?.setPixelRatio(options.pixelRatio)
 
+    // Environnement map utils
     pmremGenerator = new PMREMGenerator(renderer.value)
     pmremGenerator.compileCubemapShader()
 
+    // Resize
     window.addEventListener("resize", onResize, { passive: true })
     onResize()
-
     resizeObserver = new ResizeObserver(onResizeElement)
-
+    // Scroll
     container.addEventListener("scroll", onScroll, { passive: true })
     onScroll()
+    // Ticker
     gsap.ticker.add(onTick)
   }
 
@@ -290,8 +292,8 @@ export const useCorgiComponents = (() => {
   return () => {
 
     return {
-      addEnvmap,
       add,
+      addEnvmap,
       canRender,
       getSize,
       getByElement,

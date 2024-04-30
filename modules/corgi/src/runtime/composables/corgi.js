@@ -7,13 +7,14 @@ import { PMREMGenerator, PerspectiveCamera, Vector2, Vector3, WebGLRenderer } fr
 
 /**
  * @typedef {Object} UseCorgi
- * @property {import('three').Scene} scene - THREE.Scene
- * @property {import('three').WebGLRenderer} renderer - THREE.WebGLRenderer
- * @property {import('three').PerspectiveCamera} camera - THREE.PerspectiveCamera
- * @property {function} getSize - Return camera width & height
+ *
  * @property {function} addEnvmap - add environement map
  * @property {function} addOrbitControls - add orbit controls
+ * @property {import('three').PerspectiveCamera} camera - THREE.PerspectiveCamera
+ * @property {function} getSize - Return camera width & height
  * @property {ref<import('three/addons/controls/OrbitControls.js').OrbitControls>} orbitControls - If orbit controls is added return a ref to it
+ * @property {import('three').WebGLRenderer} renderer - THREE.WebGLRenderer
+ * @property {import('three').Scene} scene - THREE.Scene
  */
 
 /**
@@ -21,12 +22,12 @@ import { PMREMGenerator, PerspectiveCamera, Vector2, Vector3, WebGLRenderer } fr
  * @property {import('three').Color} backgroundColor - THREE.Color
  * @property {import('three').Vector3} cameraPosition - Position of the camera
  * @property {import('three').Vector3} cameraRotation - Rotation of the camera
- * @property {boolean} orbitControls - Add orbit controls
  * @property {boolean} enableZoom - Enable zoom for the orbit controls
  * @property {boolean} enablePan - Enable pan for the orbit controls
- * @property {boolean} showEnvmap - If envmap show it in the background
- * @property {number} pixelRatio - Pixel ratio for the renderer
  * @property {number} fov - Fov for camera
+ * @property {boolean} orbitControls - Add orbit controls
+ * @property {number} pixelRatio - Pixel ratio for the renderer
+ * @property {boolean} showEnvmap - If envmap show it in the background
  */
 
 /**
@@ -160,13 +161,13 @@ export const useCorgi = (canvas, options) => {
   })
 
   return {
-    scene,
-    canvas,
-    renderer,
-    camera,
-    getSize,
     addEnvmap,
     addOrbitControls,
+    canvas,
+    camera,
+    getSize,
     orbitControls,
+    renderer,
+    scene,
   }
 }

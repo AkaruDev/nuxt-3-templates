@@ -22,7 +22,7 @@
 
 
 <script setup>
-import { AgXToneMapping, Color, DoubleSide, Mesh, MeshStandardMaterial, PlaneGeometry, Uniform } from 'three'
+import { Color, DoubleSide, Mesh, MeshStandardMaterial, PlaneGeometry, Uniform } from 'three'
 import { RESOURCES_TYPES } from '../../../src/runtime/utils/types'
 // import CustomShaderMaterial from 'three-custom-shader-material/vanilla' // Not working with reload, fixed by importing it in mounted O//
 import { gsap } from 'gsap'
@@ -40,9 +40,6 @@ onMounted(async () => {
 
   const CustomShaderMaterial = (await import('three-custom-shader-material/vanilla')).default
 
-  // components.renderer.value.toneMapping = AgXToneMapping
-
-  // TODO add gltf to components
   resources.add([
     useResource('envmap', '/envmap.exr', RESOURCES_TYPES.EXR),
     useResource('custom-vertex', import('@/assets/custom-shaders/vertex.glsl'), RESOURCES_TYPES.GLSL),
