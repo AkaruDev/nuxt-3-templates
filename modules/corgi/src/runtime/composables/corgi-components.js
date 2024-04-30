@@ -1,6 +1,6 @@
 import { useScene } from "./scene"
 import { ref } from "vue"
-import { PMREMGenerator, PerspectiveCamera, Vector2, Vector4, WebGLRenderer } from "three"
+import { Box3, PMREMGenerator, PerspectiveCamera, Vector2, Vector3, Vector4, WebGLRenderer } from "three"
 import { gsap } from "gsap"
 import { isProxy, toRaw } from 'vue'
 
@@ -44,7 +44,7 @@ export const useCorgiComponents = (() => {
   let options = {
     pixelRatio: 1.5,
   }
-  const perspective = 1000
+  const perspective = 2000
 
   let width = 0
   let height = 0
@@ -138,7 +138,7 @@ export const useCorgiComponents = (() => {
   const add = (element, mesh) => {
     if (!element || components.find(component => component.element === element)) return
     if (isProxy(mesh)) mesh = toRaw(mesh)
-    const component = { element, mesh, bounds: new Vector4() }
+    const component = { element, mesh, bounds: new Vector4(), size: null }
     // TODO maybe add resize observer and observe element to set component bounds on change
 
     set(component)
@@ -157,15 +157,26 @@ export const useCorgiComponents = (() => {
   const set = (component) => {
     const elementBounds = component.element.getBoundingClientRect()
     component.bounds.left = (elementBounds.left - width * 0.5 + elementBounds.width * 0.5) * camera.aspect
-    component.bounds.top = (-(elementBounds.top + container.scrollTop) + height * 0.5 - elementBounds.height * 0.5) * camera.aspect
+    component.bounds.top = (-(elementBounds.top + (container?.scrollTop || 0)) + height * 0.5 - elementBounds.height * 0.5) * camera.aspect
     component.bounds.width = (elementBounds.width * camera.aspect)
     component.bounds.height = (elementBounds.height * camera.aspect)
 
     component.mesh.position.set(component.bounds.left, component.bounds.top, 0)
 
-    // TODO use this method to scale correctly the size of the mesh https://discourse.threejs.org/t/does-three-have-any-kind-of-independent-unit-i-understand-that-a-unit-in-three-is-abstract-but-scale-set-seems-to-be-relative-to-the-models-imported-size/16019/4
+    component.size = component.size ? component.size : new Box3().setFromObject(component.mesh).getSize(new Vector3())
+    // If element size is not 1,1 then divide bounds by size to fit element
+    if (component.size.x !== 1 && component.size.y !== 1) {
+      component.mesh.scale.set(
+        component.bounds.width / component.size.x,
+        component.bounds.height / component.size.y,
+        component.bounds.width / component.size.x,
+      )
+    } else {
+      component.mesh.scale.set(component.bounds.width, component.bounds.height, 1)
+    }
 
-    component.mesh.scale.set(component.bounds.width, component.bounds.height, 1)
+    console.info(component.mesh.scale)
+
   }
 
   /**
@@ -230,7 +241,7 @@ export const useCorgiComponents = (() => {
     canvas.value = _canvas.value
     options = { ...options, ..._options }
 
-    renderer.value = new WebGLRenderer({ canvas: canvas.value, antialias: true, alpha: true, powerPreference: "high-performance" })
+    renderer.value = new WebGLRenderer({ canvas: canvas.value, antialias: false, alpha: true, powerPreference: "high-performance" })
     // Set the quality of the render, may be used for to change shadow quality for exemple
     renderer.value?.setPixelRatio(options.pixelRatio)
 

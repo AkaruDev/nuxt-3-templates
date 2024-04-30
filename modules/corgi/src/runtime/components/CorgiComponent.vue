@@ -28,6 +28,8 @@ const component = ref()
 
 onMounted(async () => {
   component.value = components.add(el.value, props.mesh)
+
+  // console.info(component.value.size)
 })
 
 onBeforeUnmount(() => {

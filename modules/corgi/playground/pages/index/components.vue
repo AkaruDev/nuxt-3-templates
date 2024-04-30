@@ -13,7 +13,9 @@
       v-if="suzanne"
       class="Component"
       :mesh="suzanne"
+      :style="{ aspectRatio: 2.734375238418579 / 1.968750238418579 }"
     />
+    <!--  -->
   </div>
 </template>
 
@@ -71,6 +73,8 @@ onMounted(async () => {
     gsap.to(c.mesh.rotation, { y: degToRad(360), duration: 5, ease: "none", repeat: -1 })
 
     suzanne.value = modelResource.asset.scene.getObjectByName("Suzanne")
+
+    gsap.to(suzanne.value.rotation, { y: degToRad(360), duration: 5, ease: "none", repeat: -1 })
   })
 
 })
