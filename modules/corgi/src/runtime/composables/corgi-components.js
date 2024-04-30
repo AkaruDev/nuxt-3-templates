@@ -22,6 +22,7 @@ import { isProxy, toRaw } from 'vue'
  * @property {HTMLElement} element - HTMLElement
  * @property {import('three').Mesh} mesh - THREE.Mesh
  * @property {import('three').Vector4} bounds - THREE.Vector4
+ * @property {Number} aspectRatio - Aspect ratio of the component
  */
 
 /**
@@ -66,6 +67,8 @@ export const useCorgiComponents = (() => {
    * @type {import('three').PerspectiveCamera}
    */
   const camera = new PerspectiveCamera(50, 1, 1, perspective * 1.2)
+
+  let resizeObserver = null
 
   // Methods
   /**
@@ -124,6 +127,14 @@ export const useCorgiComponents = (() => {
     })
   }
 
+  const onResizeElement = (entries) => {
+    entries.forEach(entry => {
+      const component = getByElement(entry.target)
+      if (!component) return
+      set(component)
+    })
+  }
+
   const getSize = () => {
     camera.getViewSize(camera.position.z, size.value)
     return size.value
@@ -138,8 +149,10 @@ export const useCorgiComponents = (() => {
   const add = (element, mesh) => {
     if (!element || components.find(component => component.element === element)) return
     if (isProxy(mesh)) mesh = toRaw(mesh)
-    const component = { element, mesh, bounds: new Vector4(), size: null }
-    // TODO maybe add resize observer and observe element to set component bounds on change
+    const component = { element, mesh, bounds: new Vector4(), size: null, aspectRatio: 1 }
+
+    // Observe resize events
+    resizeObserver?.observe(element)
 
     set(component)
     components.push(component)
@@ -151,7 +164,7 @@ export const useCorgiComponents = (() => {
   }
 
   /**
-   *
+   * Set dimensions and positions of the components
    * @param {CorgiComponent} component
    */
   const set = (component) => {
@@ -166,16 +179,16 @@ export const useCorgiComponents = (() => {
     component.size = component.size ? component.size : new Box3().setFromObject(component.mesh).getSize(new Vector3())
     // If element size is not 1,1 then divide bounds by size to fit element
     if (component.size.x !== 1 && component.size.y !== 1) {
+      component.aspectRatio = component.size.x / component.size.y
       component.mesh.scale.set(
         component.bounds.width / component.size.x,
         component.bounds.height / component.size.y,
         component.bounds.width / component.size.x,
       )
     } else {
+      component.aspectRatio = component.bounds.width / component.bounds.height
       component.mesh.scale.set(component.bounds.width, component.bounds.height, 1)
     }
-
-    console.info(component.mesh.scale)
 
   }
 
@@ -190,6 +203,8 @@ export const useCorgiComponents = (() => {
     component.mesh.geometry.dispose()
     cleanMaterial(component.mesh.material)
     components = components.filter(item => item.element !== component.element)
+
+    resizeObserver.unobserve(component.element)
   }
 
   const removeByElement = (element) => {
@@ -250,6 +265,9 @@ export const useCorgiComponents = (() => {
 
     window.addEventListener("resize", onResize, { passive: true })
     onResize()
+
+    resizeObserver = new ResizeObserver(onResizeElement)
+
     container.addEventListener("scroll", onScroll, { passive: true })
     onScroll()
     gsap.ticker.add(onTick)
@@ -259,6 +277,7 @@ export const useCorgiComponents = (() => {
    * Remove all event listener, clear all that need to be cleaned (textures etc)
    */
   const unmount = () => {
+    resizeObserver?.disconnect()
     canRender = false
     window.removeEventListener("resize", onResize)
     container.removeEventListener("scroll", onScroll)

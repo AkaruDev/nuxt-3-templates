@@ -2,6 +2,7 @@
   <div
     ref="el"
     class="CorgiComponent"
+    :style="{ aspectRatio }"
   />
 </template>
 
@@ -26,10 +27,11 @@ const components = useCorgiComponents()
  */
 const component = ref()
 
+const aspectRatio = ref()
+
 onMounted(async () => {
   component.value = components.add(el.value, props.mesh)
-
-  // console.info(component.value.size)
+  aspectRatio.value = component.value.aspectRatio
 })
 
 onBeforeUnmount(() => {
@@ -39,3 +41,9 @@ onBeforeUnmount(() => {
 
 </script>
 
+
+<style scoped>
+.CorgiComponent {
+  width: 100%;
+}
+</style>

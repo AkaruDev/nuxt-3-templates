@@ -13,9 +13,7 @@
       v-if="suzanne"
       class="Component"
       :mesh="suzanne"
-      :style="{ aspectRatio: 2.734375238418579 / 1.968750238418579 }"
     />
-    <!--  -->
   </div>
 </template>
 
@@ -113,7 +111,7 @@ body,
 
   width: 100%;
 
-  padding-bottom: 10vh;
+  padding: 10vh 20px;
   gap: 120px;
 }
 
@@ -121,7 +119,7 @@ body,
   flex: none;
   position: relative;
   width: 30%;
-  aspect-ratio: 4/5;
+  aspect-ratio: 3/4;
 
   margin-top: 20px;
 
