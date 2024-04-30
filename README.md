@@ -8,6 +8,7 @@
 [ ] - Write a comprehensive Readme about what is this, how you can use it (bonus add cute corgi picture) - Try generated doc from jsdoc
 
 ## DONE
+[x] - Change corgi plane to accept any geometry
 [X] - Plane component
 [X] - Pixel to 3d size utils
 [x] - Planes that match HTML content position

@@ -23,12 +23,12 @@ export default defineNuxtModule({
       filePath: resolve('runtime/components/CorgiCanvas.vue')
     })
     addComponent({
-      name: 'TheCorgiPlanes',
-      filePath: resolve('runtime/components/TheCorgiPlanes.vue')
+      name: 'TheCorgiComponents',
+      filePath: resolve('runtime/components/TheCorgiComponents.vue')
     })
     addComponent({
-      name: 'CorgiPlane',
-      filePath: resolve('runtime/components/CorgiPlane.vue')
+      name: 'CorgiComponent',
+      filePath: resolve('runtime/components/CorgiComponent.vue')
     })
   }
 })

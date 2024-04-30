@@ -1,50 +1,57 @@
 <template>
   <div class="Page">
     <div
-      ref="plane"
-      class="Plane"
+      ref="component"
+      class="Component"
     />
-    <CorgiPlane
-      v-if="material"
-      class="Plane"
-      :material="material"
-      :width-segments="10"
-      :height-segments="10"
+    <CorgiComponent
+      v-if="plane"
+      class="Component"
+      :mesh="plane"
+    />
+    <CorgiComponent
+      v-if="suzanne"
+      class="Component"
+      :mesh="suzanne"
     />
   </div>
 </template>
 
 
 <script setup>
-import { AgXToneMapping, Color, DoubleSide, MeshStandardMaterial, Uniform } from 'three'
+import { AgXToneMapping, Color, DoubleSide, Mesh, MeshStandardMaterial, PlaneGeometry, Uniform } from 'three'
 import { RESOURCES_TYPES } from '../../../src/runtime/utils/types'
 // import CustomShaderMaterial from 'three-custom-shader-material/vanilla' // Not working with reload, fixed by importing it in mounted O//
 import { gsap } from 'gsap'
 import { degToRad } from 'three/src/math/MathUtils.js'
 
-const plane = ref()
-const planes = useCorgiPlanes()
+const component = ref()
+const components = useCorgiComponents()
 
 const resources = useResources()
 
-const material = ref()
+const plane = ref()
+const suzanne = ref()
 
 onMounted(async () => {
 
   const CustomShaderMaterial = (await import('three-custom-shader-material/vanilla')).default
 
-  planes.renderer.value.toneMapping = AgXToneMapping
+  components.renderer.value.toneMapping = AgXToneMapping
 
+  // TODO add gltf to components
   resources.add([
     useResource('envmap', '/envmap.exr', RESOURCES_TYPES.EXR),
     useResource('custom-vertex', import('@/assets/custom-shaders/vertex.glsl'), RESOURCES_TYPES.GLSL),
     useResource('texture', 'https://source.unsplash.com/random', RESOURCES_TYPES.IMAGE),
+    useResource('suzanne', '/suzanne.glb', RESOURCES_TYPES.GLTF),
   ])
 
-  resources.getAll().then(([envmap, vertexShader, texture]) => {
-    planes.addEnvmap(envmap.asset)
+  resources.getAll().then(([envmap, vertexShader, texture, modelResource]) => {
+    components.addEnvmap(envmap.asset)
 
-    material.value = new CustomShaderMaterial({
+    const geometry = new PlaneGeometry(1, 1, 10, 10)
+    const material = new CustomShaderMaterial({
       baseMaterial: new MeshStandardMaterial({
         metalness: 0.9,
         roughness: 0.8,
@@ -57,22 +64,25 @@ onMounted(async () => {
       vertexShader: vertexShader.asset,
       side: DoubleSide,
     })
+    plane.value = new Mesh(geometry, material)
 
-    const p = planes.addPlane(plane.value, new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.6, side: DoubleSide }))
-    gsap.to(p.mesh.rotation, { y: degToRad(360), duration: 5, ease: "none", repeat: -1 })
+    const material2 = new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.6, side: DoubleSide })
+    const c = components.add(component.value, new Mesh(geometry, material2))
+    gsap.to(c.mesh.rotation, { y: degToRad(360), duration: 5, ease: "none", repeat: -1 })
 
+    suzanne.value = modelResource.asset.scene.getObjectByName("Suzanne")
   })
 
 })
 
 onBeforeUnmount(() => {
-  planes.removePlaneByElement(plane.value)
+  components.removeByElement(component.value)
 })
 
 // Methods
 const update = (time) => {
-  if (!material.value) return
-  material.value.uniforms.uTime.value = time
+  if (!plane.value) return
+  plane.value.material.uniforms.uTime.value = time
 }
 useTicker(update)
 
@@ -100,9 +110,10 @@ body,
   width: 100%;
 
   padding-bottom: 10vh;
+  gap: 120px;
 }
 
-.Plane {
+.Component {
   flex: none;
   position: relative;
   width: 30%;

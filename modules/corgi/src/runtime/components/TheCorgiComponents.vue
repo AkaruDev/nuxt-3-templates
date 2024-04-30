@@ -1,7 +1,7 @@
 <template>
   <canvas
     ref="canvas"
-    class="CorgiPlanes"
+    class="CorgiComponents"
   />
 </template>
 
@@ -23,33 +23,33 @@ const props = defineProps({
 // Data
 const canvas = ref()
 /**
- * @type {import('../composables/corgi-planes').CorgiPlanes}
+ * @type {import('../composables/corgi-components').CorgiComponents}
 */
-const planes = useCorgiPlanes()
+const components = useCorgiComponents()
 const resources = useResources()
 
 // TODO check route change to remove planes of current route
 
 // Lifecycle
 onMounted(() => {
-  planes.mount(canvas, props)
+  components.mount(canvas, props)
   if (props.envmap) {
     resources.add(useResource('envmap', props.envmap, RESOURCES_TYPES.EXR))
     resources.get('envmap').then(envmap => {
-      planes.addEnvmap(envmap.asset, props.showEnvmap)
+      components.addEnvmap(envmap.asset, props.showEnvmap)
     })
   }
 
 })
 
 onUnmounted(() => {
-  planes.unmount()
+  components.unmount()
 })
 
 </script>
 
 <style scoped>
-.CorgiPlanes {
+.CorgiComponents {
   position: fixed;
   width: 100vw;
   height: 100vh;

@@ -1,6 +1,6 @@
 <template>
   <div class="corgi-scroll-container">
-    <TheCorgiPlanes />
+    <TheCorgiComponents />
     <NuxtPage class="Page" />
   </div>
 </template>
