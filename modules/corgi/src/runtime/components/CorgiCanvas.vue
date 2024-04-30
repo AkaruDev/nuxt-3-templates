@@ -56,10 +56,6 @@ const props = defineProps({
     type: Color,
     default: undefined,
   },
-  pixelRatio: {
-    type: Number,
-    default: 1.5,
-  },
 })
 
 // Data

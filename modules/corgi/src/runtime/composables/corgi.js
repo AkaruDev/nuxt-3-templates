@@ -26,7 +26,6 @@ import { PMREMGenerator, PerspectiveCamera, Vector2, Vector3, WebGLRenderer } fr
  * @property {boolean} enablePan - Enable pan for the orbit controls
  * @property {number} fov - Fov for camera
  * @property {boolean} orbitControls - Add orbit controls
- * @property {number} pixelRatio - Pixel ratio for the renderer
  * @property {boolean} showEnvmap - If envmap show it in the background
  */
 
@@ -46,7 +45,6 @@ export const useCorgi = (canvas, options) => {
     enableZoom: true,
     enablePan: false,
     showEnvmap: false,
-    pixelRatio: 1.5,
     fov: 50,
     ...options
   }
@@ -139,10 +137,14 @@ export const useCorgi = (canvas, options) => {
 
   // Lifecycle
   onMounted(() => {
-    renderer.value = new WebGLRenderer({ canvas: canvas.value, alpha: options.backgroundColor === undefined })
+    renderer.value = new WebGLRenderer({
+      canvas: canvas.value,
+      antialias: true,
+      alpha: options.backgroundColor === undefined,
+      stencil: false,
+    })
 
-    // Set the quality of the render, may be used for to change shadow quality for exemple
-    renderer.value?.setPixelRatio(options.pixelRatio)
+    renderer.value?.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
     if (options.orbitControls) addOrbitControls(options.enableZoom, options.enablePan)
 

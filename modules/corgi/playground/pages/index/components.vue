@@ -68,11 +68,12 @@ onMounted(async () => {
 
     const material2 = new MeshStandardMaterial({ color: new Color("pink"), metalness: 0.9, roughness: 0.1, side: DoubleSide })
     const c = components.add(component.value, new Mesh(geometry, material2))
-    gsap.to(c.mesh.rotation, { y: degToRad(360), duration: 5, ease: "none", repeat: -1 })
+    gsap.to(c.mesh.rotation, { z: degToRad(360), y: degToRad(360), duration: 10, ease: "none", repeat: -1 })
 
     suzanne.value = modelResource.asset.scene.getObjectByName("Suzanne")
 
     gsap.to(suzanne.value.rotation, { y: degToRad(360), duration: 5, ease: "none", repeat: -1 })
+
   })
 
 })

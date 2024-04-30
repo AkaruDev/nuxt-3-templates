@@ -1,10 +1,9 @@
 ## TODO
-[ ] - Add mouse movement on plane to see if it's easy to use
+[ ] - Post process, check three js, antialiasing to check with Hocus because it's not working like it should
 [ ] - Uniforms utils that has already some basics like uTime
 [ ] - Three points light preset
 [ ] - Shadow utils
 [ ] - Debug utils
-[ ] - Post process, check three js, antialiasing to check with Hocus because it's not working like it should
 [ ] - Write a comprehensive Readme about what is this, how you can use it (bonus add cute corgi picture) - Try generated doc from jsdoc
 
 ## DONE

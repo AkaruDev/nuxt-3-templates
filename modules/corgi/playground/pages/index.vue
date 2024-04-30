@@ -52,11 +52,12 @@ const pages = [
 }
 
 .Home-side {
+  width: 100%;
   max-width: 300px;
   height: 100vh;
   background-color: #161616;
 
-  padding: 2rem 3rem;
+  padding: 20px 30px;
 
   overflow-x: hidden;
   overflow-y: auto;
@@ -68,7 +69,7 @@ const pages = [
     justify-content: flex-start;
 
     margin-top: 50px;
-    gap: 30px;
+    gap: 20px;
 
     width: 200px;
 
@@ -83,9 +84,10 @@ const pages = [
     justify-content: flex-start;
     list-style: none;
 
-    gap: 1rem;
+    gap: 10px;
 
     &::before {
+      flex: none;
       display: block;
       width: 4px;
       height: 4px;
@@ -98,9 +100,10 @@ const pages = [
   }
 
   a {
-    height: 20px;
+    min-height: 20px;
     font-size: 16px;
     font-family: sans-serif;
+    line-height: 130%;
     text-decoration: none;
 
     &:hover {

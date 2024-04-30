@@ -12,7 +12,7 @@ import { isProxy, toRaw } from 'vue'
  * @property {boolean} canRender - Can the render be done ?
  * @property {function} getSize - Return camera width & height
  * @property {function} mount - Init the canvas and the listeners
- * @property {import('three').WebGLRenderer} renderer - Renderer
+ * @property {ref<import('three').WebGLRenderer>} renderer - Renderer
  * @property {function} remove - Remove a component from the scene
  * @property {function} removeByElement - Find a component by its element and remove it from the scene
  * @property {function} unmount - Dispose and remove canvas rendering
@@ -27,13 +27,6 @@ import { isProxy, toRaw } from 'vue'
  */
 
 /**
- * @typedef {Object} CorgiComponentsOptions
- * @property {import('three').Color} backgroundColor - THREE.Color
- * @property {number} pixelRatio - Pixel ratio for the renderer
- * @property {boolean} showEnvmap - If envmap show it in the background
- */
-
-/**
  * Return the Corgi Components instance.
  * @returns {CorgiComponents}
  */
@@ -43,9 +36,6 @@ export const useCorgiComponents = (() => {
    * @type {ref<HTMLCanvasElement | OffscreenCanvas | void>}
    */
   const canvas = ref(null)
-  let options = {
-    pixelRatio: 1.5,
-  }
   const perspective = 2000
 
   let width = 0
@@ -67,7 +57,7 @@ export const useCorgiComponents = (() => {
   /**
    * @type {import('three').PerspectiveCamera}
    */
-  const camera = new PerspectiveCamera(50, 1, 1, perspective * 1.2)
+  const camera = new PerspectiveCamera(50, 1, 1, perspective * 1.5)
 
   let resizeObserver = null
 
@@ -79,7 +69,7 @@ export const useCorgiComponents = (() => {
    */
   const addEnvmap = (texture, showInBackground = false) => {
     const envMap = pmremGenerator?.fromEquirectangular(texture).texture
-    if (options.showEnvmap || showInBackground) scene.background = envMap
+    if (showInBackground) scene.background = envMap
     scene.environment = envMap
 
     texture.dispose()
@@ -248,17 +238,21 @@ export const useCorgiComponents = (() => {
   /**
    *
    * @param {ref<HTMLCanvasElement | OffscreenCanvas | void>} _canvas
-   * @param {CorgiComponentsOptions} _options
    */
-  const mount = (_canvas, _options) => {
+  const mount = (_canvas) => {
     if (canvas.value) return console.warn("Canvas already exist. Mount should be called only once.")
     container = document.querySelector(".corgi-scroll-container")
     canvas.value = _canvas.value
-    options = { ...options, ..._options }
 
     // Renderer
-    renderer.value = new WebGLRenderer({ canvas: canvas.value, antialias: false, alpha: true, powerPreference: "high-performance" })
-    renderer.value?.setPixelRatio(options.pixelRatio)
+    renderer.value = new WebGLRenderer({
+      canvas: canvas.value,
+      antialias: true,
+      alpha: true,
+      powerPreference: "high-performance",
+      stencil: false,
+    })
+    renderer.value?.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
     // Environnement map utils
     pmremGenerator = new PMREMGenerator(renderer.value)

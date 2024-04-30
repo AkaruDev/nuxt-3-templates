@@ -14,10 +14,6 @@ const props = defineProps({
     default: undefined,
     validator: (value) => value.includes('.exr')
   },
-  pixelRatio: {
-    type: Number,
-    default: 1.5,
-  },
 })
 
 // Data
@@ -32,7 +28,7 @@ const resources = useResources()
 
 // Lifecycle
 onMounted(() => {
-  components.mount(canvas, props)
+  components.mount(canvas)
   if (props.envmap) {
     resources.add(useResource('envmap', props.envmap, RESOURCES_TYPES.EXR))
     resources.get('envmap').then(envmap => {
