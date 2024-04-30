@@ -28,6 +28,7 @@ const pages = [
   { label: 'Custom shaders', to: '/custom-shaders' },
   { label: 'Canvas component', to: '/canvas-component' },
   { label: 'Components matching HTMLElements', to: '/components' },
+  { label: 'Postprocess', to: '/postprocess' },
   { label: 'Particles', to: '/particles' },
   { label: 'Particles flowfield', to: '/particles-flowfield' },
   { label: 'Flowmap', to: '/flowmap' },

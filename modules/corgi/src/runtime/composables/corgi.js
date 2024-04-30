@@ -3,16 +3,18 @@ import { useWindowResize } from "./window-resize"
 import { useTicker } from "./ticker"
 import { useIntersectionObserver } from "./intersection-observer"
 import { ref, onMounted, onUnmounted } from "vue"
-import { PMREMGenerator, PerspectiveCamera, Vector2, Vector3, WebGLRenderer } from "three"
+import { PMREMGenerator, PerspectiveCamera, Vector2, Vector3, WebGLRenderTarget, WebGLRenderer } from "three"
 
 /**
  * @typedef {Object} UseCorgi
  *
  * @property {function} addEnvmap - add environement map
  * @property {function} addOrbitControls - add orbit controls
+ * @property {function} addPostprocess - add post process and returns the effect composer
  * @property {import('three').PerspectiveCamera} camera - THREE.PerspectiveCamera
  * @property {function} getSize - Return camera width & height
  * @property {ref<import('three/addons/controls/OrbitControls.js').OrbitControls>} orbitControls - If orbit controls is added return a ref to it
+ * @property {import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer} effectComposer - Return instance of effectcomposer
  * @property {import('three').WebGLRenderer} renderer - THREE.WebGLRenderer
  * @property {import('three').Scene} scene - THREE.Scene
  */
@@ -57,7 +59,7 @@ export const useCorgi = (canvas, options) => {
   } = useScene()
   if (options.backgroundColor) scene.background = options.backgroundColor
 
-  let renderer = ref(null)
+  const renderer = ref(null)
 
 
   const camera = new PerspectiveCamera(options.fov, 1, 0.1, 100)
@@ -66,6 +68,7 @@ export const useCorgi = (canvas, options) => {
 
   const orbitControls = ref(null)
   let pmremGenerator = null
+  let effectComposer = null
 
   // Methods
   /**
@@ -84,7 +87,12 @@ export const useCorgi = (canvas, options) => {
 
   const render = () => {
     orbitControls.value?.update?.()
-    renderer.value?.render(scene, camera)
+    if (effectComposer) {
+      effectComposer?.render()
+    } else {
+      renderer.value?.render(scene, camera)
+    }
+
   }
 
   // Tick
@@ -113,6 +121,7 @@ export const useCorgi = (canvas, options) => {
     camera.updateProjectionMatrix()
 
     renderer.value?.setSize(width, height)
+    effectComposer?.setSize(width, height)
 
     getSize()
   }
@@ -130,6 +139,36 @@ export const useCorgi = (canvas, options) => {
     })
   }
 
+  /**
+   * Add postprocess
+   * @param {number} samples - Number of samples used for the render target, the more the better the anti-aliasing is but it's more heavy on performance
+   * @returns {import('three/examples/jsm/postprocessing/EffectComposer.js').EffectComposer}
+   */
+  const addPostprocess = async (samples = 2) => {
+
+    const width = canvas?.value?.clientWidth || 0
+    const height = canvas?.value?.clientHeight || 0
+    const effectComposerImport = (await import('three/examples/jsm/postprocessing/EffectComposer.js'))
+    const renderPassImport = (await import('three/examples/jsm/postprocessing/RenderPass.js'))
+
+    const renderTarget = new WebGLRenderTarget(
+      width,
+      height,
+      {
+        samples
+      }
+    )
+
+    effectComposer = new effectComposerImport.EffectComposer(renderer.value, renderTarget)
+    effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    effectComposer.setSize(width, height)
+
+    const renderPass = new renderPassImport.RenderPass(scene, camera)
+    effectComposer.addPass(renderPass)
+
+    return effectComposer
+  }
+
   const getSize = () => {
     camera.getViewSize(camera.position.z, size.value)
     return size.value
@@ -143,7 +182,6 @@ export const useCorgi = (canvas, options) => {
       alpha: options.backgroundColor === undefined,
       stencil: false,
     })
-
     renderer.value?.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
     if (options.orbitControls) addOrbitControls(options.enableZoom, options.enablePan)
@@ -158,6 +196,8 @@ export const useCorgi = (canvas, options) => {
    * Remove all event listener, clear all that need to be cleaned (textures etc)
    */
   onUnmounted(() => {
+    effectComposer?.dispose()
+    effectComposer = null
     renderer.value?.dispose()
     sceneDispose()
   })
@@ -165,8 +205,10 @@ export const useCorgi = (canvas, options) => {
   return {
     addEnvmap,
     addOrbitControls,
+    addPostprocess,
     canvas,
     camera,
+    effectComposer,
     getSize,
     orbitControls,
     renderer,

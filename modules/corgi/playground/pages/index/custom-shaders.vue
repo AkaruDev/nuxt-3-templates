@@ -17,7 +17,7 @@ import { useTicker } from '../../../src/runtime/composables/ticker'
 const canvas = ref()
 
 /**
- * @type {import('../../src/runtime/composables/corgi').UseCorgi}
+ * @type {import('../../../src/runtime/composables/corgi').UseCorgi}
  */
 const corgi = useCorgi(canvas)
 let material = null

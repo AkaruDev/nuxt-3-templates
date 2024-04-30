@@ -25,7 +25,7 @@ const modelRotation = ref(new Vector3(0, 0, 0))
 
 onMounted(() => {
   gsap.to(cameraPosition.value, { x: 0, y: 0, z: 4, duration: 0.8, ease: "power3.out" })
-  gsap.to(modelRotation.value, { y: degToRad(360), duration: 5, ease: "none", repeat: -1 })
+  gsap.to(modelRotation.value, { y: degToRad(360), duration: 10, ease: "none", repeat: -1 })
 })
 
 </script>
