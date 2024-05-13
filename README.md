@@ -4,6 +4,8 @@
 [ ] - Shadow utils
 [ ] - Debug utils
 [ ] - Write a comprehensive Readme about what is this, how you can use it (bonus add cute corgi picture) - Try generated doc from jsdoc
+[ ] - test on a real project like akaru.fr
+[ ] - See for testing this as a real module for nuxt, install by npx
 
 ## DONE
 [x] - Post process, check three js, antialiasing to check with Hocus because it's not working like it should
