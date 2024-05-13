@@ -33,6 +33,8 @@ let gpgpu = null
 let gpgpuIsInit = false
 let particlesVariable = null
 
+const uniformTime = useUniformTime()
+
 // Lifecycle
 onMounted(() => {
 
@@ -95,7 +97,7 @@ onMounted(() => {
 
     // Set texture to be rewrited
     particlesVariable = gpgpu.addVariable('uParticles', particlesFragmentResource.asset, particlesTexture)
-    particlesVariable.material.uniforms.uTime = new Uniform(0)
+    particlesVariable.material.uniforms.uTime = uniformTime
     particlesVariable.material.uniforms.uDeltaTime = new Uniform(0)
     particlesVariable.material.uniforms.uBase = new Uniform(particlesTexture)
     gpgpu.setVariableDependencies(particlesVariable, [particlesVariable])
@@ -125,7 +127,7 @@ onMounted(() => {
         // blending: AdditiveBlending,
         depthWrite: false,
         uniforms: {
-          uTime: new Uniform(0),
+          uTime: uniformTime,
           uSize: new Uniform(15),
           uColor: new Uniform(new Color("#798E7B")),
           uParticles: new Uniform(),
@@ -145,13 +147,11 @@ onMounted(() => {
 
 
 // Methods
-const update = (time, deltaTime) => {
+const update = (deltaTime) => {
   if (!material) return
-  material.uniforms.uTime.value = time
 
   if (!gpgpu || !gpgpuIsInit) return
   material.uniforms.uParticles.value = gpgpu.getCurrentRenderTarget(particlesVariable).texture
-  particlesVariable.material.uniforms.uTime.value = time
   particlesVariable.material.uniforms.uDeltaTime.value = deltaTime * 0.001
   gpgpu.compute()
 }
