@@ -1,13 +1,11 @@
 ## TODO
-[ ] - Three points light preset
-[ ] - Shadow utils
 [ ] - Debug utils
 [ ] - Write a comprehensive Readme about what is this, how you can use it (bonus add cute corgi picture) 
 [ ] - Try generated doc from jsdoc
-[ ] - test on a real project like akaru.fr
 [ ] - See for testing this as a real module for nuxt, install by npx
 
 ## DONE
+[x] - Tested on a real project enchanted tools hoodie 3D viewer
 [x] - Uniforms utils that has already some basics like uTime
 [x] - Post process, check three js, antialiasing to check with Hocus because it's not working like it should
 [x] - Change corgi plane to accept any geometry
