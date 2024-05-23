@@ -1,10 +1,8 @@
-module.exports = {
-  metas: {
-    title: 'Video',
-    description: 'Add components for video use',
-    category: 'Components'
-  },
-  dependencies: ['youtube-player'],
-  devDependencies: ['@vueuse/core', '@vueuse/components', '@vimeo/player'],
-  files: ['modules/video/src', 'configs']
-}
+export const metas = {
+  title: 'Video',
+  description: 'Add components for video use',
+  category: 'Components'
+};
+export const dependencies = ['youtube-player'];
+export const devDependencies = ['@vueuse/core', '@vueuse/components', '@vimeo/player'];
+export const files = ['modules/video/src', 'configs'];
