@@ -34,11 +34,11 @@ html {
 }
 
 body {
-  overscroll-behavior: none;
-  overflow-y: scroll;
   width: 100%;
 
   overflow-x: hidden;
+  overscroll-behavior: none;
+  overflow-y: auto;
 
   font-size: 1.6rem;
 
