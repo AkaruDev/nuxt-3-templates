@@ -2,7 +2,6 @@
 [ ] - Debug utils
 [ ] - Write a comprehensive Readme about what is this, how you can use it (bonus add cute corgi picture) 
 [ ] - Try generated doc from jsdoc
-[ ] - See for testing this as a real module for nuxt, install by npx
 
 ## DONE
 [x] - Tested on a real project enchanted tools hoodie 3D viewer

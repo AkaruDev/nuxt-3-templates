@@ -13,6 +13,8 @@ import { AgXToneMapping, Color, DoubleSide, Mesh, MeshBasicMaterial, PlaneGeomet
 // import CustomShaderMaterial from 'three-custom-shader-material/vanilla' // Not working with reload, fixed by importing it in mounted O//
 import { useTicker } from '../../../src/runtime/composables/ticker'
 
+// NOTE: You can do your own material if needed exemple in this gist https://gist.github.com/oskarbraten/8e4b4909de6525610055fc83add16b7b
+
 // Data
 const canvas = ref()
 
