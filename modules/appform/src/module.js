@@ -15,5 +15,9 @@ export default defineNuxtModule({
       name: 'AppForm',
       filePath: resolve('runtime/components/AppForm.vue')
     })
+    addComponent({
+      name: 'AppInput',
+      filePath: resolve('runtime/components/AppInput.vue')
+    })
   }
 })

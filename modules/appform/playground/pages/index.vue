@@ -1,7 +1,11 @@
 <template>
   <div class="Page home">
     <h1>Home</h1>
-    <AppForm />
+    <AppForm>
+      <AppInput :required="true" label="Name" placeholder="What is your name?" type="text"/>
+      <AppInput :required="true" label="Message" placeholder="Write a comment" type="textarea"/>
+      <AppInput type="hidden"/>
+    </AppForm>
   </div>
 </template>
 
