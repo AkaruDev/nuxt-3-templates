@@ -1,0 +1,61 @@
+<template>
+  <a
+    class="AppCodeButton"
+    :href="href"
+    target="_blank"
+    title="See code"
+  >
+    <svg
+      class="AppCodeButtonIcon"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24px"
+      height="24px"
+      viewBox="0 0 24 24"
+      fill="#000000"
+    >
+      <path
+        fill="none"
+        d="M0 0h24v24H0V0z"
+      />
+      <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z" />
+    </svg>
+  </a>
+</template>
+
+<script setup>
+defineProps({
+  href: {
+    type: String,
+    required: true,
+  }
+})
+</script>
+
+<style scoped>
+.AppCodeButton {
+  position: fixed;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 50px;
+  aspect-ratio: 1;
+
+  bottom: 20px;
+  right: 20px;
+
+  font-family: sans-serif;
+  font-weight: bold;
+
+  border-radius: 100%;
+  background-color: #161616;
+
+  text-decoration: none;
+}
+
+.AppCodeButtonIcon {
+  fill: white;
+
+}
+</style>

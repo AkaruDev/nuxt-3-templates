@@ -15,6 +15,8 @@
     </div>
 
     <NuxtPage class="Home-page" />
+
+    <AppCodeButton :href="`https://github.com/AkaruDev/nuxt-3-templates/blob/features/corgi/modules/corgi/playground/pages/index${route.href}.vue`" />
   </main>
 </template>
 
@@ -33,6 +35,9 @@ const pages = [
   { label: 'Particles flowfield', to: '/particles-flowfield' },
   { label: 'Flowmap', to: '/flowmap' },
 ]
+
+const route = useRoute()
+
 
 </script>
 

@@ -1,5 +1,4 @@
 ## TODO
-[ ] - Debug utils
 [ ] - Write a comprehensive Readme about what is this, how you can use it (bonus add cute corgi picture) 
 [ ] - Try generated doc from jsdoc
 
