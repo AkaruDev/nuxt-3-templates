@@ -1,8 +1,8 @@
 
 export default defineNuxtConfig(
-    {
-        plugins: [
-            { src: '@/plugins/gsap', ssr: false }
-        ]
-    }
+  {
+    modules: [
+      '@/modules/gsap/src/module',
+    ]
+  }
 )
