@@ -1,8 +1,8 @@
 export const metas = {
-  title: 'Feature name',
-  description: 'Add feature',
-  category: 'Feature category'
+  title: 'AppForm',
+  description: 'Add components to build forms',
+  category: 'Components'
 };
 export const dependencies = [];
 export const devDependencies = [];
-export const files = ['modules/my-feature/src', 'configs'];
+export const files = ['modules/appform/src', 'configs'];
