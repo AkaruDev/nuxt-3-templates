@@ -11,9 +11,8 @@
       :required="required"
       :placeholder="placeholder"
       @change="onChange"
-    >
-      {{ value }}
-    </component>
+      :value="value"
+    />
   </div>
 </template>
 
