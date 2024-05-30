@@ -1,0 +1,12 @@
+@import '@/assets/styles/shared/utils.scss';
+@import '@/assets/styles/shared/accessibility.scss';
+
+// Choose your breakpoints style:
+// by orientations
+@import '@/assets/styles/shared/breakpoints-by-orientations.scss';
+// OR by up and down
+// @import '@/assets/styles/shared/breakpoints-up-and-down.scss';
+
+@import '@/assets/styles/shared/easings.scss';
+@import '@/assets/styles/shared/interactions.scss';
+@import '@/assets/styles/shared/app/index.scss';

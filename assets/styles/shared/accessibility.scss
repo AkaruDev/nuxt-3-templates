@@ -1,0 +1,60 @@
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@mixin no-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+@mixin motion {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
+@mixin touch {
+  @media (hover: none) and (pointer: coarse) {
+    @content;
+  }
+}
+
+@mixin mouse {
+  @media (hover: hover) and (pointer: fine) {
+    @content;
+  }
+}
+
+@mixin hover {
+  @include mouse {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+@mixin focus {
+  @include mouse {
+    &:focus {
+      @content;
+    }
+  }
+}
+
+@mixin hover-focus {
+  @include mouse {
+
+    &:hover,
+    &:focus {
+      @content;
+    }
+  }
+}

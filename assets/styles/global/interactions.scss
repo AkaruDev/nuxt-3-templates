@@ -1,0 +1,41 @@
+.no-drag {
+  @include no-drag;
+}
+
+.drag {
+  @include drag;
+}
+
+.no-select {
+  @include no-select;
+}
+
+.select {
+  @include select;
+}
+
+.no-pointer {
+  @include no-pointer;
+}
+
+.pointer {
+  @include pointer;
+}
+
+.no-interaction {
+  @include no-interaction;
+}
+
+.interaction {
+  @include interaction;
+}
+
+.scrollable-x {
+  overflow-x: auto;
+  @include scrollable-x;
+}
+
+.scrollable-y {
+  overflow-y: auto;
+  @include scrollable-y;
+}

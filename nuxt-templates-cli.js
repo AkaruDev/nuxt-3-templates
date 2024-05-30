@@ -1,8 +1,8 @@
 export const metas = {
-  title: 'Feature name',
-  description: 'Add feature',
-  category: 'Feature category'
+  title: 'Scss',
+  description: 'Add sass lib',
+  category: 'Style'
 };
-export const dependencies = [];
-export const devDependencies = [];
-export const files = ['modules/my-feature/src', 'configs'];
+export const dependencies = ['sass'];
+export const devDependencies = ['include-media'];
+export const files = ['assets/styles', 'configs'];

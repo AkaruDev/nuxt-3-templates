@@ -1,0 +1,171 @@
+$width-breakpoints: (
+  "mobile": 375,
+  "tablet": 769,
+  "desktop": 1080,
+  "large": 1440,
+  "xlarge": 1920
+);
+
+$height-breakpoints: (
+  "small": 500,
+  "medium": 800,
+  "large": 970,
+);
+
+$mobile-mockup-width: 375;
+$tablet-mockup-width: 1024;
+$desktop-mockup-width: 1440;
+$large-mockup-width: 1440;
+$xlarge-mockup-width: 1600;
+
+@mixin bp-up($size) {
+  @if (type-of($size)=="number") {
+    @media screen and (min-width: #{$size}) {
+      @content;
+    }
+  }
+
+  @else {
+    $min: map-get($width-breakpoints, $size);
+
+    @media screen and (min-width: #{$min}px) {
+      @content;
+    }
+  }
+}
+
+@mixin bp-down($size) {
+  @if (type-of($size)=="number") {
+    @media screen and (max-width: #{$size - 1}) {
+      @content;
+    }
+  }
+
+  @else {
+    $max: map-get($width-breakpoints, $size) - 1;
+
+    @media screen and (max-width: #{$max}px) {
+      @content;
+    }
+  }
+}
+
+@mixin bp-between($size1, $size2) {
+  $min: 0;
+  $max: 0;
+
+  @if (type-of($size1)=="number") {
+    $min: $size1;
+  }
+
+  @else {
+    $min: map-get($width-breakpoints, $size1);
+  }
+
+  @if (type-of($size2)=="number") {
+    $max: $size2;
+  }
+
+  @else {
+    $max: map-get($width-breakpoints, $size2) - 1;
+  }
+
+  @media screen and (min-width: #{$min}px) and (max-width: #{$max}px) {
+    @content;
+  }
+}
+
+
+@mixin height-bp-up($size) {
+  @if (type-of($size)=="number") {
+    @media screen and (min-height: #{$size}) {
+      @content;
+    }
+  }
+
+  @else {
+    $min: map-get($height-breakpoints, $size);
+
+    @media screen and (min-height: #{$min}px) {
+      @content;
+    }
+  }
+}
+
+@mixin height-bp-down($size) {
+  @if (type-of($size)=="number") {
+    @media screen and (max-height: #{$size - 1}) {
+      @content;
+    }
+  }
+
+  @else {
+    $min: map-get($height-breakpoints, $size) - 1;
+
+    @media screen and (max-height: #{$min}px) {
+      @content;
+    }
+  }
+}
+
+/**
+
+Custom
+
+**/
+
+@mixin mobile {
+  @include bp-down(tablet) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @include bp-between(tablet, desktop) {
+    @content;
+  }
+}
+
+
+@mixin tablet-up {
+  @include bp-up(tablet) {
+    @content;
+  }
+}
+
+
+@mixin small-desktop {
+  @include bp-between(desktop, large) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @include bp-up(desktop) {
+    @content;
+  }
+}
+
+@mixin large {
+  @include bp-up(large) {
+    @content;
+  }
+}
+
+@mixin xlarge {
+  @include bp-up(xlarge) {
+    @content;
+  }
+}
+
+@mixin desktop-down {
+  @include bp-down(desktop) {
+    @content;
+  }
+}
+
+@mixin large-down {
+  @include bp-down(large) {
+    @content;
+  }
+}

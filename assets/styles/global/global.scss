@@ -1,0 +1,56 @@
+@use 'sass:math';
+
+:root {
+  --sbw: 0px;
+}
+
+html {
+  --sbw: 0px;
+
+  width: 100%;
+  min-height: 100%;
+
+  font-family: $font-text;
+  font-weight: 400;
+
+  background: $primary;
+  color: $secondary;
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  font-size: math.percentage(math.div(10, 16));
+  line-height: normal;
+
+}
+
+::selection {
+  background: $secondary;
+  color: $primary;
+}
+
+body {
+  overscroll-behavior: none;
+  overflow-y: scroll;
+  width: 100%;
+
+  overflow-x: hidden;
+
+  font-size: 1.6rem;
+
+  &.cursor-wait {
+    cursor: wait;
+
+    * {
+      cursor: wait;
+    }
+  }
+}
+
+a.nuxt-link-exact-active {
+  pointer-events: none;
+}

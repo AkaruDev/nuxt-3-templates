@@ -1,0 +1,11 @@
+.centered {
+  @include centered;
+}
+
+.full-parent {
+  @include full-parent;
+}
+
+.flex-parent-center {
+  @include flex-parent-center;
+}

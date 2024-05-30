@@ -1,0 +1,72 @@
+.AppTitle {
+  font-size: 6.4rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 115%;
+}
+
+.AppText {
+  font-size: 1.6rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 137.5%;
+
+
+  p:empty {
+    height: 1.6rem;
+  }
+
+  b,
+  strong {
+    font-weight: 700;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  a {
+    text-decoration: underline;
+
+    @include mouse {
+      transition: 0.3s color $ease-power1-out;
+
+      &:hover {
+        color: $highlight;
+      }
+    }
+  }
+
+  ul {
+    display: flex;
+    flex-flow: column;
+
+    gap: 1.5rem;
+
+    padding-left: 1rem;
+
+    li {
+      position: relative;
+      padding-left: 2rem;
+
+      &:first-child {
+        margin-top: 1rem;
+      }
+
+      &::before {
+        position: absolute;
+        width: 0.6rem;
+        height: 0.6rem;
+
+        left: 0;
+        top: 0.8rem;
+
+        border-radius: 100%;
+        background-color: currentColor;
+
+        content: '';
+      }
+
+    }
+  }
+}

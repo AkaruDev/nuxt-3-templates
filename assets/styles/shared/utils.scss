@@ -1,0 +1,46 @@
+@function strip-unit($number) {
+  @if type-of($number)=='number' and not unitless($number) {
+    @return math.div($number, ($number * 0 + 1));
+  }
+
+  @return $number;
+}
+
+@function round($number) {
+  @return math.div(math.round($number * 1000), 1000);
+}
+
+@mixin darken {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  top: 0;
+  left: 0;
+
+  background: linear-gradient(0deg, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+
+  content: '';
+}
+
+@mixin lighten {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  top: 0;
+  left: 0;
+
+  background: linear-gradient(to bottom, rgba(white, 0.5) 0%, rgba(white, 0) 52%);
+
+  content: '';
+}
+
+@mixin shadow {
+  box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.1);
+}
+
+@mixin pseudo {
+  content: '';
+  display: block;
+}

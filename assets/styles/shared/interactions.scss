@@ -1,0 +1,93 @@
+@mixin no-drag {
+  -webkit-user-drag: none;
+}
+
+@mixin drag {
+  -webkit-user-drag: auto;
+}
+
+@mixin no-select {
+  user-select: none;
+}
+
+@mixin select {
+  user-select: auto;
+}
+
+@mixin no-pointer {
+  pointer-events: none;
+}
+
+@mixin pointer {
+  pointer-events: auto;
+}
+
+@mixin no-interaction {
+  @include no-drag();
+  @include no-select();
+  @include no-pointer();
+}
+
+@mixin interaction {
+  @include drag();
+  @include select();
+  @include pointer();
+}
+
+@mixin scrollable-x {
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    height: 1px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $secondary;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $primary;
+  }
+}
+
+@mixin scrollable-y {
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $secondary;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $primary;
+  }
+}
+
+@mixin scrollbar() {
+  --scrollbar-track-color: white;
+  --scrollbar-thumb-color: black;
+
+  scrollbar-color: var(--scrollbar-track-color) var(--scrollbar-thumb-color);
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--scrollbar-track-color);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-color);
+    transition: bakcground 0.3s $ease-power1-out;
+
+    &:hover {
+      background: lighten(var(--scrollbar-thumb-color), 5);
+    }
+  }
+}
