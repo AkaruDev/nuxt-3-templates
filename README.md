@@ -2,7 +2,6 @@
 <a name="readme-top"></a>
 
 <!-- PROJECT LOGO -->
-<br />
 <div align="left">
   <h1 align="left">CORGI</h1>
   <a href="https://github.com/AkaruDev/nuxt-3-templates/tree/features/corgi">
