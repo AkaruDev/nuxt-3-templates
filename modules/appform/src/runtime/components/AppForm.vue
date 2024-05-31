@@ -1,6 +1,12 @@
 <template>
-  <form ref="el" class="AppForm" autocomplete="false" @submit.prevent="onSubmit" :action="action">
-    <slot/>
+  <form
+    ref="el"
+    class="AppForm"
+    autocomplete="false"
+    :action="action"
+    @submit.prevent="onSubmit"
+  >
+    <slot />
   </form>
 </template>
 
@@ -10,7 +16,7 @@ const props = defineProps({
     type: String,
     required: true
     // TODO validator for url format
-  }
+  },
 })
 
 const el = ref()
@@ -18,6 +24,7 @@ const el = ref()
 const onSubmit = () => {
   // TODO call action url
   if (!el.value?.reportValidity()) return
+  // TODO add fake call to test different scenario, with error managing, messages and loading request.
 }
 
 </script>

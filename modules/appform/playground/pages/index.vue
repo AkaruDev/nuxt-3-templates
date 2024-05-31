@@ -1,7 +1,7 @@
 <template>
   <div class="Page home">
     <h1>Home</h1>
-    <AppForm>
+    <AppForm action="#">
       <AppInput
         :required="true"
         label="Name"
@@ -18,6 +18,9 @@
         type="hidden"
         value="i'm hidden hehe"
       />
+      <button type="submit">
+        Send
+      </button>
     </AppForm>
   </div>
 </template>
@@ -25,4 +28,9 @@
 <script setup>
 </script>
 
-<style scoped></style>
+<style scoped>
+button {
+  align-self: flex-end;
+  padding: 10px 20px;
+}
+</style>
