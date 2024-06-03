@@ -1,6 +1,12 @@
 <template>
-  <div class="AppInput" ref="el">
-    <label class="AppInput-label" v-if="type !== 'hidden' && label">{{ label }}<span v-if="required"> *</span></label>
+  <div
+    ref="el"
+    class="AppInput"
+  >
+    <label
+      v-if="type !== 'hidden' && label"
+      class="AppInput-label"
+    >{{ label }}<span v-if="required"> *</span></label>
     <component
       :is="is"
       ref="input"
@@ -10,8 +16,8 @@
       :type="type"
       :required="required"
       :placeholder="placeholder"
-      @change="onChange"
       :value="value"
+      @change="onChange"
     />
   </div>
 </template>
