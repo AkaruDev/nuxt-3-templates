@@ -182,19 +182,19 @@ export const useVideo = ({
       if (videoElement.readyState >= 3) {
         resolve(videoElement);
       } else {
-        const onLoadedData = () => {
-          videoElement.removeEventListener('loadeddata', onLoadedData);
+        const onCanPlayThrough = () => {
+          videoElement.removeEventListener('canplaythrough', onCanPlayThrough);
           videoElement.removeEventListener('error', onError);
           resolve(videoElement);
         };
 
         const onError = () => {
-          videoElement.removeEventListener('loadeddata', onLoadedData);
+          videoElement.removeEventListener('canplaythrough', onCanPlayThrough);
           videoElement.removeEventListener('error', onError);
           reject(new Error('Erreur lors du chargement de la vidéo'));
         };
 
-        videoElement.addEventListener('loadeddata', onLoadedData);
+        videoElement.addEventListener('canplaythrough', onCanPlayThrough);
         videoElement.addEventListener('error', onError);
 
         loadVideo();
