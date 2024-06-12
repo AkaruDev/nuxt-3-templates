@@ -39,6 +39,7 @@
 <script setup lang="ts">
 import YouTubePlayer from 'youtube-player'
 import { YouTubePlayer as YoutubePlayerType } from 'youtube-player/dist/types'
+import { VideoState as VideoStateType } from '../types/videoState';
 
 const emits = defineEmits(['onPause', 'onVideoEnd', 'onPlay'])
 
@@ -68,7 +69,7 @@ const props = defineProps({
 // Ref
 const refPlayer = ref<HTMLElement | null>(null)
 
-const state = ref({
+const state = ref<VideoStateType>({
   playing: false,
   loaded: false
 })
@@ -117,8 +118,9 @@ const initYoutubePlayer = () => {
   })
 }
 const onClickPlay = () => {
-  if (!YtPlayer) return
   initYoutubePlayer()
+
+  if (!YtPlayer) return
   if (youtubeId.value) YtPlayer.loadVideoById(youtubeId.value)
 
   state.value.loaded = true

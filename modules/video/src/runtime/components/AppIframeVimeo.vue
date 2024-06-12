@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 const emits = defineEmits(['onPause', 'onPlay'])
+import { VideoState as VideoStateType } from '../types/videoState';
 
 const props = defineProps({
   url: {
@@ -65,7 +66,7 @@ const refPlayer = ref<HTMLElement | null>(null)
 let Vimeo: any = null;
 let player: any = null;
 
-const state = ref({
+const state = ref<VideoStateType>({
   playing: false,
   loaded: false
 })

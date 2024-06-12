@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { VideoState } from '../types/videoState';
+import { VideoState as VideoStateType } from '../types/videoState';
 
 const props = defineProps({
   embed: {
@@ -51,7 +51,7 @@ const props = defineProps({
 })
 
 // Ref
-const state = ref<VideoState>({
+const state = ref<VideoStateType>({
   loaded: false
 })
 
