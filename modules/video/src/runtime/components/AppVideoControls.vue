@@ -6,6 +6,22 @@
       @click="togglePlayPause"
     >
       <div
+        v-show="!state.playing && !state.loaded"
+        class="AppVideoControls-load"
+      >
+        <svg
+          viewBox="0 0 10 10"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M5 0C2.23858 0 0 2.23858 0 5C0 7.76142 2.23858 10 5 10C7.76142 10 10 7.76142 10 5H8.5C8.5 6.933 6.933 8.5 5 8.5C3.067 8.5 1.5 6.933 1.5 5C1.5 3.067 3.067 1.5 5 1.5V0Z"
+          />
+        </svg>
+      </div>
+
+      <div
         v-show="!state.playing"
         class="AppVideoControls-play"
       />
@@ -75,7 +91,15 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { VideoState } from '../types/videoState';
+
+export interface Control {
+  togglePlayPause?: boolean;
+  toggleMute?: boolean;
+  toggleFullscreen?: boolean;
+  progress?: number;
+}
 
 const props = defineProps({
   progress: {
@@ -87,52 +111,49 @@ const props = defineProps({
     default: 0
   },
   state: {
-    type: Object,
+    type: Object as PropType<VideoState>,
     default: () => {
       return {
         muted: true,
         playing: false,
         fullscreen: false,
+        loaded: false,
       }
     }
   }
 })
 
-const bar = ref()
+const bar = ref<HTMLDivElement | null>(null)
 
-const formatSeconds = (seconds) => {
+const formatSeconds = (seconds: number): string => {
   return new Date(seconds * 1000).toISOString().slice(14, 19)
 }
 
-const timing = computed(() => {
-  const currentTime = (props.progress * props.duration)
+const timing: ComputedRef<string> = computed(() => {
+  const currentTime = props.progress * props.duration
   return `${formatSeconds(currentTime)} / ${formatSeconds(props.duration)}`
 })
 
-const events = {
-  change: 'change'
-}
 const emit = defineEmits(['change'])
 
 const togglePlayPause = () => {
-  emit(events.change, { togglePlayPause: true })
+  emit('change', { togglePlayPause: true })
 }
+
 const toggleMute = () => {
-  emit(events.change, { toggleMute: true })
+  emit('change', { toggleMute: true })
 }
+
 const toggleFullscreen = () => {
-  emit(events.change, { toggleFullscreen: true })
+  emit('change', { toggleFullscreen: true })
 }
 
-/**
- * @param {MouseEvent} event
- */
-const onClickProgress = (event) => {
-  const progress = event.offsetX / bar.value.clientWidth
-  emit(events.change, { progress })
+const onClickProgress = (event: MouseEvent) => {
+  if (bar.value) {
+    const progress = event.offsetX / bar.value.clientWidth
+    emit('change', { progress })
+  }
 }
-
-
 </script>
 
 <style  scoped>
@@ -149,18 +170,12 @@ button {
 .AppVideoControls {
   position: absolute;
   display: flex;
-
   align-items: center;
-
   width: 100%;
-
   bottom: 0;
   left: 0;
-
   padding: 0 20px;
-
   box-sizing: border-box;
-
   color: white;
 }
 
@@ -168,16 +183,11 @@ button {
   position: absolute;
   width: 100%;
   height: 100%;
-
   top: 0;
   left: 0;
-
   pointer-events: none;
-
   background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 70%);
-
   z-index: 0;
-
   content: '';
 }
 
@@ -187,7 +197,6 @@ button {
   flex-flow: column;
   align-items: center;
   justify-content: center;
-
   width: 50px;
   height: 50px;
   z-index: 1;
@@ -197,14 +206,11 @@ button {
   position: absolute;
   width: 0;
   height: 0;
-
   top: 50%;
   left: 50%;
-
   border-style: solid;
   border-width: 8px 0 8px 14px;
   border-color: transparent transparent transparent white;
-
   transform: translate3d(-50%, -50%, 0);
 }
 
@@ -213,35 +219,45 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-
   width: 100%;
   height: 100%;
-
   gap: 5px;
-
   top: 0;
   left: -2px;
+}
+
+.AppVideoControls-load svg {
+  width: 12px;
+  height: 12px;
+  opacity: 0.5;
+  fill: white;
+  animation: rotation 3s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .AppVideoControls-pause::before,
 .AppVideoControls-pause::after {
   width: 3px;
   height: 14px;
-
   background-color: white;
   border-radius: 1px;
-
   content: '';
 }
-
 
 .AppVideoControls-progress {
   position: relative;
   width: 100%;
   height: 50px;
-
   cursor: pointer;
-
   z-index: 1;
 }
 
@@ -250,10 +266,8 @@ button {
   position: absolute;
   width: 100%;
   height: 1px;
-
   top: 50%;
   left: 0;
-
   content: "";
 }
 
@@ -263,8 +277,7 @@ button {
 }
 
 .AppVideoControls-progress::after {
-  background-color: #9987c7;
-
+  background-color: rgba(255, 255, 255, 0.5);
   transform-origin: 0;
   transform: scaleX(v-bind('props.progress'));
   z-index: 1;
@@ -274,9 +287,8 @@ button {
   display: block;
   font-size: 11px;
   font-family: sans-serif;
-
+  z-index: 2;
   padding: 0 10px;
-
   text-align: center;
   white-space: nowrap;
 }

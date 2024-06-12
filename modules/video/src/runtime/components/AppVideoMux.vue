@@ -29,13 +29,13 @@
       class="AppVideo-cover"
     >
       <slot
-        v-if="!props.vimeoCover"
+        v-if="!props.muxCover"
         name="cover"
       />
       <img
-        v-else-if="vimeoCoverSrc"
+        v-else-if="muxCoverSrc"
         loading="lazy"
-        :src="vimeoCoverSrc"
+        :src="muxCoverSrc"
       >
     </div>
 
@@ -61,13 +61,12 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'nuxt/dist/app/compat/capi'
-import { VimeoVideo as VimeoVideoType } from '../types/vimeoVideo';
+import { MuxVideo as MuxVideoType } from '../types/muxVideo';
 
 // Props
 const props = defineProps({
   video: {
-    type: Object as PropType<VimeoVideoType>,
+    type: Object as PropType<MuxVideoType>,
     required: true
   },
   autoplay: {
@@ -105,7 +104,7 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  vimeoCover: {
+  muxCover: {
     required: false,
     default: false,
     type: Boolean
@@ -113,17 +112,18 @@ const props = defineProps({
 })
 
 // Refs
-const refEl = ref<HTMLDivElement | null>(null)
-const refVideo = ref<HTMLVideoElement | null>(null)
+const refEl = ref<HTMLDivElement | null>(null);
+const refVideo = ref<HTMLVideoElement | null>(null);
 
 // Events
 const emit = defineEmits(['onPlay', 'onPause', 'onStop', 'onProgress', 'onLoaded'])
 
 // Append video
-const { appendVideo } = useVimeo({
-  videoVimeo: props.video?.files,
+const { appendVideo } = useMuxStream({
+  muxVideo: props.video,
   videoEl: refVideo,
-  useSmallResolution: true,
+  preferMp4: true,
+  useSmallResolution: false,
 })
 
 // UseVideo
@@ -142,25 +142,34 @@ const video = reactive(useVideo(
 
 // Dimensions
 const videoWidth: ComputedRef<number | undefined> = computed(() => {
-  return props.video.width
-})
+  const videoTrack = props.video.asset?.data.tracks?.find(
+    (el) => el.type === 'video'
+  );
+  return videoTrack ? videoTrack.max_width : undefined;
+});
 
 const videoHeight: ComputedRef<number | undefined> = computed(() => {
-  return props.video.height
-})
+  const videoTrack = props.video.asset?.data.tracks?.find(
+    (el) => el.type === 'video'
+  );
+  return videoTrack ? videoTrack.max_height : undefined;
+});
 
 const aspectRatioStyle: ComputedRef<string | null> = computed(() =>
-  videoWidth && videoHeight
+  videoWidth.value && videoHeight.value
     ? `${videoWidth.value}/${videoHeight.value}`
     : null
-)
+);
 
 // Cover
-const vimeoCoverSrc = computed(() => {
-  if (props.vimeoCover) {
-    return props.video.pictures.find(picture => picture.width === 1920)?.link
+const muxCoverSrc: ComputedRef<string | undefined> = computed(() => {
+  if (props.muxCover) {
+    return props.video.asset?.playbackId
+      ? `https://image.mux.com/${props.video.asset.playbackId}/thumbnail.jpg?time=${props.video.asset.thumbTime ?? 0}`
+      : '';
   }
-})
+  return undefined;
+});
 
 // Expose
 defineExpose({ play: video.play, pause: video.pause, stop: video.stop, mute: video.mute, unmute: video.unmute, setVolume: video.setVolume, setCurrentTime: video.setCurrentTime, promiseLoadVideo: video.promiseLoadVideo })
@@ -175,9 +184,9 @@ defineExpose({ play: video.play, pause: video.pause, stop: video.stop, mute: vid
 }
 
 .AppVideo-video {
+  position: relative;
   width: 100%;
   height: 100%;
-  position: relative;
 }
 
 /* States */

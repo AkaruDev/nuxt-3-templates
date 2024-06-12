@@ -5,69 +5,111 @@
       Go to page
     </nuxt-link>
 
-    <!-- Embed player -->
     <div class="Page-demo">
-      <h2>Video embed</h2>
-      <AppVideoEmbed
+      <h2>Video - Autoplay and Loop</h2>
+      <AppVideo
         class="Page-video"
-        :src="embed"
-        cover="/cover.jpg"
+        :autoplay="true"
+        :loop="true"
+        src="/videos/fall.mp4"
+        :width="16"
+        :height="9"
+        @on-play="() => console.log('play')"
+        @on-pause="() => console.log('pause')"
+        @on-loaded="() => console.log('onLoaded')"
       />
     </div>
 
     <div class="Page-demo">
-      <h2>Video Vimeo</h2>
+      <h2>Video - Controls</h2>
+      <AppVideo
+        class="Page-video"
+        :autoplay="false"
+        :controls="true"
+        :loop="false"
+        src="/videos/fall.mp4"
+      />
+    </div>
+
+    <div class="Page-demo">
+      <h2>Video - Vimeo</h2>
       <AppVideoVimeo
         class="Page-video"
-        url="https://vimeo.com/265070712"
-        cover="/cover.jpg"
+        :autoplay="false"
+        :controls="true"
+        :loop="false"
+        :video="vimeoVideo"
+        :vimeo-cover="true"
       />
     </div>
 
     <div class="Page-demo">
-      <h2>Video with files</h2>
-      <AppVideoFile
+      <h2>Video - Mux</h2>
+      <AppVideoMux
         class="Page-video"
-        url="/videos/fall"
-        cover="/cover.jpg"
+        :autoplay="false"
+        :controls="true"
+        :loop="false"
+        :video="muxVideo"
+        :mux-cover="true"
       />
     </div>
 
+
     <div class="Page-demo">
-      <h2>Vimeo as a background</h2>
-      <AppVideoBackground
-        class="Page-videoBackground"
+      <h2>Iframe - Embed</h2>
+      <AppIframeEmbed
+        class="Page-iframe"
+        :embed="embed"
+      >
+        <template #cover>
+          <img
+            loading="lazy"
+            :src="`/cover.jpg`"
+          >
+        </template>
+      </AppIframeEmbed>
+    </div>
+
+    <div class="Page-demo">
+      <h2>Iframe - Youtube</h2>
+      <AppIframeYoutube
+        class="Page-iframe"
+        url="https://www.youtube.com/embed/E5jEjJZeCX8?feature=oembed&amp;autoplay=1&amp;rel=0&amp;modestbranding=1"
+      >
+        <template #cover>
+          <img
+            loading="lazy"
+            :src="`/cover.jpg`"
+          >
+        </template>
+      </AppIframeYoutube>
+    </div>
+
+
+    <div class="Page-demo">
+      <h2>Iframe - Vimeo</h2>
+      <AppIframeVimeo
+        class="Page-iframe"
         url="https://vimeo.com/265070712"
-        type="vimeo"
-        cover="/cover.jpg"
-      />
-    </div>
-
-    <div class="Page-demo">
-      <h2>Video file as a background</h2>
-      <AppVideoBackground
-        class="Page-videoBackground"
-        url="/videos/fall"
-        type="file"
-        cover="/cover.jpg"
-      />
-    </div>
-
-
-    <div class="Page-demo">
-      <h2>Video from YouTube</h2>
-      <AppVideo
-        class="Page-youtube"
-        src="https://www.youtube.com/watch?v=nymgT8zIIco"
-        type="youtube"
-      />
+      >
+        <template #cover>
+          <img
+            loading="lazy"
+            :src="`/cover.jpg`"
+          >
+        </template>
+      </AppIframeVimeo>
     </div>
   </div>
 </template>
 
 <script setup>
+import muxVideo from '../../src/runtime/mock/muxVideo'
+import vimeoVideo from '../../src/runtime/mock/vimeoVideo'
 
-const embed = `<iframe width="200" height="113" src="https://www.youtube.com/embed/E5jEjJZeCX8?feature=oembed&amp;autoplay=1&amp;rel=0&amp;modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" title="Nouvelle collection « Les Classiques » : découvrez nos titres pour le collège et le lycée !" data-dashlane-frameid="260"></iframe>`;
+const embed = `<iframe width="200" height="113" src="https://www.youtube.com/embed/E5jEjJZeCX8?feature=oembed&amp;autoplay=1&amp;rel=0&amp;modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" title="Nouvelle collection « Les Classiques » : découvrez nos titres pour le collège et le lycée !" data-dashlane-frameid="260"></iframe>`
+
 </script>
 
 <style scoped>
@@ -85,26 +127,20 @@ const embed = `<iframe width="200" height="113" src="https://www.youtube.com/emb
   margin-top: 80px;
 }
 
-.AppVideoBackground.Page-videoBackground,
-.AppVideoFile.Page-videoBackground {
-  width: 100%;
-  aspect-ratio: 16/9;
-  margin-top: 50px;
-
-  background-color: black;
-}
-
-.AppVideoFile.Page-video,
-.AppVideoEmbed.Page-video,
-.Page-youtube,
-.AppVideoVimeo.Page-video {
+.Page-video {
   position: relative;
   width: 60vw;
   min-width: 375px;
-  aspect-ratio: 16/9;
-
   margin-top: 50px;
+  background-color: black;
+}
 
+.Page-iframe {
+  position: relative;
+  width: 60vw;
+  min-width: 375px;
+  margin-top: 50px;
+  aspect-ratio: 16 / 9;
   background-color: black;
 }
 </style>

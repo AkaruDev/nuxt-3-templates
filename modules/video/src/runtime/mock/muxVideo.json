@@ -1,0 +1,76 @@
+{
+  "_type": "mux.video",
+  "asset": {
+    "status": "ready",
+    "playbackId": "pS5Jiva0000DnO00iBUYEr4LmCgLHS3Hd2yMxf55uhE8Ag",
+    "data": {
+      "playback_ids": [
+        {
+          "id": "pS5Jiva0000DnO00iBUYEr4LmCgLHS3Hd2yMxf55uhE8Ag",
+          "policy": "public"
+        }
+      ],
+      "encoding_tier": "smart",
+      "id": "GCjXq2uSClvOddQZb3an48Hb8e3ViCRi3JZ02Iqqlqy8",
+      "created_at": "1709744229",
+      "status": "ready",
+      "upload_id": "NGoyzoW4h1WPZJsDA6cqGhDWaDJU4rt5pln02Uxx0001V4",
+      "duration": 24.2242,
+      "max_resolution_tier": "1080p",
+      "max_stored_resolution": "HD",
+      "ingest_type": "on_demand_direct_upload",
+      "static_renditions": {
+        "files": [
+          {
+            "ext": "mp4",
+            "name": "high.mp4",
+            "width": 1280,
+            "bitrate": 1932704,
+            "filesize": "5852475",
+            "height": 720
+          },
+          {
+            "height": 270,
+            "ext": "mp4",
+            "name": "low.mp4",
+            "width": 480,
+            "bitrate": 444120,
+            "filesize": "1344868"
+          },
+          {
+            "ext": "mp4",
+            "name": "medium.mp4",
+            "width": 854,
+            "bitrate": 897280,
+            "filesize": "2717096",
+            "height": 480
+          }
+        ],
+        "status": "ready"
+      },
+      "passthrough": "366628d8-e586-4a59-b087-d55674dcc972",
+      "max_stored_frame_rate": 29.97,
+      "resolution_tier": "720p",
+      "master_access": "none",
+      "aspect_ratio": "16:9",
+      "tracks": [
+        {
+          "max_frame_rate": 29.97,
+          "max_height": 720,
+          "id": "HTKeDBTkKk5i64pCP6Jteirjr00Jtaez9e7XLSeVhTrw",
+          "type": "video",
+          "duration": 24.2242,
+          "max_width": 1280
+        }
+      ],
+      "mp4_support": "standard"
+    },
+    "assetId": "GCjXq2uSClvOddQZb3an48Hb8e3ViCRi3JZ02Iqqlqy8",
+    "_createdAt": "2024-03-06T16:57:02Z",
+    "_rev": "5W9nXCux6pZiljFE20A3Zt",
+    "_type": "mux.videoAsset",
+    "uploadId": "NGoyzoW4h1WPZJsDA6cqGhDWaDJU4rt5pln02Uxx0001V4",
+    "_id": "366628d8-e586-4a59-b087-d55674dcc972",
+    "_updatedAt": "2024-03-06T16:57:27Z"
+  }
+}

@@ -1,93 +1,83 @@
 <template>
   <div
-    v-intersection-observer="onIntersectionObserver"
+    ref="refEl"
     class="AppVideo"
-    :class="{ '--fullscreen': state.fullscreen }"
-    @mouseenter="onMouseEnter"
-    @mousemove="onMouseMove"
-    @mouseleave="onMouseLeave"
+    :class="[
+      video.state?.playing && '--is-playing',
+      video.state?.fullscreen && '--fullscreen',
+      video.isCoverHidden && '--cover-hidden',
+      `--fit-${props.fit}`
+    ]"
+    :style="[aspectRatioStyle ? { 'aspect-ratio': aspectRatioStyle } : '']"
   >
+    <!-- Video -->
+    <video
+      ref="refVideo"
+      class="AppVideo-video"
+      :preload="props.preload"
+      playsinline
+      :loop="props.loop"
+      :muted="props.muted"
+      :data-src="props.src"
+      @timeupdate="video.onTimeUpdate"
+      @canplay="video.onPlayPauseUpdate"
+      @playing="video.onPlayPauseUpdate"
+      @pause="video.onPlayPauseUpdate"
+    >
+      <source
+        v-for="(item, i) in sources"
+        :key="`video-${i}`"
+        :data-src="`${src}`"
+        :type="item.type"
+      >
+    </video>
+
     <!-- Cover -->
     <div
-      v-show="cover"
       class="AppVideo-cover"
     >
       <slot name="cover" />
-      <div
-        class="AppVideo-btplay"
-        @click="onClickBtplay"
-      >
-        <slot name="btplay" />
-      </div>
-    </div>
-
-    <!-- Player -->
-    <div
-      v-if="!cover"
-      class="AppVideo-player"
-    >
-      <!-- PLayer YouTube -->
-      <AppPlayerYoutube
-        v-if="type === TYPES.YOUTUBE"
-        ref="player"
-        :url="src"
-        :height="height"
-        :width="width"
-        @play="onPlay"
-        @pause="onPause"
-      />
-      <!-- Player embed -->
-      <AppPlayerEmbed
-        v-if="type === TYPES.EMBED"
-        :embed="src"
-      />
-      <!-- Player vimeo -->
-      <AppPlayerVimeo
-        v-if="type === TYPES.VIMEO"
-        ref="player"
-        :url="src"
-        :autoplay="autoplay"
-        :muted="muted"
-        @play="onPlay"
-        @pause="onPause"
-      />
-      <!-- Player file -->
-      <AppPlayerFile
-        v-if="type === TYPES.FILE"
-        ref="player"
-        :url="src"
-        :extensions="extensions"
-        :autoplay="autoplay"
-        :muted="muted"
-        @play="onPlay"
-        @pause="onPause"
-      />
     </div>
 
     <!-- Controls -->
     <AppVideoControls
-      v-if="controls"
-      v-show="!cover"
-      :state="state"
-      :style="{ opacity: showControls ? 1 : 0, pointerEvents: showControls ? 'auto' : 'none' }"
-      :progress="player?.progress || 0"
-      :duration="player?.duration"
-      @change="onControlsChange"
+      v-if="props.controls"
+      v-show="video.isCoverHidden"
+      :class="{ '--show': video.isCoverHidden }"
+      :state="video.state"
+      :progress="video.progress || 0"
+      :duration="video.duration || 0"
+      class="AppVideo-controls"
+      @change="video.onControlsChange"
+    />
+
+    <!-- Play Button -->
+    <AppVideoPlayButton
+      v-if="props.controls"
+      class="AppVideo-btplay"
+      @click="video.togglePlayPause"
     />
   </div>
 </template>
 
-<script setup>
-import { vIntersectionObserver } from '@vueuse/components'
+<script setup lang="ts">
+interface Source {
+  url: string;
+  type?: string;
+}
 
 // Props
-const TYPES = {
-  VIMEO: 'vimeo',
-  EMBED: 'embed',
-  FILE: 'file',
-  YOUTUBE: 'youtube'
-}
 const props = defineProps({
+  src: {
+    type: String,
+    default: '',
+    required: false
+  },
+  sources: {
+    type: Array as PropType<Source[]>,
+    default: () => [],
+    required: false
+  },
   autoplay: {
     type: Boolean,
     default: true
@@ -96,254 +86,149 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  controls: {
-    type: Boolean,
-    default: false
-  },
-  src: {
-    type: String,
-    required: true
-  },
-  extensions: {
-    type: [String, Array],
-    default: () => ["webm", "mp4"],
-  },
-  type: {
-    type: String,
-    default: undefined,
-    validator(value) {
-      return ['vimeo', 'embed', 'file', 'youtube'].includes(value)
-    }
-  },
   muted: {
     type: Boolean,
     default: true
   },
+  preload: {
+    type: String,
+    default: 'metadata',
+    validate: () => ['metadata', 'none', 'auto']
+  },
+  loading: {
+    type: String,
+    default: () => 'lazy',
+    validate: () => ['lazy', 'onMounted', 'none']
+  },
+  controls: {
+    type: Boolean,
+    default: () => false,
+  },
+  fit: {
+    type: String,
+    default: 'cover',
+    validate: () => ['cover', 'contain']
+  },
+  toggleCover: {
+    type: Boolean,
+    default: false
+  },
   width: {
-    required: false,
     type: Number,
-    default: 1920
+    required: false,
+    default: null
   },
   height: {
-    required: false,
     type: Number,
-    default: 1080
-  }
+    required: false,
+    default: null
+  },
 })
 
-// Data
-const uid = `video-${useUID()}`
-
-// Ref
-const slots = useSlots()
-const cover = ref(slots.cover !== undefined)
-const isInView = ref(false)
-const showControls = ref(false)
-const player = ref()
-const state = ref({
-  muted: props.muted,
-  playing: props.autoplay,
-  fullscreen: false,
-})
-let timeoutId = null
-
-// Methods
-const onIntersectionObserver = ([{ isIntersecting }]) => {
-  if (isIntersecting) {
-    onEnter()
-  } else {
-    onLeave()
-  }
-}
-
-const onEnter = () => {
-  isInView.value = true
-  if (props.autoplay) {
-    if (slots.cover !== undefined) {
-      cover.value = false
-    }
-    play()
-  }
-}
-
-const onLeave = () => {
-  isInView.value = false
-  pause()
-  // If embed && cover then show cover
-  if (slots.cover !== undefined && props.type === TYPES.EMBED) {
-    cover.value = true
-  }
-}
-
-const play = () => {
-  player?.value?.play()
-}
-
-const pause = () => {
-  player?.value?.pause()
-}
-
-const togglePlayPause = () => {
-  if (!player.value) return
-  state.value.playing = !state.value.playing
-  if (state.value.playing) play()
-  else pause()
-}
-
-const toggleMute = () => {
-  state.value.muted = !state.value.muted
-
-  const volume = state.value.muted ? 0 : 1
-  player?.value?.setVolume(volume)
-}
-
-const toggleFullscreen = () => {
-  if (!document.fullscreenElement) {
-    document?.documentElement?.requestFullscreen?.().then(() => {
-      state.value.fullscreen = true
-    });
-  } else {
-    document?.exitFullscreen?.().then(() => {
-      state.value.fullscreen = false
-    });
-  }
-}
-
-const setProgress = (progress) => {
-  state.value.progress = progress
-
-  player?.value?.setProgress?.(progress)
-}
-
-const show = () => {
-  cover.value = false
-}
+// Refs
+const refEl = ref<HTMLDivElement | null>(null);
+const refVideo = ref<HTMLVideoElement | null>(null);
 
 // Events
-const onClickBtplay = () => {
-  show()
-}
+const emit = defineEmits(['onPlay', 'onPause', 'onStop', 'onProgress', 'onLoaded'])
 
-const onPlay = () => {
-  state.value.playing = true
-}
-
-const onPause = () => {
-  state.value.playing = false
-}
-
-const onMouseEnter = () => {
-  showControls.value = true
-  hideControlsLater()
-}
-
-const onMouseMove = () => {
-  showControls.value = true
-  hideControlsLater()
-}
-const onMouseLeave = () => {
-  showControls.value = false
-  if (timeoutId) {
-    clearTimeout(timeoutId)
-    timeoutId = null
+// Append video
+const appendVideo = () => {
+  if (!props.sources || props.sources.length === 0) {
+    if (refVideo.value) refVideo.value.src = `${props.src}`
+  } else {
+    const sources = refVideo.value?.querySelectorAll('source')
+    props.sources.forEach((item, index) => {
+      if (sources && sources[index]) sources[index].setAttribute('src', `${item.url}`)
+    })
   }
 }
 
-const hideControlsLater = () => {
-  if (timeoutId) clearTimeout(timeoutId)
-  timeoutId = setTimeout(() => {
-    showControls.value = false
-  }, 3000)
-}
+// UseVideo
+const video = reactive(useVideo(
+  {
+    refEl,
+    refVideo,
+    muted: props.muted,
+    autoplay: props.autoplay,
+    loading: props.loading,
+    toggleCover: props.toggleCover,
+    appendVideo: appendVideo,
+    emit: emit
+  })
+)
 
-const onControlsChange = (control) => {
-  if (control?.togglePlayPause) {
-    togglePlayPause()
-  }
-  if (control?.toggleMute) {
-    toggleMute()
-  }
-  if (control?.toggleFullscreen) {
-    toggleFullscreen()
-  }
-  if (control?.progress) {
-    setProgress(control.progress)
-  }
-}
+// Dimensions
+const videoWidth: ComputedRef<number> = computed(() => {
+  return props.width;
+});
 
-// Lifecycle
-onUnmounted(() => {
-  if (timeoutId) {
-    clearTimeout(timeoutId)
-    timeoutId = null
-  }
-})
+const videoHeight: ComputedRef<number> = computed(() => {
+  return props.height;
+});
+
+const aspectRatioStyle: ComputedRef<string | null> = computed(() =>
+  videoWidth.value && videoHeight.value
+    ? `${videoWidth.value}/${videoHeight.value}`
+    : null
+);
 
 // Expose
-defineExpose({ uid, play, pause })
+defineExpose({ play: video.play, pause: video.pause, stop: video.stop, mute: video.mute, unmute: video.unmute, setVolume: video.setVolume, setCurrentTime: video.setCurrentTime, promiseLoadVideo: video.promiseLoadVideo })
 </script>
 
-<style  scoped>
+<style scoped>
 .AppVideo {
+  width: 100%;
   position: relative;
+  overflow: hidden;
+  font-size: 0;
 }
 
-.AppVideo.--fullscreen {
-  position: fixed !important;
-  width: 100vw !important;
-  height: 100vh !important;
-
-  top: 0 !important;
-  left: 0 !important;
-
-  margin: 0 !important;
-
-  z-index: 999;
+.AppVideo-video {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
-.AppVideo .AppVideoControls {
-  z-index: 10;
-
-  transition: 0.3s opacity cubic-bezier(0.65, 0, 0.35, 1);
+/* States */
+.AppVideo.--cover-hidden .AppVideo-cover {
+  opacity: 0;
+  pointer-events: none
 }
 
+.AppVideo.--cover-hidden .AppVideo-btplay {
+  opacity: 0;
+}
+
+/* Fit */
+.AppVideo.--fit-cover .AppVideo-video {
+  object-fit: cover;
+}
+
+.AppVideo.--fit-contain .AppVideo-video {
+  object-fit: contain;
+}
+
+/* Cover */
 .AppVideo-cover {
   position: absolute;
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  justify-content: center;
-
+  left: 0;
+  top: 0;
   width: 100%;
   height: 100%;
-
-  top: 0;
-  left: 0;
-
-  overflow: hidden;
-
   z-index: 1;
+  transition: opacity 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
-.AppVideo-btplay {
-  position: relative;
-
-  z-index: 1;
+/* Controls */
+.AppVideo-controls {
+  z-index: 40;
+  transform: translate3d(0, 100%, 0);
+  transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-
-.AppVideo-player {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-
-  top: 0;
-  left: 0;
-
-  z-index: 0;
-
-  &:deep(.AppPlayerVimeo) {
-    pointer-events: none;
-  }
+.AppVideo:hover .AppVideo-controls {
+  transform: translate3d(0, 0, 0);
 }
 </style>

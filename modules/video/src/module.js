@@ -18,6 +18,24 @@ export default defineNuxtModule({
       from: resolver.resolve('runtime/composables/uid')
     })
 
+    addImports({
+      name: 'useVideo',
+      as: 'useVideo',
+      from: resolver.resolve('runtime/composables/useVideo')
+    })
+
+    addImports({
+      name: 'useMuxStream',
+      as: 'useMuxStream',
+      from: resolver.resolve('runtime/composables/useMuxStream')
+    })
+
+    addImports({
+      name: 'useVimeo',
+      as: 'useVimeo',
+      from: resolver.resolve('runtime/composables/useVimeo')
+    })
+
     // Add components
     addComponent({
       name: 'AppVideo',
@@ -25,40 +43,38 @@ export default defineNuxtModule({
     })
 
     addComponent({
-      name: 'AppPlayerEmbed',
-      filePath: resolver.resolve('runtime/components/AppPlayerEmbed.vue')
-    })
-    addComponent({
-      name: 'AppPlayerVimeo',
-      filePath: resolver.resolve('runtime/components/AppPlayerVimeo.vue')
-    })
-    addComponent({
-      name: 'AppPlayerFile',
-      filePath: resolver.resolve('runtime/components/AppPlayerFile.vue')
-    })
-    addComponent({
-      name: 'AppVideoControls',
-      filePath: resolver.resolve('runtime/components/AppVideoControls.vue')
-    })
-    addComponent({
       name: 'AppVideoVimeo',
       filePath: resolver.resolve('runtime/components/AppVideoVimeo.vue')
     })
+
     addComponent({
-      name: 'AppVideoEmbed',
-      filePath: resolver.resolve('runtime/components/AppVideoEmbed.vue')
+      name: 'AppVideoMux',
+      filePath: resolver.resolve('runtime/components/AppVideoMux.vue')
     })
+
     addComponent({
-      name: 'AppVideoFile',
-      filePath: resolver.resolve('runtime/components/AppVideoFile.vue')
+      name: 'AppIframeVimeo',
+      filePath: resolver.resolve('runtime/components/AppIframeVimeo.vue')
     })
+
     addComponent({
-      name: 'AppVideoBackground',
-      filePath: resolver.resolve('runtime/components/AppVideoBackground.vue')
+      name: 'AppIframeYoutube',
+      filePath: resolver.resolve('runtime/components/AppIframeYoutube.vue')
     })
+
     addComponent({
-      name: 'AppPlayerYoutube',
-      filePath: resolver.resolve('runtime/components/AppPlayerYoutube.vue')
+      name: 'AppIframeEmbed',
+      filePath: resolver.resolve('runtime/components/AppIframeEmbed.vue')
+    })
+
+    addComponent({
+      name: 'AppVideoPlayButton',
+      filePath: resolver.resolve('runtime/components/AppVideoPlayButton.vue')
+    })
+
+    addComponent({
+      name: 'AppVideoControls',
+      filePath: resolver.resolve('runtime/components/AppVideoControls.vue')
     })
 
   }
