@@ -2,7 +2,7 @@
 export default defineNuxtConfig(
   {
     modules: [
-      '@/modules/gsap/src/module',
+      '@/modules/akaru-gsap/src/module',
     ]
   }
 )
