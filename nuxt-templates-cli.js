@@ -5,4 +5,4 @@ export const metas = {
 };
 export const dependencies = [];
 export const devDependencies = ['gsap'];
-export const files = ['configs', 'modules/src'];
+export const files = ['configs', 'modules/akaru-gsap/src'];
