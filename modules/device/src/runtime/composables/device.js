@@ -9,7 +9,7 @@ export const useDevice = () => {
 
   const breakpoints = config?.breakpoints || {
     small: 768,
-    medium: 1080,
+    medium: 1180,
     large: 1440,
     xlarge: 1660,
     xxlarge: 1920,
@@ -21,6 +21,7 @@ export const useDevice = () => {
   // Breakpoints
   const mobile = ref(true)
   const tablet = ref(false)
+  const mobileAndTablet = ref(false)
   const desktop = ref(false)
 
   // Screen orientation
@@ -51,6 +52,7 @@ export const useDevice = () => {
     // Breakpoints
     mobile.value = width.value <= breakpoints.small
     tablet.value = width.value > breakpoints.small && width.value <= breakpoints.medium
+    mobileAndTablet.value = width.value <= breakpoints.medium
     desktop.value = width.value > breakpoints.medium
 
     const widthChanged = previousWidth.value !== width.value
@@ -75,10 +77,14 @@ export const useDevice = () => {
   }
 
   onMounted(() => {
+    window.screen?.orientation?.addEventListener('change', update)
     window.addEventListener('resize', update)
     update()
   })
-  onUnmounted(() => window.removeEventListener('resize', update))
+  onUnmounted(() => {
+    window.screen?.orientation?.removeEventListener('change', update)
+    window.removeEventListener('resize', update)
+  })
 
-  return { mobile, tablet, desktop, landscape, portrait, mouse, touch, safari, getGpuTier, virtualKeyboardIsOpen }
+  return { mobile, tablet, mobileAndTablet, desktop, landscape, portrait, mouse, touch, safari, getGpuTier, virtualKeyboardIsOpen }
 }
