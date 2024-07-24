@@ -1,5 +1,4 @@
 <template>
-  <!-- v-observe="{ onEnter, onLeave, once: false }" -->
   <div
     ref="el"
     class="AppAutoScroller"
@@ -54,6 +53,14 @@ const props = defineProps({
     type: Number,
     default: 1
   },
+  autoplay: {
+    type: Boolean,
+    default: true
+  },
+  progress: {
+    type: Number,
+    default: 0
+  },
 })
 
 // Data
@@ -61,11 +68,11 @@ const directions = {
   previous: 1,
   next: -1
 }
-let animation = gsap.timeline()
 let itemWidth = 0
 let itemHeight = 0
 let slides = []
 let total = 0
+let width = 0
 let wrap = null
 let wrapWidth = 0
 const el = ref()
@@ -73,6 +80,7 @@ const wrapper = ref()
 const slideItems = ref()
 const isInit = ref(false)
 const isVisible = ref(false)
+let timeline = gsap.timeline({ paused: true })
 
 // Lifecycle
 onMounted(() => {
@@ -81,8 +89,16 @@ onMounted(() => {
 
 onUnmounted(() => {
   isInit.value = false
+  timeline?.kill()
   window.removeEventListener('resize', onResize)
 })
+
+if (!props.autoplay) {
+  watch(props, () => {
+    timeline?.progress(props.progress)
+
+  })
+}
 
 
 // Methods
@@ -100,10 +116,10 @@ useIntersectionObserver(
 const onEnter = () => {
   isVisible.value = true
   init()
-  animation?.play()
+  if (props.autoplay) timeline?.play()
 }
 const onLeave = () => {
-  animation?.pause()
+  if (props.autoplay) timeline?.pause()
   isVisible.value = false
 }
 
@@ -166,12 +182,12 @@ const setSlides = () => {
 }
 
 const setAnimation = () => {
-  animation.kill()
-  animation = gsap.timeline({ paused: false, repeat: -1 })
+  timeline.kill()
+  timeline = gsap.timeline({ paused: !props.autoplay, repeat: -1 })
 
-  animation.to(slideItems.value, {
+  timeline.to(slideItems.value, {
     duration: props.duration,
-    x: `+=${wrapWidth * props.direction}`,
+    x: `+=${(wrapWidth + 0.0001) * props.direction}`,
     ease: 'none',
     modifiers: {
       x: (x) => {
@@ -182,10 +198,12 @@ const setAnimation = () => {
 }
 
 const onResize = () => {
-  setSlides()
-  setAnimation()
+  if (width !== el?.value?.clientWidth) {
+    width = el?.value?.clientWidth
+    setSlides()
+    setAnimation()
+  }
 }
-
 
 // Expose
 defineExpose({ directions })
