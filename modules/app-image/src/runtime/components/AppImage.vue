@@ -1,36 +1,16 @@
 <template>
   <div
     ref="el"
-    v-intersection-observer="[onIntersectionObserver, { rootMargin: '0px 0px 200px 0px' }]"
     class="AppImage"
     :style="{ aspectRatio: width / height }"
   >
-    <div class="AppImage-container">
-
-      <!-- Prismic settings
-        :quality="10"
-        :modifiers="{ blur: 2000 }"
-      -->
-      <!-- IPX settings
-        :quality="100"
-        :modifiers="{ blur: 100 }"
-      -->
+    <div
+      class="AppImage-container"
+      :style="backgroundStyles"
+    >
       <nuxt-img
-        v-if="placeholder === 'blur'"
-        :class="`AppImage-image --placeholder --${loading}`"
-        :src="url"
-        :alt="alt"
-        :fit="fit"
-        :width="width"
-        :height="height"
-        loading="eager"
-        sizes="xs:10vw"
-        :quality="100"
-        :modifiers="{ blur: 100 }"
-        :style="{ objectFit: fit }"
-      />
-      <nuxt-img
-        v-show="isVisible"
+        v-if="url?.includes('prismic')"
+        :key="`image-${width}`"
         ref="img"
         :class="`AppImage-image --${loading}`"
         :src="url"
@@ -46,13 +26,22 @@
         :style="{ objectFit: fit }"
         @load="onLoad"
       />
+      <img
+        v-else
+        ref="img"
+        :src="url"
+        :width="width"
+        :height="height"
+        :loading="loading"
+        :style="{ objectFit: fit }"
+        @load="onLoad"
+      >
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { vIntersectionObserver } from '@vueuse/components'
 
 const props = defineProps({
   url: {
@@ -105,35 +94,45 @@ const props = defineProps({
   },
 })
 
+const $img = useImage()
+
 const el = ref()
 const img = ref()
 
-const config = useRuntimeConfig()
-
 const getSizes = computed(() => {
   const designWidth = 1440
-  const size = (props.width / designWidth) * 100
+  const size = Math.min(1.0, props.width / designWidth) * 100
   return props.sizes || `xs:100vw sm:100vw md:100vw lg:${size}vw xl:${size}vw xxl:${size}vw`
 })
 
 const onLoad = () => {
-  el.value?.querySelector('.AppImage-image:not(.--loaded,.--placeholder)')?.classList?.add("--loaded")
+  el.value?.querySelector('.AppImage-image:not(.--loaded)')?.classList?.add("--loaded")
 }
 
-const isVisible = ref(false)
+const placeHolderUrl = props?.placeholder === "blur" ?
+  `url('${$img(
+    props.url,
+    {
+      width: props.width,
+      format: 'webp',
+      // Prismic
+      /*
+      quality: 10,
+      blur: 2000,
+      */
+      // Ipx
+      quality: 100,
+      blur: 100,
+    }
+  )}` : undefined
+
+const backgroundStyles = ref({})
 
 onMounted(() => {
+  if (placeHolderUrl) backgroundStyles.value = { backgroundImage: placeHolderUrl, backgroundSize: props.fit }
   // Fix img already loaded and does not emit load event
   if (img?.value?.$el?.complete) onLoad()
-
-  console.info(config)
 })
-
-const onIntersectionObserver = ([{ isIntersecting }]) => {
-  if (isIntersecting && !isVisible.value) {
-    isVisible.value = true
-  }
-}
 
 </script>
 
@@ -156,22 +155,13 @@ const onIntersectionObserver = ([{ isIntersecting }]) => {
 
   top: 0;
   left: 0;
-}
 
-.AppImage:deep(.AppImage-image.--lazy) {
   opacity: 0;
   transition: 0.3s opacity cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-.AppImage:deep(.AppImage-image.--placeholder) {
+.AppImage:deep(.AppImage-image.--loaded) {
   opacity: 1;
-  z-index: 0;
-}
-
-.AppImage:deep(.AppImage-image.--loaded.--lazy) {
-  opacity: 1;
-  transition: 0.3s opacity cubic-bezier(0.65, 0, 0.35, 1);
-  z-index: 1;
 }
 
 .AppImage-container {
