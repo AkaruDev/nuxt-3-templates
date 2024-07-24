@@ -16,7 +16,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useTransition } from '../composables/transition';
+import { usePreloader } from '../composables/preloader'
+import { useBusTransition } from '../composables/bus-transition'
 
 const el = ref()
 const isShown = ref(true)
@@ -25,7 +26,9 @@ const total = ref(1)
 const progress = ref(0)
 const fulfilledPromises = ref(0)
 
-const { preloader, busTransition } = useTransition()
+const preloader = usePreloader()
+const busTransition = useBusTransition()
+useTransition()
 
 onMounted(async () => {
   preloader.preload(document.fonts.ready)
@@ -52,11 +55,9 @@ const resolvePromises = async () => {
 }
 
 const hide = () => {
-  document.body.classList.add('cursor-loading')
   isShown.value = false
   busTransition.onEnterDone()
   setTimeout(() => {
-    document.body.classList.remove('cursor-loading')
     preloader.reset()
   }, 300)
 }
@@ -67,6 +68,18 @@ const preloadPromisesCallback = () => {
 }
 
 </script>
+
+<style>
+.page-leave-active,
+.page-enter-active {
+  transition: 0.2s opacity ease-out;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
+</style>
 
 <style scoped>
 .PageLoader {

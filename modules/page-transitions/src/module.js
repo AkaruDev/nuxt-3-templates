@@ -16,6 +16,16 @@ export default defineNuxtModule({
       as: 'useTransition',
       from: resolver.resolve('runtime/composables/transition')
     })
+    addImports({
+      name: 'usePreloader',
+      as: 'usePreloader',
+      from: resolver.resolve('runtime/composables/preloader')
+    })
+    addImports({
+      name: 'useBusTransition',
+      as: 'useBusTransition',
+      from: resolver.resolve('runtime/composables/bus-transition')
+    })
 
     // Add components
     addComponent({

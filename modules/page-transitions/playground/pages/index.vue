@@ -10,7 +10,8 @@
 
 <script setup>
 
-const { preloader, busTransition } = useTransition()
+const preloader = usePreloader()
+const busTransition = useBusTransition()
 preloader.preload(useDelay(0.1))
 preloader.preload(useDelay(0.2))
 preloader.preload(useDelay(0.3))
@@ -27,8 +28,6 @@ onBeforeMount(() => {
 onBeforeUnmount(() => {
   busTransition.off('transition:enter:done', onTransitionEnterDone)
 })
-
-definePageMeta(useTransition())
 
 </script>
 

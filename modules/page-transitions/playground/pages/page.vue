@@ -11,10 +11,9 @@
 
 <script setup>
 
-const { preloader } = useTransition()
+const preloader = usePreloader()
 preloader.preload(useDelay(1))
 
-definePageMeta(useTransition())
 </script>
 
 <style scoped></style>

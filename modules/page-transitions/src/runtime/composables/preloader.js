@@ -1,6 +1,6 @@
 import { ref } from "vue"
 
-export const usePreloader = () => {
+export const usePreloader = (() => {
 
   let promises = ref([])
 
@@ -18,9 +18,11 @@ export const usePreloader = () => {
     promises.value = []
   }
 
-  return {
+  const instance = {
     preload,
     reset,
     promises
   }
-}
+
+  return () => instance
+})()

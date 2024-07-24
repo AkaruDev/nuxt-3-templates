@@ -16,7 +16,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useTransition } from '../composables/transition';
+import { usePreloader } from '../composables/preloader'
+import { useBusTransition } from '../composables/bus-transition'
 
 const el = ref()
 const isShown = ref(false)
@@ -25,7 +26,8 @@ const total = ref(1)
 const progress = ref(0)
 const fulfilledPromises = ref(0)
 
-const { preloader, busTransition } = useTransition()
+const preloader = usePreloader()
+const busTransition = useBusTransition()
 
 const { $viewportObserver } = useNuxtApp()
 
@@ -43,7 +45,6 @@ busTransition.on('transition:leave', onLeave)
 
 
 const resolvePromises = async () => {
-  const { preloader } = useTransition()
   await Promise.allSettled([
     ...preloader.promises.value.map(async p => {
       try {
@@ -58,26 +59,23 @@ const resolvePromises = async () => {
   ])
 }
 
-const hide = ({ done }) => {// { to, from, promises = [], done } = {}
-  document.body.classList.remove('cursor-loading')
+const hide = () => {
   isShown.value = false
-  $viewportObserver.active.value = true
-  busTransition.onEnterDone()
+  if ($viewportObserver?.active?.value) $viewportObserver.active.value = true
   setTimeout(() => {
-    preloader.reset()
     fulfilledPromises.value = 0
     progress.value = 0
-    done()
+    busTransition.onEnterDone()
+    preloader.reset()
   }, 300)
 }
 
-const show = ({ done }) => {
-  document.body.classList.add('cursor-loading')
+const show = () => {
   isShown.value = true
-  $viewportObserver.active.value = false
+  if ($viewportObserver?.active?.value) $viewportObserver.active.value = false
   busTransition.onLeaveDone()
   setTimeout(() => {
-    done()
+    busTransition.onLeaveDone()
   }, 300)
 }
 

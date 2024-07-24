@@ -1,51 +1,53 @@
 
-import { usePreloader } from './preloader'
 import { useBusTransition } from './bus-transition'
+import { useRouter, nextTick, useNuxtApp } from '#imports'
 
-export const useTransition = (() => {
+import { onMounted, onUnmounted } from "vue"
+
+export const useTransition = () => {
   const route = {
-    from: null,
-    to: null
+    to: undefined,
+    from: undefined,
+  }
+  const nuxtApp = useNuxtApp()
+  const router = useRouter()
+  const transitionBus = useBusTransition()
+
+  nuxtApp.hook('page:start', () => {
+    nextTick(() => {
+      onLeave(route.to, route.from)
+    })
+  })
+  nuxtApp.hook('page:finish', () => {
+    onEnter(route.to, route.from)
+  })
+
+  const onLeave = (to, from) => {
+    transitionBus.onLeave({
+      done: () => {
+        transitionBus.onLeaveDone(to, from)
+      }, to, from
+    })
   }
 
-  const preloader = usePreloader()
-  const busTransition = useBusTransition()
-
-  const transition = {
-    css: false,
-    name: 'page',
-    mode: 'out-in',
-    onEnter: (el, done) => {
-      const transitionBus = useBusTransition()
-      transitionBus.onEnter({
-        el, done: () => {
-          transitionBus.onEnterDone(route)
-          done()
-        }, ...route
-      })
-    },
-    onLeave: (el, done) => {
-      const transitionBus = useBusTransition()
-      transitionBus.onLeave({
-        el, done: () => {
-          transitionBus.onLeaveDone(route)
-          done()
-        }, ...route
-      })
-    }
+  const onEnter = (to, from) => {
+    transitionBus.onEnter({
+      done: () => {
+        transitionBus.onEnterDone(to, from)
+      }, to, from
+    })
   }
 
-  const instance = {
-    busTransition,
-    preloader,
-    pageTransition: transition,
-    layoutTransition: transition,
-    middleware (to, from) {
-      route.to = to
-      route.from = from
-    }
+  // Router events
+  router.afterEach((to, from) => {
+    route.to = to
+    route.from = from
+  })
 
-  }
+  const unsubscribe = router.afterEach(() => { })
 
-  return () => instance
-})()
+  onMounted(() => {
+    onEnter(router.currentRoute.path, undefined)
+  })
+  onUnmounted(unsubscribe)
+}

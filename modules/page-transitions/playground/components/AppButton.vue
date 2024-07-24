@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-const { preloader } = useTransition()
+const preloader = usePreloader()
 preloader.preload(useDelay(2))
 </script>
 
