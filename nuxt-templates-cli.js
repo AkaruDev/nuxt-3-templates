@@ -4,5 +4,5 @@ export const metas = {
   category: 'Hosting / Deployment'
 };
 export const dependencies = [];
-export const devDependencies = ['nuxt-simple-sitemap'];
+export const devDependencies = ['@nuxtjs/sitemap'];
 export const files = ['configs'];
