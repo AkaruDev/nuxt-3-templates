@@ -14,11 +14,14 @@ export const useTransition = () => {
   const transitionBus = useBusTransition()
 
   nuxtApp.hook('page:start', () => {
+    if (route.to === undefined && route.from === undefined) return
+    // console.info("page:start")
     nextTick(() => {
       onLeave(route.to, route.from)
     })
   })
   nuxtApp.hook('page:finish', () => {
+    // console.info("page:finish")
     onEnter(route.to, route.from)
   })
 
