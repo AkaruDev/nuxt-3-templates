@@ -5,4 +5,4 @@ export const metas = {
 };
 export const dependencies = [];
 export const devDependencies = ['eslint', '@nuxtjs/eslint-module', '@nuxt/eslint-config'];
-export const files = ['configs', '.eslintrc', '.eslintignore', '.editorconfig'];
+export const files = ['configs', '.eslint.config.mjs', '.editorconfig'];
