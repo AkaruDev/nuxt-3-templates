@@ -16,15 +16,15 @@ html {
   background: $primary;
   color: $secondary;
 
+  font-size: math.percentage(math.div(10, 16));
+  line-height: normal;
+
   *,
   *:before,
   *:after {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
   }
-
-  font-size: math.percentage(math.div(10, 16));
-  line-height: normal;
 
 }
 
