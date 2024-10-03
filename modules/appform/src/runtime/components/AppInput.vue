@@ -2,11 +2,20 @@
   <div
     ref="el"
     class="AppInput"
+    :class="[`--type-${type}`]"
   >
     <label
       v-if="type !== 'hidden' && label"
       class="AppInput-label"
-    >{{ label }}<span v-if="required"> *</span></label>
+      :for="name"
+    >
+      <span v-html="label" />
+      <span
+        v-if="required"
+        class="AppInput-required"
+      >*</span>
+    </label>
+
     <component
       :is="is"
       ref="input"
@@ -39,7 +48,7 @@ const props = defineProps({
   type: {
     type: String,
     default: 'text',
-    validator: (value) => ['text', 'textarea', 'hidden'].includes(value)
+    validator: (value) => ['text', 'textarea', 'email', 'hidden'].includes(value)
   },
   required: {
     type: Boolean,
@@ -58,9 +67,9 @@ const is = computed(() => {
   return props.type === 'textarea' ? 'textarea' : 'input'
 })
 
+
 const onChange = () => {
   if (!props.required) return
-  console.info("cc")
   el.value?.classList?.remove('--valid')
   el.value?.classList?.remove('--error')
 
@@ -71,24 +80,30 @@ const onChange = () => {
   }
 }
 
+const reset = () => {
+  el.value?.classList?.remove('--valid')
+  el.value?.classList?.remove('--error')
+}
+
+defineExpose({ reset })
 </script>
 
-<style  scoped>
+<style scoped>
 .AppInput {
   display: flex;
   flex-flow: column;
   align-items: flex-start;
   width: 100%;
 
-  gap: 10px;
+  gap: 12px;
 
-  --valid-color: rgb(106, 220, 106);
+  --valid-color: #A1BC90;
   --error-color: rgb(244, 101, 101);
-  --highlight-color: rgb(255, 180, 42);
+  --highlight-color: white;
 }
 
 
-.AppInput.--valid .AppInput-label {
+.AppInput.--valid .AppInput-required {
   color: var(--valid-color);
 }
 
@@ -103,27 +118,26 @@ const onChange = () => {
 .AppInput-label {
   display: flex;
 
-  gap: 8px;
-
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
+  gap: 0;
 }
 
 .AppInput-element {
   display: block;
   width: 100%;
 
-  padding: 10px 10px;
+  padding: 20px;
 
   border: none;
   outline: none;
-  box-shadow: inset 0 0 0 2px rgba(255, 252, 248, 0.2);
+  -webkit-appearance: none;
+  border-radius: 13px;
+  box-shadow: inset 0 0 0 1px #C5C5BF;
 }
 
 .AppInput-element.--textarea {
-  min-height: 150px;
+  height: 200px;
   resize: none;
+
 }
 
 .AppInput-element::placeholder {

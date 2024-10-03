@@ -9,3 +9,6 @@ dist
 .DS_Store
 
 _src
+
+# Local Netlify folder
+.netlify
