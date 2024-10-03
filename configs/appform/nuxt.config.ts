@@ -2,7 +2,7 @@
 export default defineNuxtConfig(
   {
     modules: [
-      '@/modules/form/src/module',
+      '@/modules/appform/src/module',
     ]
   }
 )
