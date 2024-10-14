@@ -39,6 +39,7 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .AppSvg {
+  position: relative;
 
   &:deep(svg) {
     width: 100%;
