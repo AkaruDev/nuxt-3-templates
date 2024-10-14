@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <span ref="el" class="AppSvg" v-html="currentIcon" />
+  <div ref="el" class="AppSvg" v-html="currentIcon" />
 </template>
 
 <script setup>
