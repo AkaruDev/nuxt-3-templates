@@ -55,7 +55,7 @@ export default defineNuxtModule({
           api_key: RFG_KEY,
           files_location: {
             type: "path",
-            path: "/icons"
+            path: "/icons/"
           },
           force: false,
           master_picture: {
