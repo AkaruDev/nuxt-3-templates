@@ -1,0 +1,28 @@
+// Rem responsive setup
+html {
+
+  @include portrait {
+    @include getRemFontSize(375);
+
+    @include tablet {
+      @include getRemFontSize(768);
+    }
+
+    @include media('height>=medium') {
+      @include getRemFontSize(768);
+    }
+  }
+
+  @include landscape() {
+    @include getRemFontSize(1440);
+
+    @include mobile {
+      @include getRemFontSize(1024);
+    }
+
+    @include media('>=xxlarge') {
+      @include getRemFontSize(1920);
+    }
+  }
+
+}

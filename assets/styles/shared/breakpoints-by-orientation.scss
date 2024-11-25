@@ -37,33 +37,3 @@ $breakpoints: (
   font-size: #{calc(1000 / $size)}vw;
   font-size: calc(#{calc(1000 / $size)}vw - var(--sbw) / $size * 0.1);
 }
-
-
-// Rem responsive setup
-html {
-
-  @include portrait {
-    @include getRemFontSize(375);
-
-    @include tablet {
-      @include getRemFontSize(768);
-    }
-
-    @include media('height>=medium') {
-      @include getRemFontSize(768);
-    }
-  }
-
-  @include landscape() {
-    @include getRemFontSize(1440);
-
-    @include mobile {
-      @include getRemFontSize(1024);
-    }
-
-    @include media('>=xxlarge') {
-      @include getRemFontSize(1920);
-    }
-  }
-
-}
