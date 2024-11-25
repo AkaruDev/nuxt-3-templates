@@ -1,5 +1,5 @@
 import { createPrismic } from '@prismicio/vue'
-import { useRuntimeConfig } from '#app'
+import { useRuntimeConfig } from '#app' //useNuxtApp
 import formatter from './utils/formatter'
 
 import routes from "../configs/prismic/routes"
@@ -9,8 +9,9 @@ import richTextSerializer from '../configs/prismic/richTextSerializer'
 const usePrismicApi = () => {
   // Get lang
   /*
-  const { localeProperties } = useI18n()
-  const lang = localeProperties.value.iso
+  // From i18n
+  const { $i18n } = useNuxtApp()
+  const lang = $i18n.language
   */
 
   const config = useRuntimeConfig()
