@@ -1,3 +1,7 @@
+@use '@/assets/styles/shared/colors' as *;
+@use '@/assets/styles/shared/easings' as *;
+@use '@/assets/styles/shared/accessibility' as *;
+
 .AppTitle {
   font-size: 6.4rem;
   font-style: normal;
@@ -29,7 +33,7 @@
     text-decoration: underline;
 
     @include mouse {
-      transition: 0.3s color $ease-power1-out;
+      transition: 0.3s color $power1-out;
 
       &:hover {
         color: $highlight;

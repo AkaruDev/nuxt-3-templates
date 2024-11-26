@@ -1,16 +1,18 @@
+@use "@/assets/styles/shared/easings" as *;
+
 // Observe
 .animation-show {
   opacity: 0;
   transform: translate3d(0rem, var(--offset, 8rem), 0rem) skewY(3deg);
 
-  transition: 0s transform $ease-power3-out 0.3s, 0.3s opacity $ease-power2-in-out;
+  transition: 0s transform $power3-out 0.3s, 0.3s opacity $power2-in-out;
 
   .animation-parent.--in-view &,
   &.--in-view {
     opacity: 1;
     transform: translate3d(0rem, 0rem, 0rem) skewY(0deg);
 
-    transition: 1.2s transform $ease-power3-out, 0.6s opacity $ease-power2-in-out;
+    transition: 1.2s transform $power3-out, 0.6s opacity $power2-in-out;
     transition-delay: calc(var(--delay, 0) * 1s);
   }
 }
@@ -20,14 +22,14 @@
 
   .AppImage-container {
     transform: scale(1.2) rotate(0.001deg);
-    transition: 0s transform $ease-power3-out 0.3s;
+    transition: 0s transform $power3-out 0.3s;
   }
 
   .animation-parent.--in-view &,
   &.--in-view {
     .AppImage-container {
       transform: scale(1) rotate(0.001deg);
-      transition: 1.8s transform $ease-power3-out;
+      transition: 1.8s transform $power3-out;
       transition-delay: calc(var(--delay, 0) * 1s);
     }
   }
@@ -41,7 +43,7 @@
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s $ease-power2-in-out;
+  transition: opacity 0.3s $power2-in-out;
 }
 
 .fade-enter-active {

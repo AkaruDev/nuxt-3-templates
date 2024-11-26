@@ -1,3 +1,6 @@
+@use '@/assets/styles/shared/colors' as *;
+@use '@/assets/styles/shared/easings' as *;
+
 @mixin no-drag {
   -webkit-user-drag: none;
 }
@@ -84,7 +87,7 @@
 
   &::-webkit-scrollbar-thumb {
     background: var(--scrollbar-thumb-color);
-    transition: bakcground 0.3s $ease-power1-out;
+    transition: bakcground 0.3s $power1-out;
 
     &:hover {
       background: lighten(var(--scrollbar-thumb-color), 5);

@@ -1,0 +1,26 @@
+@use "@/assets/styles/shared/sizes" as *;
+
+// Rem responsive setup
+@mixin portrait {
+  @media (orientation: portrait) {
+    @content;
+  }
+}
+
+@mixin landscape {
+  @media (orientation: 'landscape') {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width:"#{$medium}px") and (max-height:'#{$medium}px') {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width:"#{$small}px") and (max-width:'#{$medium}px') and (min-height:'#{$small}px') and (max-height:'#{$medium}px') {
+    @content;
+  }
+}

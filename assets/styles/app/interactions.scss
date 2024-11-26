@@ -1,3 +1,5 @@
+@use "@/assets/styles/shared/interactions" as *;
+
 .no-drag {
   @include no-drag;
 }

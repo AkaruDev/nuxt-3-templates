@@ -1,12 +1,12 @@
 @use 'sass:math';
+@use '@/assets/styles/shared/colors' as *;
+@use '@/assets/styles/shared/fonts' as *;
 
 :root {
   --sbw: 0px;
 }
 
 html {
-  --sbw: 0px;
-
   width: 100%;
   min-height: 100%;
 
@@ -16,7 +16,7 @@ html {
   background: $primary;
   color: $secondary;
 
-  font-size: math.percentage(math.div(10, 16));
+  // font-size: math.percentage(math.div(10, 16));
   line-height: normal;
 
   *,

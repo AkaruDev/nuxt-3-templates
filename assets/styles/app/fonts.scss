@@ -1,0 +1,40 @@
+@use "@/assets/styles/shared/media";
+@use "@/assets/styles/shared/sizes";
+
+// Rem responsive setup
+@mixin getRemFontSize($size) {
+  font-size: #{calc(1000 / $size)}vw;
+  font-size: calc(#{calc(1000 / $size)}vw - var(--sbw) / $size * 0.1);
+}
+
+:root {
+  --sbw: 0px;
+}
+
+html {
+
+  @include media.portrait {
+    @include getRemFontSize(sizes.$xsmall);
+
+    @include media.tablet {
+      @include getRemFontSize(sizes.$small);
+    }
+
+    @media (min-height:'#{sizes.$medium}px') {
+      @include getRemFontSize(sizes.$small);
+    }
+  }
+
+  @include media.landscape() {
+    @include getRemFontSize(sizes.$large);
+
+    @include media.mobile {
+      @include getRemFontSize(sizes.$medium);
+    }
+
+    @media (min-width:'#{sizes.$xxlarge}px') {
+      @include getRemFontSize(sizes.$xxlarge);
+    }
+  }
+
+}
