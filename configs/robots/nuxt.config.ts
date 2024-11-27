@@ -5,8 +5,6 @@ export default defineNuxtConfig(
     modules: [
       '@nuxtjs/robots'
     ],
-    robots: {
-      site: { indexable: isIndexed }
-    }
+    site: { indexable: isIndexed }
   }
 )
