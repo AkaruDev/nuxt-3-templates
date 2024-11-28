@@ -3,6 +3,6 @@ export const metas = {
   description: 'Add sass lib',
   category: 'Style'
 };
-export const dependencies = ['sass-embed'];
+export const dependencies = ['sass-embedded'];
 export const devDependencies = [];
 export const files = ['assets/styles', 'configs'];
