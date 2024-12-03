@@ -7,13 +7,16 @@ import routes from "../configs/prismic/routes"
 import richTextSerializer from '../configs/prismic/richTextSerializer'
 
 const usePrismicApi = () => {
-  // Get lang
+
   /*
-  // From i18n
+  // Get lang from i18n
   const { $i18n } = useNuxtApp()
-  const lang = $i18n.language
+  let lang = $i18n.locale.value
+  if (lang === "en") lang = "en-us"
+  if (lang === "fr") lang = "fr-fr"
   */
 
+  // Get lang
   const config = useRuntimeConfig()
   const lang = config?.public?.langIso || 'fr-fr'
   const endpoint = config?.public?.endpoint
